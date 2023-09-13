@@ -8,16 +8,12 @@ import com.deepoove.poi.config.Configure;
 import com.deepoove.poi.util.PoitlIOUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.wa.cluemrg.bo.BtClueBo;
 import com.wa.cluemrg.bo.PageBO;
-import com.wa.cluemrg.entity.BtClue;
 import com.wa.cluemrg.entity.Case;
 import com.wa.cluemrg.entity.CaseIndex;
 import com.wa.cluemrg.exception.BusinessException;
 import com.wa.cluemrg.response.ResponseResult;
-import com.wa.cluemrg.service.CallLogService;
 import com.wa.cluemrg.service.CaseService;
-import com.wa.cluemrg.service.PhoneImeiService;
 import com.wa.cluemrg.util.JurisdictionUtil;
 import com.wa.cluemrg.vo.JsGridVO;
 import lombok.extern.log4j.Log4j2;
@@ -37,13 +33,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
@@ -114,15 +107,20 @@ public class CaseController {
 
         PageInfo page = new PageInfo(list);
         JsGridVO<Case> vo = new JsGridVO(page);
-
+        list=page.getList();
+        int seq=(page.getPageNum()-1)*page.getPageSize()+1;
+        for (Case caseObj:list){
+            caseObj.setSeq(seq+"");
+            seq++;
+        }
         ResponseResult response = new ResponseResult();
         response.setObject(vo);
         return vo;
     }
 
     @GetMapping("/exportWord")
-    public void exportWord(@RequestParam("registerDateStart")  String registerDateStart,
-                           @RequestParam("registerDateEnd") String registerDateEnd,
+    public void exportWord(@RequestParam("dateStart")  String dateStart,
+                           @RequestParam("dateEnd") String dateEnd,
                            HttpServletRequest request,
                            HttpServletResponse response) throws IOException{
         try {
@@ -132,18 +130,27 @@ public class CaseController {
             String fileName = URLEncoder.encode("案件报告", "UTF-8").replaceAll("\\+", "%20");
             response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".docx");
             Case param = new Case();
-            if (!StringUtils.isEmpty(registerDateStart)){
-                param.setRegisterDateStart(dateFormat.parse(registerDateStart));
+            if (!StringUtils.isEmpty(dateStart)){
+                param.setRegisterDateStart(dateFormat.parse(dateStart));
             }else {
-                registerDateStart="2023-01-01";
+                dateStart="2023-01-01";
             }
-            if (!StringUtils.isEmpty(registerDateEnd)){
-                param.setRegisterDateEnd(dateFormat.parse(registerDateEnd));
+            if (!StringUtils.isEmpty(dateEnd)){
+                param.setRegisterDateEnd(dateFormat.parse(dateEnd));
             }else {
-                registerDateEnd=dateFormat.format(new Date());
+                dateEnd=dateFormat.format(new Date());
             }
             List<Case> list = caseService.selectAll(param);
-            List<CaseIndex> caseIndexList = dealCaseIndex(list,registerDateStart,registerDateEnd);
+
+            Case paramSolve = new Case();
+            if (!StringUtils.isEmpty(dateStart)){
+                paramSolve.setSolveDateStart(dateFormat.parse(dateStart));
+            }
+            if (!StringUtils.isEmpty(dateEnd)){
+                paramSolve.setSolveDateEnd(dateFormat.parse(dateEnd));
+            }
+            List<Case> listSolve = caseService.selectAll(paramSolve);
+            List<CaseIndex> caseIndexList = dealCaseIndex(list,listSolve,dateStart,dateEnd);
 
             Map<String, Object> dataMap = new HashMap<>();
             dataMap.put("list", caseIndexList);
@@ -188,22 +195,30 @@ public class CaseController {
     }
 
     @GetMapping("/getCaseIndex")
-    public List<CaseIndex> getCaseIndex(@RequestParam("registerDateStart")  String registerDateStart,
-                                        @RequestParam("registerDateEnd") String registerDateEnd,
+    public List<CaseIndex> getCaseIndex(@RequestParam("dateStart")  String dateStart,
+                                        @RequestParam("dateEnd") String dateEnd,
                                         @RequestParam(value = "jurisdiction",required = false) String jurisdiction) throws ParseException {
         Case param = new Case();
-        if (!StringUtils.isEmpty(registerDateStart)){
-            param.setRegisterDateStart(dateFormat.parse(registerDateStart));
+        if (!StringUtils.isEmpty(dateStart)){
+            param.setRegisterDateStart(dateFormat.parse(dateStart));
         }
-        if (!StringUtils.isEmpty(registerDateEnd)){
-            param.setRegisterDateEnd(dateFormat.parse(registerDateEnd));
+        if (!StringUtils.isEmpty(dateEnd)){
+            param.setRegisterDateEnd(dateFormat.parse(dateEnd));
         }
         List<Case> list = caseService.selectAll(param);
-        List<CaseIndex> caseIndexList = dealCaseIndex(list,registerDateStart,registerDateEnd);
+        Case paramSolve = new Case();
+        if (!StringUtils.isEmpty(dateStart)){
+            param.setSolveDate(dateFormat.parse(dateStart));
+        }
+        if (!StringUtils.isEmpty(dateEnd)){
+            param.setSolveDate(dateFormat.parse(dateEnd));
+        }
+        List<Case> listSolve = caseService.selectAll(paramSolve);
+        List<CaseIndex> caseIndexList = dealCaseIndex(list,listSolve,dateStart,dateEnd);
         return caseIndexList;
     }
 
-    public List<CaseIndex> dealCaseIndex(List<Case> caseList,String registerDateStart,String registerDateEnd){
+    public List<CaseIndex> dealCaseIndex(List<Case> caseList,List<Case> solveCaseList,String dateStart,String dateEnd){
         String[] jurisdictionArray=new String[]{"市本级","城中分局","鱼峰分局","柳南分局","柳北分局","柳江分局","柳东分局","柳城分局","鹿寨县局","融安县局","融水县局","三江县局"};
         Map<String,Integer> jurisdictionMap = new HashMap<String,Integer>() {
             {
@@ -225,8 +240,8 @@ public class CaseController {
         for (int i=0;i<jurisdictionArray.length;i++){
             CaseIndex caseIndex = new CaseIndex();
             caseIndex.setJurisdiction(jurisdictionArray[i]);
-            caseIndex.setStartDate(registerDateStart);
-            caseIndex.setEndDate(registerDateEnd);
+            caseIndex.setStartDate(dateStart);
+            caseIndex.setEndDate(dateEnd);
             caseIndexMap.put(i,caseIndex);
         }
         CaseIndex cityCaseIndex = caseIndexMap.get(0);
@@ -240,10 +255,17 @@ public class CaseController {
             caseIndex.setLossMoney(caseIndex.getLossMoney()+caseObj.getMoney());
             cityCaseIndex.setLossMoney(cityCaseIndex.getLossMoney()+caseObj.getMoney());
             //破案数
-            if (caseObj.getSolveDate()!=null){
+            /*if (caseObj.getSolveDate()!=null){
                 caseIndex.setSolveCount(caseIndex.getSolveCount()+1);
                 cityCaseIndex.setSolveCount(cityCaseIndex.getSolveCount()+1);
-            }
+            }*/
+        }
+        for (Case caseObj:solveCaseList) {
+            String jurisdiction = caseObj.getJurisdiction();
+            CaseIndex caseIndex = caseIndexMap.get(jurisdictionMap.get(jurisdiction));
+            //破案数
+            caseIndex.setSolveCount(caseIndex.getSolveCount() + 1);
+            cityCaseIndex.setSolveCount(cityCaseIndex.getSolveCount() + 1);
         }
         List<CaseIndex> caseIndexList = new ArrayList<>();
         DecimalFormat decimalFormat = new DecimalFormat("#.#");
@@ -269,15 +291,16 @@ public class CaseController {
     }
 
     @GetMapping("/sync")
-    public String sync(@RequestParam("registerDateStart")  String registerDateStart,
-                                @RequestParam("registerDateEnd") String registerDateEnd) throws ParseException {
-        List<Case> list = syncCaseList(registerDateStart,registerDateEnd);
+    public String sync(@RequestParam("dateStart")  String dateStart,
+                                @RequestParam("dateEnd") String dateEnd) throws ParseException {
+        List<Case> list = syncCaseList(dateStart,dateEnd,jzurl);
+        List<Case> listSolve = syncCaseList(dateStart,dateEnd,jzsolveurl);
         Case param = new Case();
-        if (!StringUtils.isEmpty(registerDateStart)){
-            param.setRegisterDateStart(dateFormat.parse(registerDateStart));
+        if (!StringUtils.isEmpty(dateStart)){
+            param.setRegisterDateStart(dateFormat.parse(dateStart));
         }
-        if (!StringUtils.isEmpty(registerDateEnd)){
-            param.setRegisterDateEnd(dateFormat.parse(registerDateEnd));
+        if (!StringUtils.isEmpty(dateEnd)){
+            param.setRegisterDateEnd(dateFormat.parse(dateEnd));
         }
         List<Case> originList = caseService.selectAll(param);
         HashSet<String> syncSet = new HashSet();
@@ -297,9 +320,13 @@ public class CaseController {
             log.info("删除案件:"+caseNoList);
             log.info("删除条数："+caseService.batchDelete(caseNoList));
         }
-
+        for (Case caseObj:listSolve){
+            caseObj.setCaseUnit(caseObj.getCaseUnit().replaceAll("\\s+",""));
+            caseObj.setOrganiser(caseObj.getOrganiser().replaceAll("\\s+",""));
+        }
         int num = caseService.batchInsertOrUpdate(list);
-        log.info("同步数据"+num+"条");
+        int numSolve = caseService.batchInsertOrUpdate(listSolve);
+        log.info("同步立案数据"+num+"条,破案数据"+numSolve+"条");
         return "同步成功";
     }
 
@@ -325,18 +352,18 @@ public class CaseController {
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-    public List<Case> syncCaseList(String registerDateStart,String registerDateEnd) {
+    public List<Case> syncCaseList(String dateStart,String dateEnd,String urlString) {
         try {
-            if (StringUtils.isEmpty(registerDateStart)){
-                registerDateStart="2023-01-01";
+            if (StringUtils.isEmpty(dateStart)){
+                dateStart="2023-01-01";
             }
-            if (StringUtils.isEmpty(registerDateEnd)){
-                registerDateEnd=dateFormat.format(new Date());
+            if (StringUtils.isEmpty(dateEnd)){
+                dateEnd=dateFormat.format(new Date());
             }
             // 创建一个URL对象，表示要访问的URL
-            //URL url = new URL("http://"+host+":"+port+"/case-simple.html?KSLASJ="+registerDateStart+"&JSLASJ="+registerDateEnd+"&LADW=4502");
-            URL url = new URL(jzurl+"&KSLASJ="+registerDateStart+"&JSLASJ="+registerDateEnd+"&LADW=4502");
-            log.info(jzurl+"&KSLASJ="+registerDateStart+"&JSLASJ="+registerDateEnd+"&LADW=4502");
+            //URL url = new URL("http://"+host+":"+port+"/case-simple.html?KSLASJ="+dateStart+"&JSLASJ="+dateEnd+"&LADW=4502");
+            URL url = new URL(urlString+"&KSLASJ="+dateStart+"&JSLASJ="+dateEnd+"&LADW=4502");
+            log.info(urlString+"&KSLASJ="+dateStart+"&JSLASJ="+dateEnd+"&LADW=4502");
             // 打开连接
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
@@ -378,55 +405,6 @@ public class CaseController {
             }
             // 关闭连接
             connection.disconnect();
-
-            //暂时的烂代码，同步破案列表
-            URL urlSolve = new URL(jzsolveurl+"&KSLASJ="+registerDateStart+"&JSLASJ="+registerDateEnd+"&LADW=4502");
-            log.info(jzsolveurl+"&KSLASJ="+registerDateStart+"&JSLASJ="+registerDateEnd+"&LADW=4502");
-            // 打开连接
-            HttpURLConnection connection2 = (HttpURLConnection) urlSolve.openConnection();
-
-            // 设置请求方法为GET
-            connection2.setRequestMethod("GET");
-
-            // 获取响应代码
-            int responseCode2 = connection2.getResponseCode();
-            log.info("Response Code: " + responseCode2);
-
-            // 读取响应内容
-            BufferedReader reader2 = new BufferedReader(new InputStreamReader(connection2.getInputStream(),Charset.forName("GBK")));
-            String line2;
-            StringBuilder responseBuilder2 = new StringBuilder();
-
-            while ((line2 = reader2.readLine()) != null) {
-                responseBuilder2.append(line2);
-            }
-            // 将GBK编码的内容解码为内部字符串（UTF-16）
-            String gbkResponse2 = responseBuilder2.toString();
-
-            // 将解码后的内容编码为UTF-8编码的字节数组
-            byte[] utf8Bytes2 = gbkResponse2.getBytes(StandardCharsets.UTF_8);
-
-            // 创建UTF-8编码的字符串
-            String utf8Response2 = new String(utf8Bytes2, StandardCharsets.UTF_8);
-
-            reader2.close();
-
-            // 打印响应内容
-            log.info("Response Content: ");
-            log.info(utf8Response2);
-            List<Case> list2 = parseHtmlToCases(utf8Response2.toString());
-            log.info("同步并解析已破案的"+list2.size()+"个案件");
-            /*for (Case case1:list){
-                for (Case case2:list2) {
-                    if (case1.getCaseNo().equals(case2.getCaseNo())){
-                        case1.setSolveDate(case2.getSolveDate());
-                        break;
-                    }
-                }
-                //log.info(case1);
-            }*/
-            // 关闭连接
-            connection2.disconnect();
             return list;
         } catch (Exception e) {
             log.error("获取case列表错误",e);

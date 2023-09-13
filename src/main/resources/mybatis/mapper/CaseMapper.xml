@@ -48,6 +48,15 @@
             <if test="registerDateStart == null and registerDateEnd != null">
                 AND REGISTER_DATE &lt;= #{registerDateEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
             </if>
+            <if test="solveDateStart != null and solveDateEnd != null">
+                AND SOLVE_DATE BETWEEN #{solveDateStart,javaType = java.util.Date, jdbcType = TIMESTAMP} AND #{solveDateEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+            </if>
+            <if test="solveDateStart != null and solveDateEnd == null">
+                AND SOLVE_DATE &gt;= #{solveDateStart,javaType = java.util.Date, jdbcType = TIMESTAMP}
+            </if>
+            <if test="solveDateStart == null and solveDateEnd != null">
+                AND SOLVE_DATE &lt;= #{registerDateEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+            </if>
             <if test="organizer != null and organizer != ''">
                 AND ORGANIZER LIKE CONCAT('%', #{organizer}, '%')
             </if>

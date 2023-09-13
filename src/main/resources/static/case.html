@@ -201,7 +201,7 @@
         registerDateEnd=$('#datetimepicker2').val();
         // 同步
         $.ajax({
-            url: ROOT_PATH +'/case/sync'+"?registerDateStart="+registerDateStart+"&registerDateEnd="+registerDateEnd,
+            url: ROOT_PATH +'/case/sync'+"?dateStart="+registerDateStart+"&dateEnd="+registerDateEnd,
             type: 'GET',
             success: function(response) {
                 // 上传成功，根据后台返回信息输出结果
@@ -242,7 +242,7 @@
         var registerDateEnd=$('#datetimepicker2').val();
         var link = document.querySelector('#a_export_word');
         var originHref=link.href;
-        link.href = link.href+"?registerDateStart="+registerDateStart+"&registerDateEnd="+registerDateEnd  ;
+        link.href = link.href+"?dateStart="+registerDateStart+"&dateEnd="+registerDateEnd  ;
         console.log(link.href)
         // 模拟点击下载链接
         link.click();
