@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN" style="height: 100%">
+<head>
+    <meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+
+<script type="text/javascript" src="https://fastly.jsdelivr.net/npm/jquery"></script>
+<script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.4.2/dist/echarts.min.js"></script>
+<!-- Uncomment this line if you want to dataTool extension
+<script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.4.2/dist/extension/dataTool.min.js"></script>
+-->
+<!-- Uncomment this line if you want to use gl extension
+<script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts-gl@2/dist/echarts-gl.min.js"></script>
+-->
+<!-- Uncomment this line if you want to echarts-stat extension
+<script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts-stat@latest/dist/ecStat.min.js"></script>
+-->
+<!-- Uncomment this line if you want to use map
+<script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@4.9.0/map/js/china.js"></script>
+<script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@4.9.0/map/js/world.js"></script>
+-->
+<!-- Uncomment these two lines if you want to use bmap extension
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=3.0&ak=YOUR_API_KEY"></script>
+<script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.4.2/dist/extension/bmap.min.js"></script>
+-->
+
+<script type="text/javascript">
+    var dom = document.getElementById('container');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var app = {};
+    var categories=[
+        {
+            id:'0',
+            name: '手机号',
+            itemStyle:{normal:{color:'#c23531'}},
+            symbolSize:[42,42]
+        },
+        {
+            id:'1',
+            name: 'IMEI',
+            itemStyle:{normal:{color:'#61a0a8'}},
+            symbolSize:[42,42]
+        },
+        {
+            id:'2',
+            name:'IMSI',
+            itemStyle:{normal:{color:'#749f83'}},
+            symbolSize:[42,42]
+        },
+        {
+            id:'3',
+            name:'部推线索',
+            itemStyle:{normal:{color:'#d48265'}},
+            symbolSize:[42,42]
+        }
+    ];
+    var winWidth=document.body.clientWidth;
+    var winHeight=document.body.clientHeight;
+    var option;
+    var ROOT_PATH = 'http://127.0.0.1:8080'
+    //$.get(ROOT_PATH + '/callLog/getGraph?data=19142776810&type=phone', function (data) {
+	$.get(ROOT_PATH + '/callLog/getGraph?data=X20230701100593&type=clue', function (data) {
+        option = {
+            legend: [{    //图例组件
+                data: categories.map(function (a) {
+                    return a.name;
+                }),
+                top:0,
+                left:(winWidth-1200)/2,         //这里是图例组件定位使用的，自定义
+                itemGap:26,
+                textStyle:{
+                    padding:[0,12]
+                },
+                backgroundColor:'#f5f5f5'
+            }],
+            title: {
+                text: 'Relation Graph'
+            },
+            tooltip: {},
+            animationDurationUpdate: 1500,
+            animationEasingUpdate: 'quinticInOut',
+            series: [
+                {
+                    type: 'graph',
+                    layout: 'none',
+                    symbolSize: 50,
+                    roam: true,
+                    label: {
+                        show: true,
+                        position: "bottom",
+                        distance: 5,
+                        fontSize: 18,
+                        align: "center",
+                    },
+                    //edgeSymbol: ['circle', 'arrow'],
+                    edgeSymbolSize: [4, 10],
+                    edgeLabel: {
+                        fontSize: 20
+                    },
+                    data: data.nodes,
+                    links: data.links,
+                    categories: categories,
+                    draggable: true,   //注意这里设置为false，不然拖拽鼠标和节点有偏移
+                    lineStyle: {
+                        opacity: 0.9,
+                        width: 2,
+                        curveness: 0
+                    }
+                }
+            ]
+        };
+        if (option && typeof option === 'object') {
+            myChart.setOption(option);
+        }
+    });
+
+
+    window.addEventListener('resize', myChart.resize);
+</script>
+</body>
+</html>

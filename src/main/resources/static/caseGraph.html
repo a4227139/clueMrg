@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>涉诈案件全景图</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+
+    <!-- Add custom CSS here -->
+    <link href="css/sb-admin.css" rel="stylesheet">
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="css/jsgrid.min.css"/>
+    <link type="text/css" rel="stylesheet" href="css/jsgrid-theme.min.css"/>
+    <link type="text/css" rel="stylesheet" href="css/clue.css"/>
+    <script type="text/javascript" src="js/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="js/jsgrid.min.js"></script>
+    <script type="text/javascript" src="js/constant.js"></script>
+    <!-- 引入DateTimePicker插件的js和css文件 -->
+    <link href="css/jquery.datetimepicker.min.css" rel="stylesheet">
+    <script src="js/jquery.datetimepicker.full.min.js"></script>
+    <script type="text/javascript" src="js/echarts.min.js"></script>
+
+
+</head>
+
+<body style="height: 100%">
+
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <!-- Sidebar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="">电诈线索研判系统</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav side-nav">
+                <li><a href="btClue.html"><i class="fa fa-table"></i> 部推线索（柳州）</a></li>
+                <li><a href="ttClue.html"><i class="fa fa-table"></i> 厅推线索（柳州）</a></li>
+                <li><a href="qgBtClue.html"><i class="fa fa-bar-chart-o"></i> 部推线索（全国）</a></li>
+                <li><a href="qgDkClue.html"><i class="fa fa-bar-chart-o"></i> 断卡线索（全国）</a></li>
+                <li><a href="alarmReceipt.html"><i class="fa fa-bar-chart-o"></i> 电诈接处警信息</a></li>
+                <li><a href="callLog.html"><i class="fa fa-bar-chart-o"></i> 通话记录</a></li>
+                <li><a href="phoneImei.html"><i class="fa fa-edit"></i> 号码-机身列表</a></li>
+                <li><a href="bsLocation.html"><i class="fa fa-edit"></i> 基站列表</a></li>
+                <li><a href="graph2.html"><i class="fa fa-camera-retro"></i> 关系图</a></li>
+                <li><a href="case.html"><i class="fa fa-camera-retro"></i> 案件列表</a></li>
+                <li class="active"><a href="caseGraph.html"><i class="fa fa-camera-retro"></i> 涉诈案件全景图</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right navbar-user">
+                <li class="dropdown user-dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Admin <b
+                            class="caret"></b></a>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </nav>
+
+    <div id="page-wrapper">
+        <!--<div class="row" style="overflow:scroll; width:100%;overflow-x: auto; ">-->
+        <div>
+            <span>
+                <h3 style="display: inline;margin: 10px;"><label>时间：</label></h3>
+                <input class="form-control" style="display:inline;width:230px;font-size:20px;height: 35px;margin: 10px;" type="text" id="datetimepicker1">
+                <h3 style="display: inline;margin: 10px;"><label>到</label></h3>
+                <input class="form-control" style="display:inline;width:230px;font-size:20px;height: 35px;margin: 10px;" type="text" id="datetimepicker2">
+                <!--<h3 style="display: inline;margin: 10px;"><label>分县局：</label></h3>
+                <span class="form-group">
+                    <select class="form-control" id="type" style="display:inline;width:150px;font-size:20px;height: 35px;margin: 10px;">
+                          <option value ="phone">城中分局</option>
+                          <option value ="imei">IMEI</option>
+                          <option value="imsi">IMSI</option>
+                          <option value="clue">线索编号</option>
+                    </select>
+                </span>-->
+                    <label class="upload-btn" style="display: block" id="search-btn">
+                    <span class="btn-text">查询</span>
+
+                    <span class="btn-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M8 17v-5H6l6-7 6 7h-2v5H8zm-2 2h8v2H6v-2z"></path>
+                        </svg>
+                    </span>
+                </label>
+            </span>
+            <div id="content" style="height: 400px"><div id="container" style="height: 100%"></div></div>
+            <br/>
+            <div id="content2" style="height: 400px"><div id="container2" style="height: 100%"></div></div>
+            </div>
+            </div>
+        </div>
+
+        <!--<div id="container" style="height: 100%"></div>-->
+
+
+    <script type="text/javascript">
+        $('#datetimepicker1').datetimepicker({
+            format: 'Y-m-d', // 时间格式，可根据需要进行调整
+            timepicker: false, // 是否显示时间选择器
+            datepicker: true, // 是否显示日期选择器
+            yearStart: 1900, // 年份的起始值
+            yearEnd: 2100, // 年份的结束值
+            todayButton: true, // 是否显示“今天”按钮
+            lang: 'zh', // 显示语言，中文为'zh'
+            step: 1 // 时间间隔，单位为分钟
+        });
+
+        $('#datetimepicker2').datetimepicker({
+            format: 'Y-m-d', // 时间格式，可根据需要进行调整
+            timepicker: false, // 是否显示时间选择器
+            datepicker: true, // 是否显示日期选择器
+            yearStart: 1900, // 年份的起始值
+            yearEnd: 2100, // 年份的结束值
+            todayButton: true, // 是否显示“今天”按钮
+            lang: 'zh', // 显示语言，中文为'zh'
+            step: 1 // 时间间隔，单位为分钟
+        });
+
+        var dom = document.getElementById('container');
+        var myChart = echarts.init(dom, null, {
+            renderer: 'canvas',
+            useDirtyRect: false
+        });
+
+        var dom2 = document.getElementById('container2');
+        var myChart2 = echarts.init(dom2, null, {
+            renderer: 'canvas',
+            useDirtyRect: false
+        });
+
+        var app = {};
+
+        var winWidth=document.documentElement.clientWidth;
+        var winHeight=document.documentElement.clientHeight;
+        document.getElementById("container").style.width=winWidth+"px";
+        document.getElementById("container").style.height=winHeight+"px";
+        console.log(winWidth+":"+winHeight)
+        console.log($('#datetimepicker1'))
+
+
+
+        var option;
+        //var ROOT_PATH = 'http://127.0.0.1:8080'
+
+        $('#search-btn').click(function() {
+            var registerDateStart=$('#datetimepicker1').val();
+            var registerDateEnd=$('#datetimepicker2').val();
+            $.get(ROOT_PATH + "/case/getCaseIndex?registerDateStart="+registerDateStart+"&registerDateEnd="+registerDateEnd, function (data) {
+                console.log(data);
+                jurisdictionArray=[];
+                countArray=[];
+                solveCountArray=[];
+                lossMoneyFormatArray=[];
+                averageLossMoneyArray=[];
+                for (var i = 1; i < data.length; i++) {
+                    jurisdictionArray.push(data[i].jurisdiction);
+                    countArray.push(data[i].count);
+                    solveCountArray.push(data[i].solveCount);
+                    lossMoneyFormatArray.push(data[i].lossMoneyFormat);
+                    averageLossMoneyArray.push(data[i].averageLossMoney);
+                }
+                option = {
+                    title: {
+                        text: '立案/破案数'
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow'
+                        }
+                    },
+                    legend: {},
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    yAxis: {
+                        type: 'value',
+                        boundaryGap: [0, 0.01]
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: jurisdictionArray
+                    },
+                    series: [
+                        {
+                            name: '立案',
+                            type: 'bar',
+                            label: {
+                                show: true,
+                                position: 'inside'
+                            },
+                            data: countArray
+                        },
+                        {
+                            name: '破案',
+                            type: 'bar',
+                            label: {
+                                show: true,
+                                position: 'inside'
+                            },
+                            data: solveCountArray
+                        }
+                    ]
+                };
+                if (option && typeof option === 'object') {
+                    console.log("myChart.setOption(option)")
+                    myChart.setOption(option);
+                }
+                const colors = ['#EE9096',  '#EE6666'];
+                option2 = {
+                    color: colors,
+                    title: {
+                        text: '损失金额/案均损失金额'
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross'
+                        }
+                    },
+                    /*grid: {
+                        right: '20%'
+                    },*/
+                    toolbox: {
+                        feature: {
+                            dataView: { show: true, readOnly: false },
+                            restore: { show: true },
+                            saveAsImage: { show: true }
+                        }
+                    },
+                    legend: {
+                        data: ['损失金额', '案均损失金额']
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            axisTick: {
+                                alignWithLabel: true
+                            },
+                            // prettier-ignore
+                            data: jurisdictionArray
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            name: '损失金额',
+                            position: 'left',
+                            alignTicks: true,
+                            axisLine: {
+                                show: true,
+                                lineStyle: {
+                                    color: colors[0]
+                                }
+                            },
+                            axisLabel: {
+                                formatter: '{value} 万元'
+                            }
+                        },
+                        {
+                            type: 'value',
+                            name: '案均损失金额',
+                            position: 'right',
+                            alignTicks: true,
+                            axisLine: {
+                                show: true,
+                                lineStyle: {
+                                    color: colors[1]
+                                }
+                            },
+                            axisLabel: {
+                                formatter: '{value} 万元'
+                            }
+                        }
+
+                    ],
+                    series: [
+                        {
+                            name: '损失金额',
+                            type: 'bar',
+                            label: {
+                                show: true,
+                                position: 'top'
+                            },
+                            data: lossMoneyFormatArray
+                        },
+                        {
+                            name: '案均损失金额',
+                            type: 'bar',
+                            label: {
+                                show: true,
+                                position: 'top'
+                            },
+                            yAxisIndex: 1,
+                            data: averageLossMoneyArray
+                        }
+                    ]
+                };
+                if (option2 && typeof option2 === 'object') {
+                    console.log("myChart2.setOption(option2)")
+                    myChart2.setOption(option2);
+                }
+            });
+        });
+        window.addEventListener('resize', myChart.resize);
+        window.addEventListener('resize', myChart2.resize);
+
+        $("#data").keydown(function (event) {
+            if (event.keyCode == 13) {
+                $('#search-btn').click();
+            }
+            //Export();
+        });
+
+        function Export() {
+            var canvas = document.getElementsByTagName("canvas")
+            if (canvas && canvas.length > 0) {
+                // 创建标签
+                var oA = document.createElement("a")
+                // 设置下载名称
+                oA.download = "Echarts图表" + ".png"
+                // 设置地址以及文件类型
+                oA.href = canvas[0].toDataURL("image/png")
+                document.body.appendChild(oA)
+                // 触发下载事件
+                oA.click()
+                // 移除元素
+                oA.remove()
+            }
+        }
+    </script>
+
+</body>
+</html>

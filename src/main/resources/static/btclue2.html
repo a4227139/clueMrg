@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clue Table</title>
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+    <style>
+        .jsgrid-cell {
+            white-space: nowrap; /* 不换行 */
+            overflow: hidden; /* 溢出隐藏 */
+            text-overflow: ellipsis; /* 超出省略号 */
+        }
+    </style>
+</head>
+<body>
+<div id="jsGrid"></div>
+
+<script>
+    /*var clients = [
+        { "Name": "Otto Clay", "Age": 25, "Country": 1, "Address": "Ap #897-1459 Quam Avenue", "Married": false },
+        { "Name": "Connor Johnston", "Age": 45, "Country": 2, "Address": "Ap #370-4647 Dis Av.", "Married": true },
+        { "Name": "Lacey Hess", "Age": 29, "Country": 3, "Address": "Ap #365-8835 Integer St.", "Married": false },
+        { "Name": "Timothy Henson", "Age": 56, "Country": 1, "Address": "911-5143 Luctus Ave", "Married": true },
+        { "Name": "Ramona Benton", "Age": 32, "Country": 3, "Address": "Ap #614-689 Vehicula Street", "Married": false }
+    ];
+
+    var countries = [
+        { Name: "", Id: 0 },
+        { Name: "United States", Id: 1 },
+        { Name: "Canada", Id: 2 },
+        { Name: "United Kingdom", Id: 3 }
+    ];*/
+
+
+    $.ajax({
+        url: "http://127.0.0.1:8080/btclue/getClueList",
+        type: 'POST',
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify({}),
+        success: function(response) {
+            clients = response.data;
+            $("#jsGrid").jsGrid({
+                width: "100%",
+                height: "auto",
+                editing: true,
+                filtering: true,
+                sorting: true,
+                paging: true,
+                //pageLoading:true,
+                pageIndex: 1,
+                autoload: true,
+                pageSize: response.pageSize,
+                pageButtonCount: 5,
+                autowidth: false, // 禁用自适应列宽
+                deleteConfirm: "Are you sure?",
+                controller: {
+                    loadData: function (filter) {
+                        console.log(filter);
+                        return clients;
+                        /*return $.grep(clients, function (client) {
+                            return (!filter.clueId || client.clueId.indexOf(filter.clueId) > -1)
+                                && (!filter.roaming || client.roaming.indexOf(filter.roaming) > -1)
+                                && (!filter.operator || client.operator.indexOf(filter.operator) > -1)
+                                && (!filter.phone || client.phone.indexOf(filter.phone) > -1)
+                                && (!filter.caseUnit || client.caseUnit.indexOf(filter.caseUnit) > -1)
+                                && (!filter.caseNo || client.caseNo.indexOf(filter.caseNo) > -1)
+                                && (!filter.caseCategory || client.caseCategory.indexOf(filter.caseCategory) > -1)
+                                && (!filter.money || client.money.indexOf(filter.money) > -1)
+                                && (!filter.time || client.time.indexOf(filter.time) > -1)
+                                && (!filter.caseBrief || client.caseBrief.indexOf(filter.caseBrief) > -1)
+                                && (!filter.victimPhone || client.victimPhone.indexOf(filter.victimPhone) > -1);
+                        });*/
+                    },
+                    insertItem: function (item) {
+                        return $.ajax({
+                            type: "POST",
+                            url: "your-backend-url",
+                            data: item,
+                            success: function (response) {
+                                clients.push(response.data);
+                                alert("Insert successfully");
+                            },
+                            error: function () {
+                                alert("Insert failed");
+                            }
+                        });
+                    },
+                    updateItem: function (item) {
+                        return $.ajax({
+                            type: "PUT",
+                            url: "your-backend-url/" + item.clueId,
+                            data: item,
+                            success: function (response) {
+                                alert("Update successfully");
+                            },
+                            error: function () {
+                                alert("Update failed");
+                            }
+                        });
+                    },
+                    deleteItem: function (item) {
+                        return $.ajax({
+                            type: "DELETE",
+                            url: "your-backend-url/" + item.clueId,
+                            success: function (response) {
+                                clients.splice(clients.indexOf(item), 1);
+                                alert("Delete successfully");
+                            },
+                            error: function () {
+                                alert("Delete failed");
+                            }
+                        });
+                    }
+                },
+                fields: [
+                    {name: "clueId", type: "text"},
+                    {name: "roaming", type: "text"},
+                    {name: "operator", type: "text"},
+                    {name: "phone", type: "text"},
+                    {name: "caseUnit", type: "text"},
+                    {name: "caseNo", type: "text"},
+                    {name: "caseCategory", type: "text"},
+                    {
+                        name: "money", type: "number", width: 50,
+                        itemTemplate: function (value) {
+                            return value.toFixed(2) + "元";
+                        }
+                    },
+                    {name: "time", type: "text"},
+                    {name: "caseBrief", type: "textarea", width: 150},
+                    {name: "victimPhone", type: "text"},
+                    { type: "control" }
+                ]
+            })
+        }
+    });
+
+    /*$("#jsGrid").jsGrid({
+        height: "auto",
+        width: "100%",
+
+        filtering: true,
+        sorting: true,
+        paging: true,
+        autoload: true,
+        pageSize: response.pageSize,
+        pageButtonCount: 5,
+        deleteConfirm: "Are you sure?",
+        controller: {
+            loadData: function() {
+                var d = $.Deferred();
+
+                $.ajax({
+                    url: "http://127.0.0.1:8080/btclue/getClueList",
+                    type: 'POST',
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify({})
+                }).done(function(response) {
+                    console.log(JSON.stringify(response))
+                    d.resolve(response.data);
+                });
+
+                return d.promise();
+            },
+            insertItem: function (item) {
+                return $.ajax({
+                    type: "POST",
+                    url: "/JsGridEx/ManageCars",
+                    data: item
+                });
+            },
+            updateItem: function (item) {
+                return $.ajax({
+                    type: "PUT",
+                    url: "/JsGridEx/ManageCars",
+                    data: item
+                });
+            },
+            deleteItem: function (item) {
+                return $.ajax({
+                    type: "DELETE",
+                    url: "/JsGridEx/ManageCars",
+                    data: item
+                });
+            }
+        },
+
+        fields: [
+            { name: "clueId", type: "text" },
+            { name: "roaming", type: "text" },
+            { name: "operator", type: "text" },
+            { name: "phone", type: "text" },
+            { name: "caseUnit", type: "text" },
+            { name: "caseNo", type: "text" },
+            { name: "caseCategory", type: "text" },
+            { name: "money", type: "number", width: 50,
+                itemTemplate: function(value) {
+                    return value.toFixed(2) + "元"; }
+            },
+            { name: "time", type: "text" },
+            { name: "caseBrief", type: "textarea", width: 150 },
+            { name: "victimPhone", type: "text" }
+        ]
+    });*/
+</script>
+</body>
+</html>

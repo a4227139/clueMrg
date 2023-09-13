@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 对应 ClueMapper 接口的全限定名 -->
+<mapper namespace="com.wa.cluemrg.dao.CaseMapper">
+    <!-- resultMap 定义 -->
+    <resultMap id="caseResultMap" type="com.wa.cluemrg.entity.Case">
+        <id property="seq" column="SEQ"/>
+        <result property="caseNo" column="CASE_NO"/>
+        <result property="caseName" column="CASE_NAME"/>
+        <result property="caseUnit" column="CASE_UNIT"/>
+        <result property="registerDate" column="REGISTER_DATE"/>
+        <result property="jurisdiction" column="JURISDICTION" jdbcType="VARCHAR"  />
+        <result property="organizer" column="ORGANIZER"/>
+        <result property="solveDate" column="SOLVE_DATE"/>
+        <result property="type" column="TYPE"/>
+        <result property="projectId" column="PROJECT_ID"/>
+        <result property="organiser" column="ORGANISER"/>
+        <result property="coOrganiser" column="CO_ORGANISER"/>
+        <result property="money" column="MONEY"/>
+    </resultMap>
+
+    <!-- 根据所有字段查找Clue -->
+    <select id="selectAll" resultMap="caseResultMap">
+        SELECT SEQ, CASE_NO, CASE_NAME, CASE_UNIT, REGISTER_DATE,JURISDICTION, ORGANIZER, SOLVE_DATE, TYPE, PROJECT_ID, ORGANISER, CO_ORGANISER, MONEY
+        FROM `CASE`
+        <where>
+            <if test="seq != null and seq != ''">
+                AND SEQ =#{seq}
+            </if>
+            <if test="caseNo != null and caseNo != ''">
+                AND CASE_NO LIKE CONCAT('%', #{caseNo}, '%')
+            </if>
+            <if test="caseName != null and caseName != ''">
+                AND CASE_NAME LIKE CONCAT('%', #{caseName}, '%')
+            </if>
+            <if test="caseUnit != null and caseUnit != ''">
+                AND CASE_UNIT LIKE CONCAT('%', #{caseUnit}, '%')
+            </if>
+            <if test="jurisdiction != null and jurisdiction != ''">
+                AND JURISDICTION LIKE CONCAT('%', #{jurisdiction}, '%')
+            </if>
+            <if test="registerDateStart != null and registerDateEnd != null">
+                AND REGISTER_DATE BETWEEN #{registerDateStart,javaType = java.util.Date, jdbcType = TIMESTAMP} AND #{registerDateEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+            </if>
+            <if test="registerDateStart != null and registerDateEnd == null">
+                AND REGISTER_DATE &gt;= #{registerDateStart,javaType = java.util.Date, jdbcType = TIMESTAMP}
+            </if>
+            <if test="registerDateStart == null and registerDateEnd != null">
+                AND REGISTER_DATE &lt;= #{registerDateEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+            </if>
+            <if test="organizer != null and organizer != ''">
+                AND ORGANIZER LIKE CONCAT('%', #{organizer}, '%')
+            </if>
+            <if test="solveDate != null and solveDate != ''">
+                AND SOLVE_DATE LIKE CONCAT('%', #{solveDate}, '%')
+            </if>
+            <if test="type != null and type != ''">
+                AND TYPE LIKE CONCAT('%', #{type}, '%')
+            </if>
+            <if test="projectId != null and projectId != ''">
+                AND PROJECT_ID LIKE CONCAT('%', #{projectId}, '%')
+            </if>
+            <if test="organiser != null and organiser != ''">
+                AND ORGANISER LIKE CONCAT('%', #{organiser}, '%')
+            </if>
+            <if test="coOrganiser != null and coOrganiser != ''">
+                AND CO_ORGANISER LIKE CONCAT('%', #{coOrganiser}, '%')
+            </if>
+            <if test="money != null and money != ''">
+                AND MONEY = #{money}
+            </if>
+        </where>
+        order by SEQ asc
+    </select>
+
+
+    <!-- 插入操作 -->
+    <insert id="insert" parameterType="com.wa.cluemrg.entity.Case">
+        INSERT INTO `CASE` (SEQ, CASE_NO, CASE_NAME, CASE_UNIT, JURISDICTION,REGISTER_DATE, ORGANIZER, SOLVE_DATE, TYPE, PROJECT_ID, ORGANISER, CO_ORGANISER, MONEY)
+        VALUES
+        (#{seq}, #{caseNo}, #{caseName}, #{caseUnit},#{jurisdiction}, #{registerDate}, #{organizer}, #{solveDate}, #{type}, #{projectId}, #{organiser}, #{coOrganiser}, #{money})
+    </insert>
+
+    <!-- 插入操作 -->
+    <insert id="batchInsert" parameterType="com.wa.cluemrg.entity.Case">
+        INSERT IGNORE `CASE` (SEQ, CASE_NO, CASE_NAME, CASE_UNIT,JURISDICTION, REGISTER_DATE, ORGANIZER, SOLVE_DATE, TYPE, PROJECT_ID, ORGANISER, CO_ORGANISER, MONEY)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            ( #{item.seq}, #{item.caseNo}, #{item.caseName}, #{item.caseUnit}, #{item.jurisdiction}, #{item.registerDate}, #{item.organizer}, #{item.solveDate}, #{item.type}, #{item.projectId}, #{item.organiser}, #{item.coOrganiser}, #{item.money})
+        </foreach>
+    </insert>
+
+
+    <!-- 插入操作/更新 -->
+    <insert id="batchInsertOrUpdate" parameterType="com.wa.cluemrg.entity.Case">
+        INSERT IGNORE `CASE` (SEQ, CASE_NO, CASE_NAME, CASE_UNIT, JURISDICTION,REGISTER_DATE, ORGANIZER, SOLVE_DATE, TYPE, PROJECT_ID, ORGANISER, CO_ORGANISER, MONEY)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.seq}, #{item.caseNo}, #{item.caseName}, #{item.caseUnit}, #{item.jurisdiction},#{item.registerDate}, #{item.organizer}, #{item.solveDate}, #{item.type}, #{item.projectId}, #{item.organiser}, #{item.coOrganiser}, #{item.money})
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        SEQ = VALUES(SEQ),
+        CASE_NAME = VALUES(CASE_NAME),
+        CASE_UNIT = VALUES(CASE_UNIT),
+        JURISDICTION = VALUES(JURISDICTION),
+        REGISTER_DATE = VALUES(REGISTER_DATE),
+        ORGANIZER = VALUES(ORGANIZER),
+        SOLVE_DATE = VALUES(SOLVE_DATE),
+        TYPE = VALUES(TYPE),
+        PROJECT_ID = VALUES(PROJECT_ID),
+        ORGANISER = VALUES(ORGANISER),
+        CO_ORGANISER = VALUES(CO_ORGANISER),
+        MONEY = VALUES(MONEY)
+    </insert>
+
+    <!-- 删除操作 -->
+    <delete id="delete" parameterType="java.lang.String">
+        DELETE FROM `CASE` WHERE SEQ = #{caseNo}
+    </delete>
+
+    <delete id="batchDelete" parameterType="java.lang.String">
+        DELETE FROM `CASE` WHERE CASE_NO  IN
+        <foreach collection="list" item="item" separator="," open="(" close=")">
+             #{item}
+        </foreach>
+    </delete>
+
+    <!-- 更新操作 -->
+    <update id="update" parameterType="com.wa.cluemrg.entity.Case">
+        UPDATE `CASE`
+        SET
+            SEQ = #{seq},
+            CASE_NAME = #{caseName},
+            CASE_UNIT = #{caseUnit},
+            JURISDICTION=#{jurisdiction},
+            REGISTER_DATE = #{registerDate},
+            ORGANIZER = #{organizer},
+            SOLVE_DATE = #{solveDate},
+            TYPE = #{type},
+            PROJECT_ID = #{projectId},
+            ORGANISER = #{organiser},
+            CO_ORGANISER = #{coOrganiser},
+            MONEY = #{money}
+        WHERE CASE_NO = #{caseNo}
+    </update>
+
+    <!-- 根据 CLUE_ID 查询操作 -->
+    <select id="select" parameterType="java.lang.String" resultMap="caseResultMap">
+        SELECT * FROM `CASE` WHERE CASE_NO = #{caseNo}
+    </select>
+
+    <!-- 分页查询操作 -->
+    <select id="selectPage" parameterType="map" resultMap="caseResultMap">
+        SELECT * FROM `CASE` LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="getLatestCase" resultType="java.lang.String">
+        SELECT REGISTER_DATE FROM `CASE` ORDER BY REGISTER_DATE DESC LIMIT 1
+    </select>
+
+</mapper>

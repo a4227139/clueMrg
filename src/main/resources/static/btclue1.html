@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Clue Table</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"/>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+</head>
+<body>
+    <table id="clue-table" class="display">
+        <thead>
+        <tr>
+            <th>Clue ID</th>
+            <th>Roaming</th>
+            <th>Operator</th>
+            <th>Phone</th>
+            <th>Case Unit</th>
+            <th>Case No.</th>
+            <th>Case Category</th>
+            <th>Money</th>
+            <th>Time</th>
+            <th>Case Brief</th>
+            <th>Victim Phone</th>
+        </tr>
+        </thead>
+    </table>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var table =$('#clue-table').DataTable({
+
+                "serverSide": true,
+                "columns": [
+                    {"data": "clueId"},
+                    {"data": "roaming"},
+                    {"data": "operator"},
+                    {"data": "phone"},
+                    {"data": "caseUnit"},
+                    {"data": "caseNo"},
+                    {"data": "caseCategory"},
+                    {"data": "money"},
+                    {"data": "time"},
+                    {"data": "caseBrief"},
+                    {"data": "victimPhone"}
+                ],
+                "ajax": {
+                    "url": "http://127.0.0.1:8080/btclue/getClueList",
+                    "type": 'POST',
+                    "contentType": "application/json",
+                    "data": function (d) {
+                        return JSON.stringify({});
+                    }/*,
+                    "dataSrc": function (resp) {
+                        // 将resp中的数据转换为DataTables需要的格式
+                        console.log(JSON.stringify(resp));
+                        console.log(resp.total);
+                        return resp.data;
+                    }*/
+                },
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.13.4/i18n/zh.json"
+                }
+            });
+            // 显示当前页码和总页码
+            var pageInfo = table.page.info();
+            console.log(pageInfo.page+":"+pageInfo.pages)
+            $('#pageInfo').html('当前页码: ' + (pageInfo.page + 2) + ', 总页码: ' + pageInfo.pages+3);
+        });
+
+
+        /*$.ajax({
+            url: 'http://127.0.0.1:8080/btclue/getClueList',
+            type: 'POST',
+            contentType:"application/json",
+            data: JSON.stringify({"pageNum":"1","pageSize":"10","data":{"roaming": "柳州","clueId": "X202303"}}),
+            success: function(response) {
+                var data = response.object.list;
+                console.log(JSON.stringify( data ));
+                $('#clue-table').DataTable().clear().rows.add(data).draw();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // 请求失败的处理
+            }
+        });*/
+    </script>
+</body>
+</html>

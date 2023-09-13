@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wa.cluemrg.dao.LinkTagMapper">
+
+    <resultMap id="linkTagMap" type="com.wa.cluemrg.entity.LinkTag">
+        <id column="id" property="id"/>
+        <result column="source" property="source"/>
+        <result column="target" property="target"/>
+        <result column="tag" property="tag"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <!-- 插入记录 -->
+    <insert id="insert" parameterType="LinkTag">
+        INSERT INTO link_tag (source,target, tag, create_time)
+        VALUES (#{source}, #{target},#{tag}, #{createTime})
+    </insert>
+
+    <!-- 删除记录 -->
+    <delete id="delete" parameterType="int">
+        DELETE FROM link_tag WHERE id = #{id}
+    </delete>
+
+    <!-- 修改记录 -->
+    <update id="update" parameterType="LinkTag">
+        UPDATE link_tag
+        SET source = #{source},
+            target =#{target},
+            tag = #{tag},
+            create_time = #{createTime}
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectAll" resultType="com.wa.cluemrg.entity.LinkTag">
+        select * from link_tag
+        <where>
+            <if test="source != null and source != ''">
+                AND source LIKE CONCAT('%', #{source}, '%')
+            </if>
+            <if test="target != null and target != ''">
+                AND target LIKE CONCAT('%', #{target}, '%')
+            </if>
+            <if test="tag != null and tag != ''">
+                AND tag LIKE CONCAT('%', #{tag}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAllByLinkList" resultType="com.wa.cluemrg.entity.LinkTag">
+        select * from link_tag
+        where (source, target) in
+        <foreach collection="list" item="item" separator="," open="(" close=")">
+            (#{item.source},#{item.target})
+        </foreach>
+    </select>
+
+
+</mapper>

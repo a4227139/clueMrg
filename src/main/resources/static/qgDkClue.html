@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>断卡线索（全国）</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+
+    <!-- Add custom CSS here -->
+    <link href="css/sb-admin.css" rel="stylesheet">
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="css/jsgrid.min.css"/>
+    <link type="text/css" rel="stylesheet" href="css/jsgrid-theme.min.css"/>
+    <link type="text/css" rel="stylesheet" href="css/clue.css"/>
+    <script type="text/javascript" src="js/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="js/jsgrid.min.js"></script>
+    <script type="text/javascript" src="js/constant.js"></script>
+    <style>
+        .jsgrid-cell {
+            white-space: nowrap; /* 不换行 */
+            overflow: hidden; /* 溢出隐藏 */
+            text-overflow: ellipsis; /* 超出省略号 */
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="">电诈线索研判系统</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav side-nav">
+                <li><a href="btClue.html"><i class="fa fa-table"></i> 部推线索（柳州）</a></li>
+                <li><a href="ttClue.html"><i class="fa fa-table"></i> 厅推线索（柳州）</a></li>
+                <li><a href="qgBtClue.html"><i class="fa fa-bar-chart-o"></i> 部推线索（全国）</a></li>
+                <li class="active"><a href="qgDkClue.html"><i class="fa fa-bar-chart-o"></i> 断卡线索（全国）</a></li>
+                <li><a href="alarmReceipt.html"><i class="fa fa-bar-chart-o"></i> 电诈接处警信息</a></li>
+                <li><a href="callLog.html"><i class="fa fa-bar-chart-o"></i> 通话记录</a></li>
+                <li><a href="phoneImei.html"><i class="fa fa-edit"></i> 号码-机身列表</a></li>
+                <li><a href="bsLocation.html"><i class="fa fa-edit"></i> 基站列表</a></li>
+                <li><a href="graph2.html"><i class="fa fa-camera-retro"></i> 关系图</a></li>
+                <li><a href="case.html"><i class="fa fa-camera-retro"></i> 案件列表</a></li>
+                <li><a href="caseGraph.html"><i class="fa fa-camera-retro"></i> 涉诈案件全景图</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right navbar-user">
+                <li class="dropdown user-dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Admin <b
+                            class="caret"></b></a>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </nav>
+
+    <div id="page-wrapper">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>断卡线索（全国） <small>更新至 <span id="latestDay"></span></small></h1>
+                <!--<ol class="breadcrumb">
+                    <li><a href="index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+                    <li class="active"><i class="fa fa-table"></i> 部推线索</li>
+                </ol>-->
+                <div class="alert alert-info alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    拖动横向滚动条查看更多字段，还可进行增删改查操作。
+                </div>
+                <label class="upload-btn" style="display: block" id="upload-btn">
+                    <input type="file" id="file-input" style="display: none">
+                    <span class="btn-text">上传线索</span>
+                    <span class="btn-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M8 17v-5H6l6-7 6 7h-2v5H8zm-2 2h8v2H6v-2z"></path>
+                        </svg>
+                    </span>
+                </label>
+            </div>
+        </div><!-- /.row -->
+        <!--<div class="row" style="overflow:scroll; width:100%;overflow-x: auto; ">-->
+        <div>
+            <div class="table-responsive">
+                <div id="jsGrid" ></div>
+            </div>
+        </div>
+        <div id="overlay">
+            <div id="progressBar"></div>
+        </div>
+        <!--</div>-->
+
+    </div><!-- /.row -->
+
+</div><!-- /#page-wrapper -->
+
+</div><!-- /#wrapper -->
+
+<!-- JavaScript -->
+<!-- <script src="js/jquery-1.10.2.js"></script>-->
+<script src="js/bootstrap.js"></script>
+
+<!-- Page Specific Plugins -->
+<script src="js/tablesorter/jquery.tablesorter.js"></script>
+<script src="js/tablesorter/tables.js"></script>
+<script>
+
+
+    function refreshGridData(){
+        var grid = $("#jsGrid");
+        grid.jsGrid("loadData");
+        $.ajax({
+            type: "GET",
+            url: ROOT_PATH +"/qgDkClue/getLatestDay",
+            success: function (response) {
+                console.log(response);
+                $("#latestDay").text(response);
+            }
+        });
+    }
+
+    $('#download-btn').click(function() {
+        var link = document.querySelector('#a_download_template');
+        // 模拟点击下载链接
+        link.click();
+    });
+
+    $('#upload-btn').click(function() {
+        $("#file-input").val("");
+        $('#file-input').click();
+    });
+
+    $("#file-input").change(function() {
+        const file = $(this).prop("files")[0];
+        const formData = new FormData();
+        formData.append("file", file);
+        /*var overlay = $("#overlay");
+        var progressBar = $("#progressBar");
+        overlay.show();
+        progressBar.css("width", "0%");
+        var progress = 0;
+        var interval = setInterval(function() {
+            progress += 10;
+            progressBar.css("width", progress + "%");
+            if (progress >= 100) {
+                clearInterval(interval);
+                setTimeout(function() {
+                    overlay.hide();
+                }, 1000); // 1秒后关闭浮窗
+            }
+        }, 200);
+
+        setTimeout(function() {
+            clearInterval(interval);
+            progressBar.css("width", "100%");
+            setTimeout(function() {
+                overlay.hide();
+            }, 1000); // 1秒后关闭浮窗
+        }, 3000); // 3秒后刷新数据*/
+        $.ajax({
+            url: ROOT_PATH +'/qgDkClue/upload',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            cache: false,
+            success: function(response) {
+                // 上传成功，根据后台返回信息输出结果
+                alert(JSON.stringify(response));
+                console.log('上传成功:'+JSON.stringify(response))
+                refreshGridData();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // 上传失败，输出错误信息
+                alert('上传失败：' + textStatus);
+            }
+        });
+    });
+
+    $.ajax({
+        type: "GET",
+        url: ROOT_PATH +"/qgDkClue/getLatestDay",
+        success: function (response) {
+            console.log(response);
+            $("#latestDay").text(response);
+        }
+    });
+
+    $("#jsGrid").jsGrid({
+        width: "100%",
+        height: "auto",
+        dragging: true,
+        editing: true,
+        filtering: true,
+        inserting: true,
+        sorting: true,
+        paging: true,
+        pageLoading: true,
+        pageIndex: 1,
+        autoload: true,
+        scrolling: true,
+        pageSize: 10,
+        pageButtonCount: 5,
+        autowidth: true,
+        deleteConfirm: "确定删除?",
+        onDataLoaded:function(){
+            var url = ROOT_PATH +"/qgDkClue/downloadTemplate";
+            var link = document.querySelector('#a_download_template');
+            if (!link){
+                // 创建一个隐藏的 <a> 元素
+                link = document.createElement("a");
+            }
+            link.id="a_download_template";
+            link.style.display = "none";
+            link.href = url;
+            document.body.appendChild(link);
+        },
+        controller: {
+            loadData: function (filter) {
+
+                /*console.log("loadData:"+JSON.stringify(filter));
+                var dataResult ={}
+                dataResult.data=response.data;
+                dataResult.itemsCount=response.itemsCount;
+                return dataResult;*/
+                console.log("loadData:" + JSON.stringify(filter))
+                var d = $.Deferred();
+                var param = {};
+                param.data = filter;
+                param.pageIndex = filter.pageIndex;
+                param.pageSize = filter.pageSize;
+                param.sortField = filter.sortField;
+                param.sortOrder = filter.sortOrder;
+                console.log(JSON.stringify(param));
+                $.ajax({
+                    url: ROOT_PATH +"/qgDkClue/getClueList",
+                    type: 'POST',
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(param)
+                }).done(function (response) {
+                    d.resolve(response);
+                });
+                return d.promise();
+            },
+            insertItem: function (item) {
+                return $.ajax({
+                    type: "POST",
+                    url: ROOT_PATH +"/qgDkClue/insertClue",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(item),
+                    success: function (response) {
+                        console.log("Insert successfully");
+                        $("#jsGrid").jsGrid("loadData");
+                    },
+                    error: function () {
+                        alert("Insert failed");
+                    }
+                });
+            },
+            updateItem: function (item) {
+                return $.ajax({
+                    type: "PUT",
+                    url: ROOT_PATH +"/qgDkClue/updateClue",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(item),
+                    success: function (response) {
+                        console.log("Update successfully");
+                        $("#jsGrid").jsGrid("loadData");
+                    },
+                    error: function () {
+                        alert("Update failed");
+                    }
+                });
+            },
+            deleteItem: function (item) {
+                var currentPage = $("#jsGrid").jsGrid("option", "pageIndex");  // 获取当前页码
+                return $.ajax({
+                    type: "DELETE",
+                    url: ROOT_PATH +"/qgDkClue/deleteClue?clueId=" + item.clueId,
+                    success: function (response) {
+                        console.log("Delete successfully");
+                        $("#jsGrid").jsGrid("loadData", {pageIndex: currentPage});
+                    },
+                    error: function () {
+                        alert("Delete failed");
+                    }
+                });
+            }
+        },
+        fields: [
+            {name: "clueId", type: "text", title: "线索编号",width: 150, validate: "required"},
+            {name: "caseNo", type: "text", title: "案件编号",width: 200},
+            {name: "num", type: "text", title: "涉案号码或账号",width: 200, validate: "required"},
+            {name: "person", type: "text", title: "开卡人",width: 150},
+            {name: "id", type: "text", title: "证件号码",width: 200},
+            {name: "institution", type: "text", title: "运营商或银行",width: 150},
+            {name: "outlets", type: "text", title: "开户网点",width: 300},
+            {name: "time", type: "text", title: "开户日期",width: 80},
+            {name: "province", type: "text", title: "开户省",width: 80},
+            {name: "city", type: "text", title: "开户市",width: 80},
+            {name: "issueTime", type: "text", title: "首次下发时间",width: 180,
+                itemTemplate: function(value) {
+                    return formatDate(new Date(value));
+                }
+            },
+            {name: "type", type: "text", title: "类型",width: 80},
+            {type: "control",width: 100}
+        ]
+    })
+
+</script>
+
+</body>
+</html>

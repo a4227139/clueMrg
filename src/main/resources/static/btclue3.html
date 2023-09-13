@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clue Table</title>
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+    <style>
+        .jsgrid-cell {
+            white-space: nowrap; /* 不换行 */
+            overflow: hidden; /* 溢出隐藏 */
+            text-overflow: ellipsis; /* 超出省略号 */
+        }
+    </style>
+</head>
+<body>
+<div id="jsGrid"></div>
+
+<script>
+
+    $("#jsGrid").jsGrid({
+        width: "100%",
+        height: "auto",
+        editing: true,
+        filtering: true,
+        inserting: true,
+        sorting: true,
+        paging: true,
+        pageLoading:true,
+        pageIndex: 1,
+        autoload: true,
+        scrolling: true,
+        pageSize: 5,
+        pageButtonCount: 5,
+        autowidth: false, // 禁用自适应列宽
+        deleteConfirm: "确定删除?",
+        controller: {
+            loadData: function (filter) {
+                console.log("loadData:"+JSON.stringify(filter))
+                var d = $.Deferred();
+                var param ={};
+                param.data=filter;
+                param.pageIndex=filter.pageIndex;
+                param.pageSize=filter.pageSize;
+                param.sortField=filter.sortField;
+                param.sortOrder=filter.sortOrder;
+                console.log(JSON.stringify(param));
+                $.ajax({
+                    url: "http://127.0.0.1:8080/btclue/getClueList",
+                    type: 'POST',
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(param)
+                }).done(function(response) {
+                    d.resolve(response);
+                });
+                return d.promise();
+            },
+            insertItem: function (item) {
+                return $.ajax({
+                    type: "POST",
+                    url: "http://127.0.0.1:8080/btclue/insertClue",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(item),
+                    success: function (response) {
+                        console.log("Insert successfully");
+                        $("#jsGrid").jsGrid("loadData");
+                    },
+                    error: function () {
+                        alert("Insert failed");
+                    }
+                });
+            },
+            updateItem: function (item) {
+                return $.ajax({
+                    type: "PUT",
+                    url: "http://127.0.0.1:8080/btclue/updateClue",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(item),
+                    success: function (response) {
+                        console.log("Update successfully");
+                        $("#jsGrid").jsGrid("loadData");
+                    },
+                    error: function () {
+                        alert("Update failed");
+                    }
+                });
+            },
+            deleteItem: function (item) {
+                var currentPage = $("#jsGrid").jsGrid("option", "pageIndex");  // 获取当前页码
+                return $.ajax({
+                    type: "DELETE",
+                    url: "http://127.0.0.1:8080/btclue/deleteClue?clueId=" + item.clueId,
+                    success: function (response) {
+                        console.log("Delete successfully");
+                        $("#jsGrid").jsGrid("loadData", { pageIndex: currentPage });
+                    },
+                    error: function () {
+                        alert("Delete failed");
+                    }
+                });
+            }
+        },
+        fields: [
+            {name: "clueId", type: "text",title:"线索编号",validate: "required"},
+            {name: "roaming", type: "text",title:"漫游地", width: 70},
+            {name: "operator", type: "text",title:"运营商", width: 50},
+            {name: "phone", type: "text",title:"涉案电话",validate: "required"},
+            {name: "caseUnit", type: "text",title:"立案单位"},
+            {name: "caseNo", type: "text",title:"案件编号"},
+            {name: "caseCategory", type: "text",title:"案件类别",
+                itemTemplate: function(value) {
+                    if (value&&value.length > 20) {
+                        return "<span title='" + value + "'>" + value.substr(0, 20) + "...</span>";
+                    } else {
+                        return value;
+                    }
+                }
+            },
+            {name: "money", type: "number", width: 50,title:"涉案金额",
+                itemTemplate: function (value) {
+                    if(value){
+                        return value + "元";
+                    }else {
+                        return "0元"
+                    }
+                }
+            },
+            {name: "time", type: "text",title:"发案时间"},
+            {name: "caseBrief", type: "textarea",title:"简要案情", width: 150,
+                itemTemplate: function(value) {
+                    if (value&&value.length > 20) {
+                        return "<span title='" + value + "'>" + value.substr(0, 20) + "...</span>";
+                    } else {
+                        return value;
+                    }
+                }
+            },
+            {name: "victimPhone", type: "text",title:"受害人电话"},
+            { type: "control" }
+        ]
+    })
+</script>
+</body>
+</html>

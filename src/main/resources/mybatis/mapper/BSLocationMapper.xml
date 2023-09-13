@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wa.cluemrg.dao.BSLocationMapper">
+
+    <resultMap id="bsLocationResultMap" type="com.wa.cluemrg.entity.BSLocation">
+        <id property="id" column="id" />
+        <result property="lac" column="lac" />
+        <result property="ci" column="ci" />
+        <result property="location" column="location" />
+        <result property="longitude" column="longitude" />
+        <result property="latitude" column="latitude" />
+    </resultMap>
+
+    <!-- 根据条件进行LIKE查询 -->
+    <select id="selectAll" parameterType="com.wa.cluemrg.entity.BSLocation" resultMap="bsLocationResultMap">
+        SELECT *
+        FROM bs_location
+        <where>
+            <if test="id != null and id != ''">
+                ID = #{id}
+            </if>
+            <if test="lac != null and lac != ''">
+                AND LAC LIKE CONCAT('%', #{lac}, '%')
+            </if>
+            <if test="ci != null and ci != ''">
+                AND CI LIKE CONCAT('%', #{ci}, '%')
+            </if>
+            <if test="location != null and location != ''">
+                AND LOCATION LIKE CONCAT('%', #{location}, '%')
+            </if>
+            <if test="longitude != null and longitude != ''">
+                AND LONGITUDE LIKE CONCAT('%', #{longitude}, '%')
+            </if>
+            <if test="latitude != null and latitude != ''">
+                AND LATITUDE LIKE CONCAT('%', #{latitude}, '%')
+            </if>
+        </where>
+    </select>
+
+
+    <insert id="insert" parameterType="com.wa.cluemrg.entity.BSLocation">
+        INSERT INTO bs_location (ID,LAC,CI, LOCATION, LONGITUDE, LATITUDE)
+        VALUES (#{id},#{lac},#{ci}, #{location}, #{longitude}, #{latitude})
+    </insert>
+
+
+    <update id="update" parameterType="com.wa.cluemrg.entity.BSLocation">
+        UPDATE bs_location
+        SET LOCATION = #{location},LAC = #{lac},CI = #{ci}, LONGITUDE = #{longitude}, LATITUDE = #{latitude}
+        WHERE ID = #{id}
+    </update>
+
+    <delete id="delete" parameterType="String">
+        DELETE FROM bs_location
+        WHERE ID = #{id}
+    </delete>
+
+</mapper>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wa.cluemrg.dao.NodeTagMapper">
+
+    <resultMap id="nodeTagMap" type="com.wa.cluemrg.entity.NodeTag">
+        <id column="id" property="id"/>
+        <result column="node" property="node"/>
+        <result column="tag" property="tag"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <!-- 插入记录 -->
+    <insert id="insert" parameterType="NodeTag">
+        INSERT INTO node_tag (node, tag, create_time)
+        VALUES (#{node}, #{tag}, #{createTime})
+    </insert>
+
+    <!-- 删除记录 -->
+    <delete id="delete" parameterType="int">
+        DELETE FROM node_tag WHERE id = #{id}
+    </delete>
+
+    <!-- 修改记录 -->
+    <update id="update" parameterType="NodeTag">
+        UPDATE node_tag
+        SET node = #{node},
+            tag = #{tag},
+            create_time = #{createTime}
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectAll" resultType="com.wa.cluemrg.entity.NodeTag">
+        select *
+        from node_tag
+        <where>
+            <if test="node != null and node != ''">
+                AND node LIKE CONCAT('%', #{node}, '%')
+            </if>
+            <if test="tag != null and tag != ''">
+                AND tag LIKE CONCAT('%', #{tag}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAllByKeyList" resultType="com.wa.cluemrg.entity.NodeTag">
+        select *
+        from node_tag
+        where node in
+        <foreach collection="list" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <insert id="batchInsert" parameterType="NodeTag">
+        INSERT IGNORE INTO node_tag (node, tag, create_time)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.node}, #{item.tag}, #{item.createTime})
+        </foreach>
+    </insert>
+
+</mapper>

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 对应 ClueMapper 接口的全限定名 -->
+<mapper namespace="com.wa.cluemrg.dao.BtClueMapper">
+    <!-- resultMap 定义 -->
+    <resultMap id="clueResultMap" type="com.wa.cluemrg.entity.BtClue">
+        <id column="CLUE_ID" property="clueId" />
+        <result column="ROAMING" property="roaming" />
+        <result column="OPERATOR" property="operator" />
+        <result column="PHONE" property="phone" />
+        <result column="CASE_UNIT" property="caseUnit" />
+        <result column="CASE_NO" property="caseNo" />
+        <result column="CASE_CATEGORY" property="caseCategory" />
+        <result column="MONEY" property="money" />
+        <result column="TIME" property="time" />
+        <result column="CASE_BRIEF" property="caseBrief" />
+        <result column="VICTIM_PHONE" property="victimPhone" />
+        <result column="OWNER" property="owner" />
+        <result column="OWNER_ID" property="ownerId" />
+        <result column="OWNER_ADDRESS" property="ownerAddress" />
+        <result column="STATE" jdbcType="VARCHAR" property="state" />
+        <result column="ISSUE_TIME" jdbcType="TIMESTAMP" property="issueTime" />
+        <result column="LIAISON_OFFICER" jdbcType="VARCHAR" property="liaisonOfficer" />
+        <result column="JURISDICTION" jdbcType="VARCHAR" property="jurisdiction" />
+        <result column="MATERIAL" jdbcType="VARCHAR" property="material" />
+        <result column="ATTRIBUTION" jdbcType="VARCHAR" property="attribution" />
+        <result column="SITUATION" jdbcType="VARCHAR" property="situation" />
+        <result column="SUSPECT" jdbcType="VARCHAR" property="suspect" />
+        <result column="SUSPECT_NUM" jdbcType="INTEGER" property="suspectNum" />
+        <result column="JZ_PERSON" jdbcType="VARCHAR" property="jzPerson" />
+        <result column="JZ_INQUIRY_TIME" jdbcType="TIMESTAMP" property="jzInquiryTime" />
+        <result column="FZ_PERSON" jdbcType="VARCHAR" property="fzPerson" />
+        <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    </resultMap>
+
+    <!-- 根据所有字段查找Clue -->
+    <select id="selectAll" resultMap="clueResultMap">
+        SELECT CLUE_ID,ROAMING,OPERATOR,PHONE,CASE_UNIT,CASE_NO,CASE_CATEGORY,MONEY,TIME,
+          CASE_BRIEF,VICTIM_PHONE,OWNER,OWNER_ID,OWNER_ADDRESS,STATE,DATE(ISSUE_TIME) AS ISSUE_TIME,LIAISON_OFFICER,JURISDICTION,MATERIAL,
+          ATTRIBUTION,SITUATION,SUSPECT,SUSPECT_NUM,JZ_PERSON,DATE(JZ_INQUIRY_TIME) AS JZ_INQUIRY_TIME,FZ_PERSON,REMARK
+        FROM BT_CLUE
+        <where>
+            <if test="clueId != null and clueId != ''">
+                AND CLUE_ID LIKE CONCAT('%', #{clueId}, '%')
+            </if>
+            <if test="roaming != null and roaming != ''">
+                AND ROAMING LIKE CONCAT('%', #{roaming}, '%')
+            </if>
+            <if test="operator != null and operator != ''">
+                AND OPERATOR LIKE CONCAT('%', #{operator}, '%')
+            </if>
+            <if test="phone != null and phone != ''">
+                AND PHONE LIKE CONCAT('%', #{phone}, '%')
+            </if>
+            <if test="caseUnit != null and caseUnit != ''">
+                AND CASE_UNIT LIKE CONCAT('%', #{caseUnit}, '%')
+            </if>
+            <if test="caseNo != null and caseNo != ''">
+                AND CASE_NO LIKE CONCAT('%', #{caseNo}, '%')
+            </if>
+            <if test="caseCategory != null and caseCategory != ''">
+                AND CASE_CATEGORY LIKE CONCAT('%', #{caseCategory}, '%')
+            </if>
+            <if test="money != null and money != ''">
+                AND MONEY = #{money}
+            </if>
+            <if test="time != null and time != ''">
+                AND TIME LIKE CONCAT('%', #{time}, '%')
+            </if>
+            <if test="caseBrief != null and caseBrief != ''">
+                AND CASE_BRIEF LIKE CONCAT('%', #{caseBrief}, '%')
+            </if>
+            <if test="victimPhone != null and victimPhone != ''">
+                AND VICTIM_PHONE LIKE CONCAT('%', #{victimPhone}, '%')
+            </if>
+            <if test="owner != null and owner != ''">
+                AND OWNER LIKE CONCAT('%', #{owner}, '%')
+            </if>
+            <if test="ownerId != null and ownerId != ''">
+                AND OWNER_ID LIKE CONCAT('%', #{ownerId}, '%')
+            </if>
+            <if test="ownerAddress != null and ownerAddress != ''">
+                AND OWNER_ADDRESS LIKE CONCAT('%', #{ownerAddress}, '%')
+            </if>
+            <if test="state != null and state != ''">
+                AND STATE LIKE CONCAT('%', #{state}, '%')
+            </if>
+            <if test="issueTime != null and issueTime != ''">
+                AND ISSUE_TIME = #{issueTime}
+            </if>
+            <if test="liaisonOfficer != null and liaisonOfficer != ''">
+                AND LIAISON_OFFICER LIKE CONCAT('%', #{liaisonOfficer}, '%')
+            </if>
+            <if test="jurisdiction != null and jurisdiction != ''">
+                AND JURISDICTION LIKE CONCAT('%', #{jurisdiction}, '%')
+            </if>
+            <if test="material != null and material != ''">
+                AND MATERIAL LIKE CONCAT('%', #{material}, '%')
+            </if>
+            <if test="attribution != null and attribution != ''">
+                AND ATTRIBUTION LIKE CONCAT('%', #{attribution}, '%')
+            </if>
+            <if test="situation != null and situation != ''">
+                AND SITUATION LIKE CONCAT('%', #{situation}, '%')
+            </if>
+            <if test="suspect != null and suspect != ''">
+                AND SUSPECT LIKE CONCAT('%', #{suspect}, '%')
+            </if>
+            <if test="suspectNum != null and suspectNum != ''">
+                AND SUSPECT_NUM = #{suspectNum}
+            </if>
+            <if test="jzPerson != null and jzPerson != ''">
+                AND JZ_PERSON LIKE CONCAT('%', #{jzPerson}, '%')
+            </if>
+            <if test="jzInquiryTime != null and jzInquiryTime != ''">
+                AND JZ_INQUIRY_TIME = #{jzInquiryTime}
+            </if>
+            <if test="fzPerson != null and fzPerson != ''">
+                AND FZ_PERSON LIKE CONCAT('%', #{fzPerson}, '%')
+            </if>
+            <if test="remark != null and remark != ''">
+                AND REMARK LIKE CONCAT('%', #{remark}, '%')
+            </if>
+        </where>
+        order by CLUE_ID desc
+    </select>
+
+
+    <!-- 插入操作 -->
+    <insert id="insert" parameterType="com.wa.cluemrg.entity.BtClue">
+        INSERT INTO bt_clue (  CLUE_ID,  ROAMING,  OPERATOR,  PHONE,  CASE_UNIT,  CASE_NO,  CASE_CATEGORY,  MONEY,  TIME,  CASE_BRIEF,  VICTIM_PHONE, OWNER, OWNER_ID,OWNER_ADDRESS, STATE,  ISSUE_TIME,  LIAISON_OFFICER,  JURISDICTION,  MATERIAL,  ATTRIBUTION,  SITUATION,  SUSPECT,  SUSPECT_NUM,  JZ_PERSON,  JZ_INQUIRY_TIME,  FZ_PERSON,  REMARK)
+        VALUES (  #{clueId},  #{roaming},  #{operator},  #{phone},  #{caseUnit},  #{caseNo},  #{caseCategory},  #{money},  #{time},  #{caseBrief},  #{victimPhone}, #{owner},  #{ownerId}, #{ownerAddress},#{state},  #{issueTime},  #{liaisonOfficer},  #{jurisdiction},  #{material},  #{attribution},  #{situation},  #{suspect},  #{suspectNum},  #{jzPerson},  #{jzInquiryTime},  #{fzPerson},  #{remark})
+    </insert>
+
+    <!-- 插入操作 -->
+    <insert id="batchInsert" parameterType="com.wa.cluemrg.entity.BtClue">
+        INSERT IGNORE bt_clue (  CLUE_ID,  ROAMING,  OPERATOR,  PHONE,  CASE_UNIT,  CASE_NO,  CASE_CATEGORY,  MONEY,  TIME,  CASE_BRIEF,  VICTIM_PHONE,  OWNER, OWNER_ID,OWNER_ADDRESS, STATE,  ISSUE_TIME,  LIAISON_OFFICER,  JURISDICTION,  MATERIAL,  ATTRIBUTION,  SITUATION,  SUSPECT,  SUSPECT_NUM,  JZ_PERSON,  JZ_INQUIRY_TIME,  FZ_PERSON,  REMARK)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+         (  #{item.clueId},  #{item.roaming},  #{item.operator},  #{item.phone},  #{item.caseUnit},  #{item.caseNo},  #{item.caseCategory},  #{item.money},  #{item.time},  #{item.caseBrief},  #{item.victimPhone}, #{item.owner},  #{item.ownerId}, #{item.ownerAddress},#{item.state},  #{item.issueTime},  #{item.liaisonOfficer},  #{item.jurisdiction},  #{item.material},  #{item.attribution},  #{item.situation},  #{item.suspect},  #{item.suspectNum},  #{item.jzPerson},  #{item.jzInquiryTime},  #{item.fzPerson},  #{item.remark})
+        </foreach>
+    </insert>
+
+
+    <!-- 插入操作/更新 -->
+    <insert id="batchInsertOrUpdate" parameterType="com.wa.cluemrg.entity.BtClue">
+        INSERT IGNORE bt_clue (  CLUE_ID,  ROAMING,  OPERATOR,  PHONE,  CASE_UNIT,  CASE_NO,  CASE_CATEGORY,  MONEY,  TIME,  CASE_BRIEF,  VICTIM_PHONE,  OWNER, OWNER_ID,OWNER_ADDRESS, STATE,  ISSUE_TIME,  LIAISON_OFFICER,  JURISDICTION,  MATERIAL,  ATTRIBUTION,  SITUATION,  SUSPECT,  SUSPECT_NUM,  JZ_PERSON,  JZ_INQUIRY_TIME,  FZ_PERSON,  REMARK)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (  #{item.clueId},  #{item.roaming},  #{item.operator},  #{item.phone},  #{item.caseUnit},  #{item.caseNo},  #{item.caseCategory},  #{item.money},  #{item.time},  #{item.caseBrief},  #{item.victimPhone}, #{item.owner},  #{item.ownerId}, #{item.ownerAddress},#{item.state},  #{item.issueTime},  #{item.liaisonOfficer},  #{item.jurisdiction},  #{item.material},  #{item.attribution},  #{item.situation},  #{item.suspect},  #{item.suspectNum},  #{item.jzPerson},  #{item.jzInquiryTime},  #{item.fzPerson},  #{item.remark})
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        ROAMING = VALUES(ROAMING),
+        OPERATOR = VALUES(OPERATOR),
+        PHONE = VALUES(PHONE),
+        CASE_UNIT = VALUES(CASE_UNIT),
+        CASE_NO = VALUES(CASE_NO),
+        CASE_CATEGORY = VALUES(CASE_CATEGORY),
+        MONEY = VALUES(MONEY),
+        TIME = VALUES(TIME),
+        CASE_BRIEF = VALUES(CASE_BRIEF),
+        VICTIM_PHONE = VALUES(VICTIM_PHONE),
+        OWNER = VALUES(OWNER),
+        OWNER_ID = VALUES(OWNER_ID),
+        OWNER_ADDRESS = VALUES(OWNER_ADDRESS),
+        STATE = VALUES(STATE),
+        ISSUE_TIME = VALUES(ISSUE_TIME),
+        LIAISON_OFFICER = VALUES(LIAISON_OFFICER),
+        JURISDICTION = VALUES(JURISDICTION),
+        MATERIAL = VALUES(MATERIAL),
+        ATTRIBUTION = VALUES(ATTRIBUTION),
+        SITUATION = VALUES(SITUATION),
+        SUSPECT = VALUES(SUSPECT),
+        SUSPECT_NUM = VALUES(SUSPECT_NUM),
+        JZ_PERSON = VALUES(JZ_PERSON),
+        JZ_INQUIRY_TIME = VALUES(JZ_INQUIRY_TIME),
+        FZ_PERSON = VALUES(FZ_PERSON),
+        REMARK = VALUES(REMARK)
+    </insert>
+
+    <!-- 删除操作 -->
+    <delete id="delete" parameterType="java.lang.String">
+        DELETE FROM BT_CLUE WHERE CLUE_ID = #{clueId}
+    </delete>
+
+    <!-- 更新操作 -->
+    <update id="update" parameterType="com.wa.cluemrg.entity.BtClue">
+        UPDATE bt_clue SET ROAMING=#{roaming},OPERATOR=#{operator},PHONE=#{phone},CASE_UNIT=#{caseUnit},CASE_NO=#{caseNo},CASE_CATEGORY=#{caseCategory},MONEY=#{money},TIME=#{time},CASE_BRIEF=#{caseBrief},VICTIM_PHONE=#{victimPhone},OWNER=#{owner},STATE=#{state},ISSUE_TIME=#{issueTime},LIAISON_OFFICER=#{liaisonOfficer},JURISDICTION=#{jurisdiction},MATERIAL=#{material},ATTRIBUTION=#{attribution},SITUATION=#{situation},SUSPECT=#{suspect},SUSPECT_NUM=#{suspectNum},JZ_PERSON=#{jzPerson},JZ_INQUIRY_TIME=#{jzInquiryTime},FZ_PERSON=#{fzPerson},REMARK=#{remark}
+        WHERE CLUE_ID=#{clueId}
+    </update>
+
+    <!-- 根据 CLUE_ID 查询操作 -->
+    <select id="select" parameterType="java.lang.String" resultMap="clueResultMap">
+        SELECT * FROM BT_CLUE WHERE CLUE_ID = #{clueId}
+    </select>
+
+    <!-- 分页查询操作 -->
+    <select id="selectPage" parameterType="map" resultMap="clueResultMap">
+        SELECT * FROM BT_CLUE LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="getLatestClue" resultType="java.lang.String">
+        SELECT CLUE_ID FROM BT_CLUE ORDER BY CLUE_ID DESC LIMIT 1
+    </select>
+
+</mapper>

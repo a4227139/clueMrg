@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wa.cluemrg.dao.PhoneImeiMapper">
+
+    <resultMap id="phoneImeiMap" type="com.wa.cluemrg.entity.PhoneImei">
+        <id column="id" property="id"/>
+        <result column="phone" property="phone"/>
+        <result column="imei" property="imei"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <!-- 插入记录 -->
+    <insert id="insert" parameterType="PhoneImei">
+        INSERT INTO phone_imei (phone, imei, create_time)
+        VALUES (#{phone}, #{imei}, #{createTime})
+    </insert>
+
+    <!-- 删除记录 -->
+    <delete id="delete" parameterType="int">
+        DELETE FROM phone_imei WHERE id = #{id}
+    </delete>
+
+    <!-- 修改记录 -->
+    <update id="update" parameterType="PhoneImei">
+        UPDATE phone_imei
+        SET phone = #{phone},
+            imei = #{imei},
+            create_time = #{createTime}
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectAll" resultType="com.wa.cluemrg.entity.PhoneImei">
+        select *
+        from phone_imei
+        <where>
+            <if test="phone != null and phone != ''">
+                AND phone LIKE CONCAT('%', #{phone}, '%')
+            </if>
+            <if test="imei != null and imei != ''">
+                AND imei LIKE CONCAT('%', #{imei}, '%')
+            </if>
+        </where>
+    </select>
+
+    <insert id="batchInsert" parameterType="PhoneImei">
+        INSERT IGNORE INTO phone_imei (phone, imei, create_time)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.phone}, #{item.imei}, #{item.createTime})
+        </foreach>
+    </insert>
+
+</mapper>

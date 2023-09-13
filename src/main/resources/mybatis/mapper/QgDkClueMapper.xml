@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 对应 ClueMapper 接口的全限定名 -->
+<mapper namespace="com.wa.cluemrg.dao.QgDkClueMapper">
+    <!-- resultMap 定义 -->
+    <resultMap id="DkClueResultMap" type="com.wa.cluemrg.entity.DkClue">
+        <id property="clueId" column="CLUE_ID"/>
+        <result property="caseNo" column="CASE_NO"/>
+        <result property="num" column="NUM"/>
+        <result property="person" column="PERSON"/>
+        <result property="id" column="ID"/>
+        <result property="institution" column="INSTITUTION"/>
+        <result property="outlets" column="OUTLETS"/>
+        <result property="time" column="TIME"/>
+        <result property="province" column="PROVINCE"/>
+        <result property="city" column="CITY"/>
+        <result property="issueTime" column="ISSUE_TIME"/>
+        <result property="type" column="TYPE"/>
+    </resultMap>
+
+    <!-- 根据所有字段查找Clue -->
+    <select id="selectAll" resultMap="DkClueResultMap">
+        SELECT *
+        FROM QG_DK_CLUE
+        <where>
+            <if test="clueId != null and clueId != ''">
+                AND CLUE_ID LIKE CONCAT('%', #{clueId}, '%')
+            </if>
+            <if test="caseNo != null and caseNo != ''">
+                AND CASE_NO LIKE CONCAT('%', #{caseNo}, '%')
+            </if>
+            <if test="num != null and num != ''">
+                AND NUM LIKE CONCAT('%', #{num}, '%')
+            </if>
+            <if test="person != null and person != ''">
+                AND PERSON LIKE CONCAT('%', #{person}, '%')
+            </if>
+            <if test="id != null and id != ''">
+                AND ID LIKE CONCAT('%', #{id}, '%')
+            </if>
+            <if test="institution != null and institution != ''">
+                AND INSTITUTION LIKE CONCAT('%', #{institution}, '%')
+            </if>
+            <if test="outlets != null and outlets != ''">
+                AND OUTLETS LIKE CONCAT('%', #{outlets}, '%')
+            </if>
+            <if test="time != null and time != ''">
+                AND TIME LIKE CONCAT('%', #{time}, '%')
+            </if>
+            <if test="province != null and province != ''">
+                AND PROVINCE LIKE CONCAT('%', #{province}, '%')
+            </if>
+            <if test="city != null and city != ''">
+                AND CITY LIKE CONCAT('%', #{city}, '%')
+            </if>
+            <if test="issueTime != null and issueTime != ''">
+                AND ISSUE_TIME LIKE CONCAT('%', #{issueTime}, '%')
+            </if>
+            <if test="type != null and type != ''">
+                AND TYPE LIKE CONCAT('%', #{type}, '%')
+            </if>
+        </where>
+        order by CLUE_ID desc
+    </select>
+
+
+    <!-- 插入操作 -->
+    <insert id="insert" parameterType="com.wa.cluemrg.entity.DkClue">
+        INSERT INTO QG_DK_CLUE (CLUE_ID, CASE_NO, NUM, PERSON, ID, INSTITUTION, OUTLETS, TIME, PROVINCE, CITY, ISSUE_TIME, TYPE)
+        VALUES (#{clueId}, #{caseNo}, #{num}, #{person}, #{id}, #{institution}, #{outlets}, #{time}, #{province}, #{city}, #{issueTime}, #{type})
+    </insert>
+
+    <!-- 插入操作 -->
+    <insert id="batchInsert" parameterType="com.wa.cluemrg.entity.DkClue">
+        INSERT IGNORE QG_DK_CLUE (CLUE_ID, CASE_NO, NUM, PERSON, ID, INSTITUTION, OUTLETS, TIME, PROVINCE, CITY, ISSUE_TIME, TYPE)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+         (  #{item.clueId}, #{item.caseNo}, #{item.num}, #{item.person}, #{item.id}, #{item.institution}, #{item.outlets}, #{item.time}, #{item.province}, #{item.city}, #{item.issueTime}, #{item.type})
+        </foreach>
+    </insert>
+
+    <!-- 插入操作/更新 -->
+    <insert id="batchInsertOrUpdate" parameterType="com.wa.cluemrg.entity.DkClue">
+        INSERT IGNORE QG_DK_CLUE (CLUE_ID, CASE_NO, NUM, PERSON, ID, INSTITUTION, OUTLETS, TIME, PROVINCE, CITY, ISSUE_TIME, TYPE)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            ( #{item.clueId}, #{item.caseNo}, #{item.num}, #{item.person}, #{item.id}, #{item.institution}, #{item.outlets}, #{item.time}, #{item.province}, #{item.city}, #{item.issueTime}, #{item.type})
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        CASE_NO = VALUES(CASE_NO),
+        NUM = VALUES(NUM),
+        PERSON = VALUES(PERSON),
+        ID = VALUES(ID),
+        INSTITUTION = VALUES(INSTITUTION),
+        OUTLETS = VALUES(OUTLETS),
+        TIME = VALUES(TIME),
+        PROVINCE = VALUES(PROVINCE),
+        CITY = VALUES(CITY),
+        ISSUE_TIME = VALUES(ISSUE_TIME),
+        TYPE = VALUES(TYPE)
+    </insert>
+
+    <!-- 删除操作 -->
+    <delete id="delete" parameterType="java.lang.String">
+        DELETE FROM QG_DK_CLUE WHERE CLUE_ID = #{clueId}
+    </delete>
+
+    <!-- 更新操作 -->
+    <update id="update" parameterType="com.wa.cluemrg.entity.DkClue">
+        UPDATE QG_DK_CLUE
+        SET CASE_NO = #{caseNo}, NUM = #{num}, PERSON = #{person}, ID = #{id}, INSTITUTION = #{institution},
+            OUTLETS = #{outlets}, TIME = #{time}, PROVINCE = #{province}, CITY = #{city}, ISSUE_TIME = #{issueTime}, TYPE = #{type}
+        WHERE CLUE_ID = #{clueId}
+    </update>
+
+    <!-- 根据 CLUE_ID 查询操作 -->
+    <select id="select" parameterType="java.lang.String" resultMap="DkClueResultMap">
+        SELECT * FROM QG_DK_CLUE WHERE CLUE_ID = #{clueId}
+    </select>
+
+    <!-- 分页查询操作 -->
+    <select id="selectPage" parameterType="map" resultMap="DkClueResultMap">
+        SELECT * FROM QG_DK_CLUE LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="getLatestClue" resultType="java.lang.String">
+        SELECT CLUE_ID FROM QG_DK_CLUE ORDER BY CLUE_ID DESC LIMIT 1
+    </select>
+
+</mapper>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 对应 ClueMapper 接口的全限定名 -->
+<mapper namespace="com.wa.cluemrg.dao.QgBtClueMapper">
+    <!-- resultMap 定义 -->
+    <resultMap id="clueResultMap" type="com.wa.cluemrg.entity.BtClue">
+        <id column="CLUE_ID" property="clueId" />
+        <result column="ROAMING" property="roaming" />
+        <result column="OPERATOR" property="operator" />
+        <result column="PHONE" property="phone" />
+        <result column="CASE_UNIT" property="caseUnit" />
+        <result column="CASE_NO" property="caseNo" />
+        <result column="CASE_CATEGORY" property="caseCategory" />
+        <result column="MONEY" property="money" />
+        <result column="TIME" property="time" />
+    </resultMap>
+
+    <!-- 根据所有字段查找Clue -->
+    <select id="selectAll" resultMap="clueResultMap">
+        SELECT CLUE_ID,ROAMING,OPERATOR,PHONE,CASE_UNIT,CASE_NO,CASE_CATEGORY,MONEY, TIME
+        FROM QG_BT_CLUE
+        <where>
+            <if test="clueId != null and clueId != ''">
+                AND CLUE_ID LIKE CONCAT('%', #{clueId}, '%')
+            </if>
+            <if test="roaming != null and roaming != ''">
+                AND ROAMING LIKE CONCAT('%', #{roaming}, '%')
+            </if>
+            <if test="operator != null and operator != ''">
+                AND OPERATOR LIKE CONCAT('%', #{operator}, '%')
+            </if>
+            <if test="phone != null and phone != ''">
+                AND PHONE LIKE CONCAT('%', #{phone}, '%')
+            </if>
+            <if test="caseUnit != null and caseUnit != ''">
+                AND CASE_UNIT LIKE CONCAT('%', #{caseUnit}, '%')
+            </if>
+            <if test="caseNo != null and caseNo != ''">
+                AND CASE_NO LIKE CONCAT('%', #{caseNo}, '%')
+            </if>
+            <if test="caseCategory != null and caseCategory != ''">
+                AND CASE_CATEGORY LIKE CONCAT('%', #{caseCategory}, '%')
+            </if>
+            <if test="money != null and money != ''">
+                AND MONEY = #{money}
+            </if>
+            <if test="time != null and time != ''">
+                AND TIME LIKE CONCAT('%', #{time}, '%')
+            </if>
+        </where>
+        order by CLUE_ID desc
+    </select>
+
+
+    <!-- 插入操作 -->
+    <insert id="insert" parameterType="com.wa.cluemrg.entity.BtClue">
+        INSERT INTO QG_BT_CLUE (  CLUE_ID,  ROAMING,  OPERATOR,  PHONE,  CASE_UNIT,  CASE_NO,  CASE_CATEGORY,  MONEY,  TIME)
+        VALUES (  #{clueId},  #{roaming},  #{operator},  #{phone},  #{caseUnit},  #{caseNo},  #{caseCategory},  #{money},  #{time})
+    </insert>
+
+    <!-- 插入操作 -->
+    <insert id="batchInsert" parameterType="com.wa.cluemrg.entity.BtClue">
+        INSERT IGNORE QG_BT_CLUE (  CLUE_ID,  ROAMING,  OPERATOR,  PHONE,  CASE_UNIT,  CASE_NO,  CASE_CATEGORY,  MONEY,  TIME)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+         (  #{item.clueId},  #{item.roaming},  #{item.operator},  #{item.phone},  #{item.caseUnit},  #{item.caseNo},  #{item.caseCategory},  #{item.money},  #{item.time})
+        </foreach>
+    </insert>
+
+    <!-- 插入操作/更新 -->
+    <insert id="batchInsertOrUpdate" parameterType="com.wa.cluemrg.entity.BtClue">
+        INSERT IGNORE QG_BT_CLUE (  CLUE_ID,  ROAMING,  OPERATOR,  PHONE,  CASE_UNIT,  CASE_NO,  CASE_CATEGORY,  MONEY,  TIME)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (  #{item.clueId},  #{item.roaming},  #{item.operator},  #{item.phone},  #{item.caseUnit},  #{item.caseNo},  #{item.caseCategory},  #{item.money},  #{item.time})
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        ROAMING = VALUES(ROAMING),
+        OPERATOR = VALUES(OPERATOR),
+        PHONE = VALUES(PHONE),
+        CASE_UNIT = VALUES(CASE_UNIT),
+        CASE_NO = VALUES(CASE_NO),
+        CASE_CATEGORY = VALUES(CASE_CATEGORY),
+        MONEY = VALUES(MONEY),
+        TIME = VALUES(TIME)
+    </insert>
+
+    <!-- 删除操作 -->
+    <delete id="delete" parameterType="java.lang.String">
+        DELETE FROM QG_BT_CLUE WHERE CLUE_ID = #{clueId}
+    </delete>
+
+    <!-- 更新操作 -->
+    <update id="update" parameterType="com.wa.cluemrg.entity.BtClue">
+        UPDATE QG_BT_CLUE SET ROAMING=#{roaming},OPERATOR=#{operator},PHONE=#{phone},CASE_UNIT=#{caseUnit},CASE_NO=#{caseNo},CASE_CATEGORY=#{caseCategory},MONEY=#{money},TIME=#{time}
+        WHERE CLUE_ID=#{clueId}
+    </update>
+
+    <!-- 根据 CLUE_ID 查询操作 -->
+    <select id="select" parameterType="java.lang.String" resultMap="clueResultMap">
+        SELECT * FROM QG_BT_CLUE WHERE CLUE_ID = #{clueId}
+    </select>
+
+    <!-- 分页查询操作 -->
+    <select id="selectPage" parameterType="map" resultMap="clueResultMap">
+        SELECT * FROM QG_BT_CLUE LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="getLatestClue" resultType="java.lang.String">
+        SELECT CLUE_ID FROM QG_BT_CLUE ORDER BY CLUE_ID DESC LIMIT 1
+    </select>
+
+</mapper>

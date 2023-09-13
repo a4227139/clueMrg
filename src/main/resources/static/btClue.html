@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>公安部打击治理电信网络新型违法犯罪专项行动办公室涉案线索（柳州）</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+
+    <!-- Add custom CSS here -->
+    <link href="css/sb-admin.css" rel="stylesheet">
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="css/jsgrid.min.css"/>
+    <link type="text/css" rel="stylesheet" href="css/jsgrid-theme.min.css"/>
+    <link type="text/css" rel="stylesheet" href="css/clue.css"/>
+    <script type="text/javascript" src="js/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="js/jsgrid.min.js"></script>
+    <script type="text/javascript" src="js/constant.js"></script>
+    <style>
+        .jsgrid-cell {
+            white-space: nowrap; /* 不换行 */
+            overflow: hidden; /* 溢出隐藏 */
+            text-overflow: ellipsis; /* 超出省略号 */
+        }
+        /* 样式用于弹窗 */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+        .popup-content {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="">电诈线索研判系统</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav side-nav">
+                <li class="active"><a href="btClue.html"><i class="fa fa-table"></i> 部推线索（柳州）</a></li>
+                <li><a href="ttClue.html"><i class="fa fa-table"></i> 厅推线索（柳州）</a></li>
+                <li><a href="qgBtClue.html"><i class="fa fa-bar-chart-o"></i> 部推线索（全国）</a></li>
+                <li><a href="qgDkClue.html"><i class="fa fa-bar-chart-o"></i> 断卡线索（全国）</a></li>
+                <li><a href="alarmReceipt.html"><i class="fa fa-bar-chart-o"></i> 电诈接处警信息</a></li>
+                <li><a href="callLog.html"><i class="fa fa-bar-chart-o"></i> 通话记录</a></li>
+                <li><a href="phoneImei.html"><i class="fa fa-edit"></i> 号码-机身列表</a></li>
+                <li><a href="bsLocation.html"><i class="fa fa-edit"></i> 基站列表</a></li>
+                <li><a href="graph2.html"><i class="fa fa-camera-retro"></i> 关系图</a></li>
+                <li><a href="case.html"><i class="fa fa-camera-retro"></i> 案件列表</a></li>
+                <li><a href="caseGraph.html"><i class="fa fa-camera-retro"></i> 涉诈案件全景图</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right navbar-user">
+                <li class="dropdown user-dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Admin <b
+                            class="caret"></b></a>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </nav>
+
+    <div id="page-wrapper">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>公安部打击治理电信网络新型违法犯罪专项行动办公室涉案线索（柳州） <small>更新至 <span id="latestDay"></span></small></h1>
+                <!--<ol class="breadcrumb">
+                    <li><a href="index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+                    <li class="active"><i class="fa fa-table"></i> 部推线索</li>
+                </ol>-->
+                <div class="alert alert-info alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    拖动横向滚动条查看更多字段，还可进行增删改查操作。
+                </div>
+                <label class="upload-btn" style="display: block" id="export-sd-word">
+                    <span class="btn-text">导出三定报告</span>
+                    <span class="btn-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M8 17v-5H6l6-7 6 7h-2v5H8zm-2 2h8v2H6v-2z"></path>
+                        </svg>
+                    </span>
+                </label>
+                <label class="upload-btn" style="display: block" id="export-word">
+                    <span class="btn-text">导出线索通报</span>
+                    <span class="btn-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M8 17v-5H6l6-7 6 7h-2v5H8zm-2 2h8v2H6v-2z"></path>
+                        </svg>
+                    </span>
+                </label>
+                <label class="upload-btn" style="display: block" id="upload-btn">
+                    <input type="file" id="file-input" style="display: none">
+                    <span class="btn-text">上传线索</span>
+                    <span class="btn-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M8 17v-5H6l6-7 6 7h-2v5H8zm-2 2h8v2H6v-2z"></path>
+                        </svg>
+                    </span>
+                </label>
+                <label class="upload-btn" style="display: block" id="download-btn">
+                    <span class="btn-text">下载模板</span>
+                    <span class="btn-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M8 17v-5H6l6-7 6 7h-2v5H8zm-2 2h8v2H6v-2z"></path>
+                        </svg>
+                    </span>
+                </label>
+            </div>
+        </div><!-- /.row -->
+        <!--<div class="row" style="overflow:scroll; width:100%;overflow-x: auto; ">-->
+        <div>
+            <div class="table-responsive">
+                <div id="jsGrid" ></div>
+            </div>
+        </div>
+        <!--</div>-->
+        <!-- 自定义弹窗 -->
+        <div id="myPopup" class="popup">
+            <div class="popup-content"></div>
+            <button id="closePopup">关闭</button>
+        </div>
+    </div><!-- /.row -->
+
+</div><!-- /#page-wrapper -->
+
+</div><!-- /#wrapper -->
+
+<!-- JavaScript -->
+<!-- <script src="js/jquery-1.10.2.js"></script>-->
+<script src="js/bootstrap.js"></script>
+
+<!-- Page Specific Plugins -->
+<script src="js/tablesorter/jquery.tablesorter.js"></script>
+<script src="js/tablesorter/tables.js"></script>
+<script>
+    var currentItem={}
+
+    $('#download-btn').click(function() {
+        var link = document.querySelector('#a_download_template');
+        // 模拟点击下载链接
+        link.click();
+    });
+
+    // 关闭弹窗按钮的点击事件
+    document.getElementById("closePopup").addEventListener("click", function() {
+        document.getElementById("myPopup").style.display = "none";
+    });
+
+    // 复制文本到剪贴板的函数
+    function copyToClipboard(text) {
+        var dummy = document.createElement("textarea");
+        document.body.appendChild(dummy);
+        dummy.value = text;
+        dummy.select();
+        document.execCommand("copy");
+        document.body.removeChild(dummy);
+    }
+
+    $('#export-word').click(function() {
+        if (!currentItem.clueId){
+            alert("请先选中线索")
+            return
+        }
+        console.log(currentItem);
+        var link = document.querySelector('#a_export_word');
+        var originHref=link.href;
+        link.href=link.href+"?clueId="+currentItem.clueId;
+        // 模拟点击下载链接
+        link.click();
+        link.href=originHref;
+        
+        //生成三台合一文本
+        generateText();
+        /*var selectedRows = $("#jsGrid").jsGrid("option", "selectedItems");
+        if (selectedRows.length > 0) {
+            var selectedRow = selectedRows[0];
+            console.log("Selected row: ", selectedRow);
+        } else {
+            console.log("No row selected.");
+        }*/
+
+        // 获取 jsgrid 实例
+        /*var jsGridInstance = $("#jsGrid").data("instance");
+        console.log(jsGridInstance)
+        // 获取选中行的数据
+        var selectedRows = jsGridInstance.getSelectedRows();
+
+        // 处理选中的数据
+        for (var i = 0; i < selectedRows.length; i++) {
+            var rowData = selectedRows[i];
+            // 在这里对选中的数据进行处理，可以输出到控制台或执行其他操作
+            console.log(rowData);
+        }*/
+        /*item ={"clueId":"X20230802100550"}
+        var row = $("#jsGrid").jsGrid("rowByItem", item);
+        console.log(row);*/
+    });
+
+    $('#export-sd-word').click(function() {
+        console.log(currentItem);
+        var link = document.querySelector('#a_export_sd_word');
+        var originHref=link.href;
+        link.href = link.href + "?clueId=" + currentItem.clueId;
+        // 模拟点击下载链接
+        link.click();
+        link.href=originHref;
+    });
+
+    var jurisdictionMap = new Map();
+    // 添加映射关系
+    jurisdictionMap.set("城中", "柳州市公安局城中分局");
+    jurisdictionMap.set("鱼峰", "柳州市公安局鱼峰分局");
+    jurisdictionMap.set("柳北", "柳州市公安局柳北分局");
+    jurisdictionMap.set("柳南", "柳州市公安局柳南分局");
+    jurisdictionMap.set("柳江", "柳州市公安局柳江分局");
+    jurisdictionMap.set("柳东", "柳州市公安局柳东分局");
+    jurisdictionMap.set("柳城", "柳城县公安局");
+    jurisdictionMap.set("鹿寨", "鹿寨县公安局");
+    jurisdictionMap.set("融安", "融安县公安局");
+    jurisdictionMap.set("融水", "融水苗族自治县公安局");
+    jurisdictionMap.set("三江", "三江侗族自治县公安局");
+    function generateText(){
+        var currentDate = new Date();
+        var title="【线索流转】"+(currentDate.getMonth() + 1)+"月"+currentDate.getDate()+"日"+"部推线索"+currentItem.clueId+"下发"+currentItem.jurisdiction;
+        var content0 = jurisdictionMap.get(currentItem.jurisdiction) + ":";
+        var content1=currentItem.clueId.substring(1,5) + "年" + currentItem.clueId.substring(5,7) + "月" + currentItem.clueId.substring(7,9) + "日"+
+            "，公安部打击治理电信网络新型违法犯罪专项行动办公室，以编号为"+currentItem.clueId+
+            "下发涉案线索（详见线索核查表），立案单位"+currentItem.caseUnit+"，金额"+currentItem.money+"元，案件编号"+currentItem.caseNo+
+            "。经研判，涉案号码"+currentItem.phone+"在案发时在"+currentItem.jurisdiction+"。";
+        var content2="为查明案情深挖犯罪线索，特请"+jurisdictionMap.get(currentItem.jurisdiction)+"对该线索以及使用的号码进行研判分析，及时打击。";
+        var content3="技侦支队研判人："+currentItem.jzPerson;
+        var content4 = "新网支队研判人："+currentItem.fzPerson;
+        var content=title+"<br>"+content0+"<br>"+content1+"<br>"+content2;
+        if(currentItem.jzPerson) {
+            content=content+"<br>"+content3;
+        }
+        if(currentItem.fzPerson) {
+            content=content+"<br>"+content4;
+        }
+        document.getElementById("myPopup").style.display = "block";
+        document.querySelector(".popup-content").innerHTML = content;
+    }
+
+    $('#upload-btn').click(function() {
+        $("#file-input").val("");
+        $('#file-input').click();
+    });
+
+    $("#file-input").change(function() {
+        const file = $(this).prop("files")[0];
+        const formData = new FormData();
+        formData.append("file", file);
+
+        $.ajax({
+            url: ROOT_PATH +'/btClue/upload',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            cache: false,
+            success: function(response) {
+                // 上传成功，根据后台返回信息输出结果
+                alert(JSON.stringify(response));
+                console.log('上传成功:'+JSON.stringify(response))
+                $("#jsGrid").jsGrid("option", "pageIndex", 1);
+                $("#jsGrid").jsGrid("loadData");
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // 上传失败，输出错误信息
+                alert('上传失败：' + textStatus);
+            }
+        });
+    });
+
+    $.ajax({
+        type: "GET",
+        url: ROOT_PATH +"/btClue/getLatestDay",
+        success: function (response) {
+            console.log(response);
+            $("#latestDay").text(response);
+        }
+    });
+
+
+    $("#jsGrid").jsGrid({
+        width: "100%",
+        height: "auto",
+        dragging: true,
+        editing: true,
+        filtering: true,
+        inserting: true,
+        sorting: true,
+        paging: true,
+        pageLoading: true,
+        pageIndex: 1,
+        autoload: true,
+        scrolling: true,
+        pageSize: 10,
+        pageButtonCount: 5,
+        autowidth: true,
+        deleteConfirm: "确定删除?",
+        onDataLoaded:function(){
+            var url = ROOT_PATH +"/btClue/downloadTemplate";
+            var link = document.querySelector('#a_download_template');
+            if (!link){
+                // 创建一个隐藏的 <a> 元素
+                link = document.createElement("a");
+            }
+            link.id="a_download_template";
+            link.style.display = "none";
+            link.href = url;
+            document.body.appendChild(link);
+
+            //var url2 = ROOT_PATH +"/btClue/exportWord";
+            var url2 = ROOT_PATH +"/btClue/exportZip";
+            var link2 = document.querySelector('#a_export_word');
+            if (!link2){
+                // 创建一个隐藏的 <a> 元素
+                link2 = document.createElement("a");
+            }
+            link2.id="a_export_word";
+            link2.style.display = "none";
+            link2.href = url2;
+            document.body.appendChild(link2);
+
+            var url3 = ROOT_PATH +"/btClue/exportSDWord";
+            var link3 = document.querySelector('#a_export_sd_word');
+            if (!link3){
+                // 创建一个隐藏的 <a> 元素
+                link3 = document.createElement("a");
+            }
+            link3.id="a_export_sd_word";
+            link3.style.display = "none";
+            link3.href = url3;
+            document.body.appendChild(link3);
+        },
+        controller: {
+            loadData: function (filter) {
+
+                /*console.log("loadData:"+JSON.stringify(filter));
+                var dataResult ={}
+                dataResult.data=response.data;
+                dataResult.itemsCount=response.itemsCount;
+                return dataResult;*/
+                console.log("loadData:" + JSON.stringify(filter))
+                var d = $.Deferred();
+                var param = {};
+                param.data = filter;
+                param.pageIndex = filter.pageIndex;
+                param.pageSize = filter.pageSize;
+                param.sortField = filter.sortField;
+                param.sortOrder = filter.sortOrder;
+                console.log(JSON.stringify(param));
+                $.ajax({
+                    url: ROOT_PATH +"/btClue/getClueList",
+                    type: 'POST',
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(param)
+                }).done(function (response) {
+                    d.resolve(response);
+                });
+                return d.promise();
+            },
+            insertItem: function (item) {
+                return $.ajax({
+                    type: "POST",
+                    url: ROOT_PATH +"/btClue/insertClue",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(item),
+                    success: function (response) {
+                        console.log("Insert successfully");
+                        $("#jsGrid").jsGrid("loadData");
+                    },
+                    error: function () {
+                        alert("Insert failed");
+                    }
+                });
+            },
+            updateItem: function (item) {
+                return $.ajax({
+                    type: "PUT",
+                    url: ROOT_PATH +"/btClue/updateClue",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(item),
+                    success: function (response) {
+                        console.log("Update successfully");
+                        $("#jsGrid").jsGrid("loadData");
+                    },
+                    error: function () {
+                        alert("Update failed");
+                    }
+                });
+            },
+            deleteItem: function (item) {
+                var currentPage = $("#jsGrid").jsGrid("option", "pageIndex");  // 获取当前页码
+                return $.ajax({
+                    type: "DELETE",
+                    url: ROOT_PATH +"/btClue/deleteClue?clueId=" + item.clueId,
+                    success: function (response) {
+                        console.log("Delete successfully");
+                        $("#jsGrid").jsGrid("loadData", {pageIndex: currentPage});
+                    },
+                    error: function () {
+                        alert("Delete failed");
+                    }
+                });
+            }
+        },
+        onItemEditing: function(args) {
+            currentItem=args.item;
+            //console.log(args.item)
+        },
+        /*rowClick:function(item,itemIndex,event) {
+            console.log(item);
+            console.log(itemIndex);
+            console.log(event);
+        },*/
+        fields: [
+            /*{name: "isChecked", type: "checkbox", title: ""},*/
+            {name: "clueId", type: "text", title: "线索编号",width: 150, validate: "required"},
+            {name: "jurisdiction", type: "text", title: "作案地点"},
+            {name: "roaming", type: "text", title: "漫游地"},
+            {name: "operator", type: "text", title: "运营商"},
+            {name: "phone", type: "text", title: "涉案电话",width: 150, validate: "required"},
+            {name: "caseUnit", type: "text", title: "立案单位",width: 200},
+            {name: "caseNo", type: "text", title: "案件编号",width: 200},
+            {name: "caseCategory", type: "text", title: "案件类别",width: 200},
+            {
+                name: "money", type: "number", title: "涉案金额",
+                itemTemplate: function (value) {
+                    if (value) {
+                        return value + "元";
+                    } else {
+                        return "0元"
+                    }
+                }
+            },
+            {name: "time", type: "text", title: "发案时间",width: 150},
+            {
+                name: "caseBrief", type: "textarea", title: "简要案情", width: 150,
+                itemTemplate: function (value) {
+                    if (value && value.length > 20) {
+                        return "<span title='" + value + "'>" + value.substr(0, 20) + "...</span>";
+                    } else {
+                        return value;
+                    }
+                }
+            },
+            {name: "victimPhone", type: "text", title: "受害人电话"},
+            {name: "owner", type: "text", title: "机主信息"},
+            {name: "jzPerson", type: "text", title: "JZ查询人"},
+            {name: "fzPerson", type: "text", title: "下发人"},
+            {name: "state", type: "text", title: "状态"},
+            {name: "issueTime", type: "text", title: "下发时间",width: 150},
+            {name: "liaisonOfficer", type: "text", title: "责任人"},
+            {name: "material", type: "text", title: "战果材料"},
+            {name: "attribution", type: "text", title: "号码归属地"},
+            {name: "situation", type: "text", title: "打击情况"},
+            {name: "suspect", type: "text", title: "嫌疑人"},
+            {name: "suspectNum", type: "text", title: "嫌疑人人数"},
+            {name: "jzInquiryTime", type: "text", title: "JZ查询时间",width: 150},
+            {name: "remark", type: "text", title: "备注"},
+            {type: "control",width: 100}
+        ]
+    })
+
+</script>
+
+</body>
+</html>
