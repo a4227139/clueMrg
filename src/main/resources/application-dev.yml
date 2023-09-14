@@ -26,5 +26,5 @@ spring:
 base:
   host: 127.0.0.1
   port: 8080
-  jzurl: http://127.0.0.1:8080/case-simple.html?
-  jzsolveurl: http://127.0.0.1:8080/case-simple2.html?
+  jzurl: http://127.0.0.1:8080/showReport2.html?
+  jzsolveurl: http://127.0.0.1:8080/showReport3.html?

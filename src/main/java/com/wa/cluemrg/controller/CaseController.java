@@ -133,21 +133,25 @@ public class CaseController {
             if (!StringUtils.isEmpty(dateStart)){
                 param.setRegisterDateStart(dateFormat.parse(dateStart));
             }else {
-                dateStart="2023-01-01";
+                param.setRegisterDateStart(dateFormat.parse("2023-01-01"));
             }
             if (!StringUtils.isEmpty(dateEnd)){
                 param.setRegisterDateEnd(dateFormat.parse(dateEnd));
             }else {
-                dateEnd=dateFormat.format(new Date());
+                param.setRegisterDateEnd(new Date());
             }
             List<Case> list = caseService.selectAll(param);
 
             Case paramSolve = new Case();
             if (!StringUtils.isEmpty(dateStart)){
                 paramSolve.setSolveDateStart(dateFormat.parse(dateStart));
+            }else {
+                paramSolve.setSolveDateStart(dateFormat.parse("2023-01-01"));
             }
             if (!StringUtils.isEmpty(dateEnd)){
                 paramSolve.setSolveDateEnd(dateFormat.parse(dateEnd));
+            }else {
+                paramSolve.setSolveDateEnd(new Date());
             }
             List<Case> listSolve = caseService.selectAll(paramSolve);
             List<CaseIndex> caseIndexList = dealCaseIndex(list,listSolve,dateStart,dateEnd);
@@ -201,17 +205,25 @@ public class CaseController {
         Case param = new Case();
         if (!StringUtils.isEmpty(dateStart)){
             param.setRegisterDateStart(dateFormat.parse(dateStart));
+        }else {
+            param.setRegisterDateStart(dateFormat.parse("2023-01-01"));
         }
         if (!StringUtils.isEmpty(dateEnd)){
             param.setRegisterDateEnd(dateFormat.parse(dateEnd));
+        }else {
+            param.setRegisterDateEnd(new Date());
         }
         List<Case> list = caseService.selectAll(param);
         Case paramSolve = new Case();
         if (!StringUtils.isEmpty(dateStart)){
-            param.setSolveDate(dateFormat.parse(dateStart));
+            paramSolve.setSolveDateStart(dateFormat.parse(dateStart));
+        }else {
+            paramSolve.setSolveDateStart(dateFormat.parse("2023-01-01"));
         }
         if (!StringUtils.isEmpty(dateEnd)){
-            param.setSolveDate(dateFormat.parse(dateEnd));
+            paramSolve.setSolveDateEnd(dateFormat.parse(dateEnd));
+        }else {
+            paramSolve.setSolveDateEnd(new Date());
         }
         List<Case> listSolve = caseService.selectAll(paramSolve);
         List<CaseIndex> caseIndexList = dealCaseIndex(list,listSolve,dateStart,dateEnd);
@@ -298,9 +310,13 @@ public class CaseController {
         Case param = new Case();
         if (!StringUtils.isEmpty(dateStart)){
             param.setRegisterDateStart(dateFormat.parse(dateStart));
+        }else {
+            param.setRegisterDateStart(dateFormat.parse("2023-01-01"));
         }
         if (!StringUtils.isEmpty(dateEnd)){
             param.setRegisterDateEnd(dateFormat.parse(dateEnd));
+        }else {
+            param.setRegisterDateEnd(new Date());
         }
         List<Case> originList = caseService.selectAll(param);
         HashSet<String> syncSet = new HashSet();
@@ -401,6 +417,9 @@ public class CaseController {
             for (Case case1:list){
                 //log.info("----------------------------case----------------------------");
                 case1.setJurisdiction(JurisdictionUtil.getJurisdiction(case1.getCaseUnit()));
+                if (StringUtils.isEmpty(case1.getJurisdiction())){
+                    case1.setJurisdiction(JurisdictionUtil.getJurisdiction(case1.getOrganizer()));
+                }
                 //log.info(case1);
             }
             // 关闭连接
