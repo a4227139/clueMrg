@@ -4,8 +4,8 @@
 <mapper namespace="com.wa.cluemrg.dao.CaseMapper">
     <!-- resultMap 定义 -->
     <resultMap id="caseResultMap" type="com.wa.cluemrg.entity.Case">
-        <id property="seq" column="SEQ"/>
-        <result property="caseNo" column="CASE_NO"/>
+        <id property="caseNo" column="CASE_NO"/>
+        <result property="seq" column="SEQ"/>
         <result property="caseName" column="CASE_NAME"/>
         <result property="caseUnit" column="CASE_UNIT"/>
         <result property="registerDate" column="REGISTER_DATE"/>
@@ -55,7 +55,133 @@
                 AND SOLVE_DATE &gt;= #{solveDateStart,javaType = java.util.Date, jdbcType = TIMESTAMP}
             </if>
             <if test="solveDateStart == null and solveDateEnd != null">
-                AND SOLVE_DATE &lt;= #{registerDateEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+                AND SOLVE_DATE &lt;= #{solveDateEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+            </if>
+            <if test="organizer != null and organizer != ''">
+                AND ORGANIZER LIKE CONCAT('%', #{organizer}, '%')
+            </if>
+            <if test="solveDate != null and solveDate != ''">
+                AND SOLVE_DATE LIKE CONCAT('%', #{solveDate}, '%')
+            </if>
+            <if test="type != null and type != ''">
+                AND TYPE LIKE CONCAT('%', #{type}, '%')
+            </if>
+            <if test="projectId != null and projectId != ''">
+                AND PROJECT_ID LIKE CONCAT('%', #{projectId}, '%')
+            </if>
+            <if test="organiser != null and organiser != ''">
+                AND ORGANISER LIKE CONCAT('%', #{organiser}, '%')
+            </if>
+            <if test="coOrganiser != null and coOrganiser != ''">
+                AND CO_ORGANISER LIKE CONCAT('%', #{coOrganiser}, '%')
+            </if>
+            <if test="money != null and money != ''">
+                AND MONEY = #{money}
+            </if>
+        </where>
+        order by SEQ asc
+    </select>
+
+    <!-- 根据所有字段查找Clue -->
+    <select id="selectAllSolve" resultMap="caseResultMap">
+        SELECT SEQ, CASE_NO, CASE_NAME, CASE_UNIT, REGISTER_DATE,JURISDICTION, ORGANIZER, SOLVE_DATE, TYPE, PROJECT_ID, ORGANISER, CO_ORGANISER, MONEY
+        FROM `CASE_SOLVE`
+        <where>
+            <if test="seq != null and seq != ''">
+                AND SEQ =#{seq}
+            </if>
+            <if test="caseNo != null and caseNo != ''">
+                AND CASE_NO LIKE CONCAT('%', #{caseNo}, '%')
+            </if>
+            <if test="caseName != null and caseName != ''">
+                AND CASE_NAME LIKE CONCAT('%', #{caseName}, '%')
+            </if>
+            <if test="caseUnit != null and caseUnit != ''">
+                AND CASE_UNIT LIKE CONCAT('%', #{caseUnit}, '%')
+            </if>
+            <if test="jurisdiction != null and jurisdiction != ''">
+                AND JURISDICTION LIKE CONCAT('%', #{jurisdiction}, '%')
+            </if>
+            <if test="registerDateStart != null and registerDateEnd != null">
+                AND REGISTER_DATE BETWEEN #{registerDateStart,javaType = java.util.Date, jdbcType = TIMESTAMP} AND #{registerDateEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+            </if>
+            <if test="registerDateStart != null and registerDateEnd == null">
+                AND REGISTER_DATE &gt;= #{registerDateStart,javaType = java.util.Date, jdbcType = TIMESTAMP}
+            </if>
+            <if test="registerDateStart == null and registerDateEnd != null">
+                AND REGISTER_DATE &lt;= #{registerDateEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+            </if>
+            <if test="solveDateStart != null and solveDateEnd != null">
+                AND SOLVE_DATE BETWEEN #{solveDateStart,javaType = java.util.Date, jdbcType = TIMESTAMP} AND #{solveDateEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+            </if>
+            <if test="solveDateStart != null and solveDateEnd == null">
+                AND SOLVE_DATE &gt;= #{solveDateStart,javaType = java.util.Date, jdbcType = TIMESTAMP}
+            </if>
+            <if test="solveDateStart == null and solveDateEnd != null">
+                AND SOLVE_DATE &lt;= #{solveDateEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+            </if>
+            <if test="organizer != null and organizer != ''">
+                AND ORGANIZER LIKE CONCAT('%', #{organizer}, '%')
+            </if>
+            <if test="solveDate != null and solveDate != ''">
+                AND SOLVE_DATE LIKE CONCAT('%', #{solveDate}, '%')
+            </if>
+            <if test="type != null and type != ''">
+                AND TYPE LIKE CONCAT('%', #{type}, '%')
+            </if>
+            <if test="projectId != null and projectId != ''">
+                AND PROJECT_ID LIKE CONCAT('%', #{projectId}, '%')
+            </if>
+            <if test="organiser != null and organiser != ''">
+                AND ORGANISER LIKE CONCAT('%', #{organiser}, '%')
+            </if>
+            <if test="coOrganiser != null and coOrganiser != ''">
+                AND CO_ORGANISER LIKE CONCAT('%', #{coOrganiser}, '%')
+            </if>
+            <if test="money != null and money != ''">
+                AND MONEY = #{money}
+            </if>
+        </where>
+        order by SEQ asc
+    </select>
+
+    <!-- 根据所有字段查找Clue -->
+    <select id="selectAllHistory" resultMap="caseResultMap">
+        SELECT SEQ, CASE_NO, CASE_NAME, CASE_UNIT, REGISTER_DATE,JURISDICTION, ORGANIZER, SOLVE_DATE, TYPE, PROJECT_ID, ORGANISER, CO_ORGANISER, MONEY
+        FROM `CASE_HISTORY`
+        <where>
+            <if test="seq != null and seq != ''">
+                AND SEQ =#{seq}
+            </if>
+            <if test="caseNo != null and caseNo != ''">
+                AND CASE_NO LIKE CONCAT('%', #{caseNo}, '%')
+            </if>
+            <if test="caseName != null and caseName != ''">
+                AND CASE_NAME LIKE CONCAT('%', #{caseName}, '%')
+            </if>
+            <if test="caseUnit != null and caseUnit != ''">
+                AND CASE_UNIT LIKE CONCAT('%', #{caseUnit}, '%')
+            </if>
+            <if test="jurisdiction != null and jurisdiction != ''">
+                AND JURISDICTION LIKE CONCAT('%', #{jurisdiction}, '%')
+            </if>
+            <if test="registerDateStart != null and registerDateEnd != null">
+                AND REGISTER_DATE BETWEEN #{registerDateStart,javaType = java.util.Date, jdbcType = TIMESTAMP} AND #{registerDateEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+            </if>
+            <if test="registerDateStart != null and registerDateEnd == null">
+                AND REGISTER_DATE &gt;= #{registerDateStart,javaType = java.util.Date, jdbcType = TIMESTAMP}
+            </if>
+            <if test="registerDateStart == null and registerDateEnd != null">
+                AND REGISTER_DATE &lt;= #{registerDateEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+            </if>
+            <if test="solveDateStart != null and solveDateEnd != null">
+                AND SOLVE_DATE BETWEEN #{solveDateStart,javaType = java.util.Date, jdbcType = TIMESTAMP} AND #{solveDateEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+            </if>
+            <if test="solveDateStart != null and solveDateEnd == null">
+                AND SOLVE_DATE &gt;= #{solveDateStart,javaType = java.util.Date, jdbcType = TIMESTAMP}
+            </if>
+            <if test="solveDateStart == null and solveDateEnd != null">
+                AND SOLVE_DATE &lt;= #{solveDateEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
             </if>
             <if test="organizer != null and organizer != ''">
                 AND ORGANIZER LIKE CONCAT('%', #{organizer}, '%')
@@ -122,6 +248,28 @@
         MONEY = VALUES(MONEY)
     </insert>
 
+    <!-- 插入操作/更新 -->
+    <insert id="batchInsertOrUpdateSolve" parameterType="com.wa.cluemrg.entity.Case">
+        INSERT IGNORE `CASE_SOLVE` (SEQ, CASE_NO, CASE_NAME, CASE_UNIT, JURISDICTION,REGISTER_DATE, ORGANIZER, SOLVE_DATE, TYPE, PROJECT_ID, ORGANISER, CO_ORGANISER, MONEY)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.seq}, #{item.caseNo}, #{item.caseName}, #{item.caseUnit}, #{item.jurisdiction},#{item.registerDate}, #{item.organizer}, #{item.solveDate}, #{item.type}, #{item.projectId}, #{item.organiser}, #{item.coOrganiser}, #{item.money})
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        SEQ = VALUES(SEQ),
+        CASE_NAME = VALUES(CASE_NAME),
+        CASE_UNIT = VALUES(CASE_UNIT),
+        JURISDICTION = VALUES(JURISDICTION),
+        REGISTER_DATE = VALUES(REGISTER_DATE),
+        ORGANIZER = VALUES(ORGANIZER),
+        SOLVE_DATE = VALUES(SOLVE_DATE),
+        TYPE = VALUES(TYPE),
+        PROJECT_ID = VALUES(PROJECT_ID),
+        ORGANISER = VALUES(ORGANISER),
+        CO_ORGANISER = VALUES(CO_ORGANISER),
+        MONEY = VALUES(MONEY)
+    </insert>
+
     <!-- 删除操作 -->
     <delete id="delete" parameterType="java.lang.String">
         DELETE FROM `CASE` WHERE SEQ = #{caseNo}
@@ -131,6 +279,13 @@
         DELETE FROM `CASE` WHERE CASE_NO  IN
         <foreach collection="list" item="item" separator="," open="(" close=")">
              #{item}
+        </foreach>
+    </delete>
+
+    <delete id="batchDeleteSolve" parameterType="java.lang.String">
+        DELETE FROM `CASE_SOLVE` WHERE CASE_NO  IN
+        <foreach collection="list" item="item" separator="," open="(" close=")">
+            #{item}
         </foreach>
     </delete>
 

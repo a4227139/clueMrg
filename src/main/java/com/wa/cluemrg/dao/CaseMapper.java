@@ -16,6 +16,7 @@ public interface CaseMapper extends MyBatisBaseDao<Case, String> {
     int delete(String caseNo);
 
     int batchDelete(List<String> caseNo);
+    int batchDeleteSolve(List<String> caseNo);
 
     int update(Case case1);
 
@@ -24,6 +25,8 @@ public interface CaseMapper extends MyBatisBaseDao<Case, String> {
     List<Case> selectPage(@Param("offset") int offset, @Param("limit") int limit);
 
     List<Case> selectAll(Case case1);
+    List<Case> selectAllSolve(Case case1);
+    List<Case> selectAllHistory(Case case1);
 
     String getLatestCase();
 
@@ -31,4 +34,5 @@ public interface CaseMapper extends MyBatisBaseDao<Case, String> {
 
     int batchInsertOrUpdate(List<Case> caseList);
 
+    int batchInsertOrUpdateSolve(List<Case> caseList);
 }

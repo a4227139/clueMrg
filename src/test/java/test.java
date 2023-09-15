@@ -1,5 +1,7 @@
 import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class test {
     public static void main(String[] args) throws UnsupportedEncodingException {
@@ -10,7 +12,7 @@ public class test {
         System.out.println(Integer.toHexString(50489010));
         System.out.println(Integer.toHexString(179564546));
         System.out.println(Integer.toHexString(189179702));
-        //YD ä¸åº”è¯¥è¢«è½¬æ¢çš?
+        //YD ä¸åº”è¯¥è¢«è½¬æ¢ï¿½?
         System.out.println("-----------YD-----------");
         System.out.println(Integer.toHexString(340262));
         System.out.println(Integer.toHexString(404083003));*/
@@ -22,9 +24,15 @@ public class test {
         String formattedResult = decimalFormat.format(c);
         System.out.println(formattedResult);*/
 
-        String strGBK = "¹ãÎ÷ÁøÖİÊĞ¹«°²¾Ö³ÉÍÅÅÉ³öËù";
+        /*String strGBK = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¹ï¿½ï¿½ï¿½ï¿½Ö³ï¿½ï¿½ï¿½ï¿½É³ï¿½ï¿½ï¿½";
         byte[] bytes = strGBK.getBytes("GBK");
         String strUTF = new String(bytes,"UTF-8");
-        System.out.println(strUTF);
+        System.out.println(strUTF);*/
+
+        String[] array = new String[]{"a","b"};
+        List<String> list  = new ArrayList<>();
+        list.add("a");
+        list.add("b");
+        System.out.println(String.join(",",array));
     }
 }

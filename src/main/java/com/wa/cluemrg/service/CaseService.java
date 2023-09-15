@@ -21,6 +21,14 @@ public class CaseService {
         return caseMapper.selectAll(case1);
     }
 
+    public List<Case> selectAllSolve(Case case1) {
+        return caseMapper.selectAllSolve(case1);
+    }
+
+    public List<Case> selectAllHistory(Case case1) {
+        return caseMapper.selectAllHistory(case1);
+    }
+
     public int insert(Case case1) {
         return caseMapper.insert(case1);
     }
@@ -45,7 +53,14 @@ public class CaseService {
         return caseMapper.batchInsertOrUpdate(list);
     }
 
+    public int batchInsertOrUpdateSolve(List<Case> list) {
+        return caseMapper.batchInsertOrUpdateSolve(list);
+    }
+
     public int batchDelete(List<String> list) {
         return caseMapper.batchDelete(list);
+    }
+    public int batchDeleteSolve(List<String> list) {
+        return caseMapper.batchDeleteSolve(list);
     }
 }

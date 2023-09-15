@@ -102,6 +102,14 @@
                         </svg>
                     </span>
                 </label>
+                <label class="upload-btn" style="display: block" id="export-excel">
+                    <span class="btn-text">导出Excel</span>
+                    <span class="btn-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M8 17v-5H6l6-7 6 7h-2v5H8zm-2 2h8v2H6v-2z"></path>
+                        </svg>
+                    </span>
+                </label>
                 <label class="upload-btn" style="display: block" id="export-word">
                     <span class="btn-text">导出报告</span>
                     <span class="btn-icon">
@@ -249,6 +257,18 @@
         link.href=originHref;
     });
 
+    $('#export-excel').click(function() {
+        var registerDateStart=$('#datetimepicker1').val();
+        var registerDateEnd=$('#datetimepicker2').val();
+        var link = document.querySelector('#a_export_excel');
+        var originHref=link.href;
+        link.href = link.href+"?dateStart="+registerDateStart+"&dateEnd="+registerDateEnd  ;
+        console.log(link.href)
+        // 模拟点击下载链接
+        link.click();
+        link.href=originHref;
+    });
+
     $("#file-input").change(function() {
         const file = $(this).prop("files")[0];
         const formData = new FormData();
@@ -336,6 +356,19 @@
             //link.download = filename;
             // 将 <a> 元素添加到页面中
             document.body.appendChild(link_word);
+
+            var url_excel = ROOT_PATH +"/case/exportExcel";
+            var link_excel = document.querySelector('#a_export_excel');
+            if (!link_excel){
+                // 创建一个隐藏的 <a> 元素
+                link_excel = document.createElement("a");
+            }
+            link_excel.id="a_export_excel";
+            link_excel.style.display = "none";
+            link_excel.href = url_excel;
+            //link.download = filename;
+            // 将 <a> 元素添加到页面中
+            document.body.appendChild(link_excel);
         },
         controller: {
             loadData: function (filter) {
