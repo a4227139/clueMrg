@@ -109,6 +109,11 @@
 
 
     <script type="text/javascript">
+        $(document).ready(function() {
+            //加载完就显示
+            $('#search-btn').click();
+        });
+
         $('#datetimepicker1').datetimepicker({
             format: 'Y-m-d', // 时间格式，可根据需要进行调整
             timepicker: false, // 是否显示时间选择器
@@ -158,9 +163,9 @@
         //var ROOT_PATH = 'http://127.0.0.1:8080'
 
         $('#search-btn').click(function() {
-            var registerDateStart=$('#datetimepicker1').val();
-            var registerDateEnd=$('#datetimepicker2').val();
-            $.get(ROOT_PATH + "/case/getCaseIndex?registerDateStart="+registerDateStart+"&registerDateEnd="+registerDateEnd, function (data) {
+            var dateStart=$('#datetimepicker1').val();
+            var dateEnd=$('#datetimepicker2').val();
+            $.get(ROOT_PATH + "/case/getCaseIndex?dateStart="+dateStart+"&dateEnd="+dateEnd, function (data) {
                 console.log(data);
                 jurisdictionArray=[];
                 countArray=[];
@@ -172,7 +177,7 @@
                     countArray.push(data[i].count);
                     solveCountArray.push(data[i].solveCount);
                     lossMoneyFormatArray.push(data[i].lossMoneyFormat);
-                    averageLossMoneyArray.push(data[i].averageLossMoney);
+                    averageLossMoneyArray.push(data[i].averageLossMoneyFormat);
                 }
                 option = {
                     title: {
@@ -224,7 +229,7 @@
                     console.log("myChart.setOption(option)")
                     myChart.setOption(option);
                 }
-                const colors = ['#EE9096',  '#EE6666'];
+                const colors = ['#EE6666','#EE9096'];
                 option2 = {
                     color: colors,
                     title: {
