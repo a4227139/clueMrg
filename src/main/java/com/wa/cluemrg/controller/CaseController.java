@@ -1,22 +1,21 @@
 package com.wa.cluemrg.controller;
 
 
-import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.util.MapUtils;
-import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
 import com.alibaba.fastjson.JSON;
 import com.deepoove.poi.XWPFTemplate;
 import com.deepoove.poi.config.Configure;
 import com.deepoove.poi.util.PoitlIOUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.wa.cluemrg.bo.CallLogBo;
-import com.wa.cluemrg.bo.CallLogExportBo;
 import com.wa.cluemrg.bo.PageBO;
+import com.wa.cluemrg.entity.AlarmReceipt;
 import com.wa.cluemrg.entity.Case;
 import com.wa.cluemrg.entity.CaseIndex;
+import com.wa.cluemrg.entity.SimpleIndex;
 import com.wa.cluemrg.exception.BusinessException;
 import com.wa.cluemrg.response.ResponseResult;
+import com.wa.cluemrg.service.AlarmReceiptService;
 import com.wa.cluemrg.service.CaseService;
 import com.wa.cluemrg.util.JurisdictionUtil;
 import com.wa.cluemrg.vo.JsGridVO;
@@ -51,6 +50,8 @@ import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -62,6 +63,8 @@ public class CaseController {
 
     @Autowired
     CaseService caseService;
+    @Autowired
+    AlarmReceiptService alarmReceiptService;
     @Value("${base.host}")
     String host;
     @Value("${base.port}")
@@ -529,6 +532,81 @@ public class CaseController {
         return "同步成功";
     }
 
+    @GetMapping("/getCaseLineIndex")
+    public Map<String,List<SimpleIndex>> getCaseLineIndex(@RequestParam("dateStart")  String dateStart,
+                                                          @RequestParam("dateEnd") String dateEnd,
+                                                          @RequestParam(value = "jurisdiction",required = false) String jurisdiction) throws ParseException {
+
+        if (StringUtils.isEmpty(dateEnd)){
+            dateEnd= LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        }
+        //默认一个月
+        if (StringUtils.isEmpty(dateStart)){
+            LocalDate date = LocalDate.parse(dateEnd);
+            LocalDate oneMonthAgo = date.minusMonths(1);
+            dateStart = oneMonthAgo.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        }
+        Date start = dateFormat.parse(dateStart);
+        Date end = dateFormat.parse(dateEnd);
+        Case caseObj = new Case();
+        caseObj.setRegisterDateStart(start);
+        caseObj.setRegisterDateEnd(end);
+        Case solveCase = new Case();
+        solveCase.setSolveDateStart(start);
+        solveCase.setSolveDateEnd(end);
+        AlarmReceipt alarmReceipt = new AlarmReceipt();
+        alarmReceipt.setAlarmTimeStart(start);
+        alarmReceipt.setAlarmTimeEnd(end);
+        List<SimpleIndex> caseIndexList = caseService.getCaseCountByDate(caseObj);
+        List<SimpleIndex> caseSolveIndexList = caseService.getCaseSolveCountByDate(solveCase);
+        List<SimpleIndex> alarmReceiptIndexList = alarmReceiptService.getAlarmReceiptCountByDate(alarmReceipt);
+        Map<String,List<SimpleIndex>> index = new HashMap<>();
+        index.put("caseIndexList",caseIndexList);
+        index.put("caseSolveIndexList",caseSolveIndexList);
+        index.put("alarmReceiptIndexList",alarmReceiptIndexList);
+        return index;
+    }
+
+    @GetMapping("/getAlarmReceiptTypeIndex")
+    public List<SimpleIndex> getAlarmReceiptTypeIndex(@RequestParam("dateStart")  String dateStart,
+                                                          @RequestParam("dateEnd") String dateEnd,
+                                                          @RequestParam(value = "jurisdiction",required = false) String jurisdiction) throws ParseException {
+        if (StringUtils.isEmpty(dateEnd)){
+            dateEnd= LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        }
+        //默认全年
+        if (StringUtils.isEmpty(dateStart)){
+            dateStart="2023-01-01";
+        }
+        Date start = dateFormat.parse(dateStart);
+        Date end = dateFormat.parse(dateEnd);
+        AlarmReceipt alarmReceipt = new AlarmReceipt();
+        alarmReceipt.setAlarmTimeStart(start);
+        alarmReceipt.setAlarmTimeEnd(end);
+        List<SimpleIndex> alarmReceiptIndexList = alarmReceiptService.getAlarmReceiptCountByType(alarmReceipt);
+        return alarmReceiptIndexList;
+    }
+
+    @GetMapping("/getAlarmReceiptCommunityIndex")
+    public List<SimpleIndex> getAlarmReceiptCommunityIndex(@RequestParam("dateStart")  String dateStart,
+                                                      @RequestParam("dateEnd") String dateEnd,
+                                                      @RequestParam(value = "jurisdiction",required = false) String jurisdiction) throws ParseException {
+        if (StringUtils.isEmpty(dateEnd)){
+            dateEnd= LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        }
+        //默认全年
+        if (StringUtils.isEmpty(dateStart)){
+            dateStart="2023-01-01";
+        }
+        Date start = dateFormat.parse(dateStart);
+        Date end = dateFormat.parse(dateEnd);
+        AlarmReceipt alarmReceipt = new AlarmReceipt();
+        alarmReceipt.setAlarmTimeStart(start);
+        alarmReceipt.setAlarmTimeEnd(end);
+        List<SimpleIndex> alarmReceiptIndexList = alarmReceiptService.getAlarmReceiptCountByCommunity(alarmReceipt);
+        return alarmReceiptIndexList;
+    }
+
     @GetMapping("/getLatestDay")
     public String getLatestDay() {
         return caseService.getLatestDay();
@@ -668,6 +746,6 @@ public class CaseController {
 
         return cases;
     }
-
 }
+
 

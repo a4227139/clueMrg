@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.wa</groupId>
     <artifactId>clue-mrg</artifactId>
-    <version>0.0.9-SNAPSHOT</version>
+    <version>0.0.11-SNAPSHOT</version>
     <name>clue-mrg</name>
     <description>Clue Management System</description>
     <properties>

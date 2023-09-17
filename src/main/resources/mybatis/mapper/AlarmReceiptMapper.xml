@@ -4,14 +4,16 @@
 <mapper namespace="com.wa.cluemrg.dao.AlarmReceiptMapper">
 
     <resultMap id="AlarmReceiptResultMap" type="com.wa.cluemrg.entity.AlarmReceipt">
-        <id property="seq" column="SEQ"/>
+        <!--<id property="seq" column="SEQ"/>-->
+        <id property="jqno" column="JQNO"/>
         <result property="alarmTime" column="ALARM_TIME"/>
         <result property="department" column="DEPARTMENT"/>
         <result property="phone" column="PHONE"/>
         <result property="victim" column="VICTIM"/>
         <result property="id" column="ID"/>
         <result property="jurisdiction" column="JURISDICTION"/>
-        <result property="jurisdiction2" column="JURISDICTION2"/>
+        <result property="pcs" column="PCS"/>
+        <result property="community" column="COMMUNITY"/>
         <result property="address" column="ADDRESS"/>
         <result property="content" column="CONTENT"/>
         <result property="type" column="TYPE"/>
@@ -19,7 +21,13 @@
         <result property="stopPaymentMoney" column="STOP_PAYMENT_MONEY"/>
         <result property="stopPaymentAccount" column="STOP_PAYMENT_ACCOUNT"/>
         <result property="state" column="STATE"/>
-        <result property="jqno" column="JQNO"/>
+    </resultMap>
+
+    <resultMap id="SimpleIndexResultMap" type="com.wa.cluemrg.entity.SimpleIndex">
+        <result property="count" column="COUNT"/>
+        <result property="value" column="VALUE"/>
+        <result property="date" column="DATE"/>
+        <result property="name" column="NAME"/>
     </resultMap>
 
     <!-- 根据所有字段查找Clue -->
@@ -27,11 +35,26 @@
         SELECT *
         FROM alarm_receipt
         <where>
-            <if test="seq != null">
-                AND SEQ = #{seq}
+            <if test="jqno != null and jqno != ''">
+                AND JQNO LIKE CONCAT('%', #{jqno}, '%')
+            </if>
+            <if test="community != null and community != ''">
+                AND COMMUNITY LIKE CONCAT('%', #{community}, '%')
+            </if>
+            <if test="pcs != null and pcs != ''">
+                AND PCS LIKE CONCAT('%', #{pcs}, '%')
             </if>
             <if test="alarmTime != null">
                 AND ALARM_TIME = #{alarmTime}
+            </if>
+            <if test="alarmTimeStart != null and alarmTimeEnd != null">
+                AND ALARM_TIME BETWEEN #{alarmTimeStart,javaType = java.util.Date, jdbcType = TIMESTAMP} AND #{alarmTimeEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+            </if>
+            <if test="alarmTimeStart != null and alarmTimeEnd == null">
+                AND ALARM_TIME &gt;= #{alarmTimeStart,javaType = java.util.Date, jdbcType = TIMESTAMP}
+            </if>
+            <if test="alarmTimeStart == null and alarmTimeEnd != null">
+                AND ALARM_TIME &lt;= #{alarmTimeEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
             </if>
             <if test="department != null and department != ''">
                 AND DEPARTMENT LIKE CONCAT('%', #{department}, '%')
@@ -47,9 +70,6 @@
             </if>
             <if test="jurisdiction != null and jurisdiction != ''">
                 AND JURISDICTION LIKE CONCAT('%', #{jurisdiction}, '%')
-            </if>
-            <if test="jurisdiction2 != null and jurisdiction2 != ''">
-                AND JURISDICTION2 LIKE CONCAT('%', #{jurisdiction2}, '%')
             </if>
             <if test="address != null and address != ''">
                 AND ADDRESS LIKE CONCAT('%', #{address}, '%')
@@ -72,18 +92,15 @@
             <if test="state != null and state != ''">
                 AND STATE LIKE CONCAT('%', #{state}, '%')
             </if>
-            <if test="jqno != null and jqno != ''">
-                AND JQNO LIKE CONCAT('%', #{jqno}, '%')
-            </if>
         </where>
         order by ALARM_TIME desc
     </select>
 
     <!-- 增加数据操作 -->
     <insert id="insert" parameterType="com.wa.cluemrg.entity.AlarmReceipt">
-        INSERT INTO alarm_receipt (ALARM_TIME, DEPARTMENT, PHONE, VICTIM, ID, JURISDICTION, JURISDICTION2,
+        INSERT INTO alarm_receipt (JQNO,ALARM_TIME, DEPARTMENT, PHONE, VICTIM, ID, JURISDICTION,COMMUNITY, PCS,
                                    ADDRESS, CONTENT, TYPE, LOSS_MONEY, STOP_PAYMENT_MONEY, STOP_PAYMENT_ACCOUNT, STATE, JQNO)
-        VALUES (#{alarmTime}, #{department}, #{phone}, #{victim}, #{id}, #{jurisdiction}, #{jurisdiction2},
+        VALUES (#{jqno},#{alarmTime}, #{department}, #{phone}, #{victim}, #{id}, #{jurisdiction},#{community},#{pcs}
                 #{address}, #{content}, #{type}, #{lossMoney}, #{stopPaymentMoney}, #{stopPaymentAccount}, #{state}, #{jqno})
     </insert>
 
@@ -91,24 +108,24 @@
     <update id="update" parameterType="com.wa.cluemrg.entity.AlarmReceipt">
         UPDATE alarm_receipt
         SET ALARM_TIME = #{alarmTime}, DEPARTMENT = #{department}, PHONE = #{phone}, VICTIM = #{victim}, ID = #{id},
-            JURISDICTION = #{jurisdiction}, JURISDICTION2 = #{jurisdiction2}, ADDRESS = #{address}, CONTENT = #{content},
+            JURISDICTION = #{jurisdiction}, COMMUNITY=#{community}, PCS=#{pcs},ADDRESS = #{address}, CONTENT = #{content},
             TYPE = #{type}, LOSS_MONEY = #{lossMoney}, STOP_PAYMENT_MONEY = #{stopPaymentMoney},
-            STOP_PAYMENT_ACCOUNT = #{stopPaymentAccount}, STATE = #{state}, JQNO = #{jqno}
-        WHERE SEQ = #{seq}
+            STOP_PAYMENT_ACCOUNT = #{stopPaymentAccount}, STATE = #{state}
+        WHERE jqno = #{JQNO}
     </update>
 
     <!-- 删除数据操作 -->
-    <delete id="delete" parameterType="Integer">
-        DELETE FROM alarm_receipt WHERE SEQ = #{seq}
+    <delete id="delete" >
+        DELETE FROM alarm_receipt WHERE JQNO = #{jqno}
     </delete>
 
     <!-- 插入操作/更新 -->
-    <insert id="batchInsertOrUpdate" parameterType="com.wa.cluemrg.entity.DkClue">
-        INSERT IGNORE alarm_receipt (ALARM_TIME, DEPARTMENT, PHONE, VICTIM, ID, JURISDICTION, JURISDICTION2,
-        ADDRESS, CONTENT, TYPE, LOSS_MONEY, STOP_PAYMENT_MONEY, STOP_PAYMENT_ACCOUNT, STATE, JQNO)
+    <insert id="batchInsertOrUpdate" parameterType="com.wa.cluemrg.entity.AlarmReceipt">
+        INSERT IGNORE alarm_receipt (JQNO,ALARM_TIME, DEPARTMENT, PHONE, VICTIM, ID, JURISDICTION,COMMUNITY, PCS,
+        ADDRESS, CONTENT, TYPE, LOSS_MONEY, STOP_PAYMENT_MONEY, STOP_PAYMENT_ACCOUNT, STATE)
         VALUES
         <foreach collection="list" item="item" separator=",">
-            ( #{item.alarmTime}, #{item.department}, #{item.phone}, #{item.victim}, #{item.id}, #{item.jurisdiction},#{item.jurisdiction2}, #{item.address}, #{item.content}, #{item.type}, #{item.lossMoney}, #{item.stopPaymentMoney},#{item.stopPaymentAccount}, #{item.state}, #{item.jqno})
+            (  #{item.jqno},#{item.alarmTime}, #{item.department}, #{item.phone}, #{item.victim}, #{item.id}, #{item.jurisdiction},#{item.community},#{item.pcs},#{item.address}, #{item.content}, #{item.type}, #{item.lossMoney}, #{item.stopPaymentMoney},#{item.stopPaymentAccount}, #{item.state})
         </foreach>
         ON DUPLICATE KEY UPDATE
         ALARM_TIME = VALUES(ALARM_TIME),
@@ -116,19 +133,40 @@
         PHONE = VALUES(PHONE),
         VICTIM = VALUES(VICTIM),
         JURISDICTION = VALUES(JURISDICTION),
-        JURISDICTION2 = VALUES(JURISDICTION2),
+        COMMUNITY = VALUES(COMMUNITY),
+        PCS = VALUES(PCS),
         ADDRESS = VALUES(ADDRESS),
         CONTENT = VALUES(CONTENT),
         TYPE = VALUES(TYPE),
         LOSS_MONEY = VALUES(LOSS_MONEY),
         STOP_PAYMENT_MONEY = VALUES(STOP_PAYMENT_MONEY),
         STOP_PAYMENT_ACCOUNT = VALUES(STOP_PAYMENT_ACCOUNT),
-        STATE = VALUES(STATE),
-        JQNO = VALUES(JQNO)
+        STATE = VALUES(STATE)
     </insert>
 
     <select id="getLatestDate" resultType="string">
         SELECT DATE_FORMAT(ALARM_TIME, '%Y-%m-%d') FROM alarm_receipt order by ALARM_TIME DESC LIMIT 1
     </select>
 
+    <select id="getAlarmReceiptCountByDate" resultMap="SimpleIndexResultMap">
+        select COUNT(*) as count,DATE(alarm_time) AS date from alarm_receipt GROUP BY DATE(alarm_time) HAVING date
+        BETWEEN #{alarmTimeStart,javaType = java.util.Date, jdbcType = TIMESTAMP} AND #{alarmTimeEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+        ORDER BY date
+    </select>
+
+    <select id="getAlarmReceiptCountByType" resultMap="SimpleIndexResultMap">
+        select COUNT(*) AS value,type as name from alarm_receipt where DATE(alarm_time)
+            BETWEEN #{alarmTimeStart,javaType = java.util.Date, jdbcType = TIMESTAMP} AND #{alarmTimeEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+        GROUP BY name
+        ORDER BY value desc
+    </select>
+
+    <select id="getAlarmReceiptCountByCommunity" resultMap="SimpleIndexResultMap">
+        select COUNT(*) AS value,community as name from alarm_receipt
+        where DATE(alarm_time) BETWEEN #{alarmTimeStart,javaType = java.util.Date, jdbcType = TIMESTAMP} AND #{alarmTimeEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+        AND community!='未知'
+        GROUP BY name
+        ORDER BY value desc
+        LIMIT 10
+    </select>
 </mapper>

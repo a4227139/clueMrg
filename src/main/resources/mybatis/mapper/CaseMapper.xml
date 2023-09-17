@@ -19,6 +19,11 @@
         <result property="money" column="MONEY"/>
     </resultMap>
 
+    <resultMap id="SimpleIndexResultMap" type="com.wa.cluemrg.entity.SimpleIndex">
+        <result property="count" column="COUNT"/>
+        <result property="date" column="DATE"/>
+    </resultMap>
+
     <!-- 根据所有字段查找Clue -->
     <select id="selectAll" resultMap="caseResultMap">
         SELECT SEQ, CASE_NO, CASE_NAME, CASE_UNIT, REGISTER_DATE,JURISDICTION, ORGANIZER, SOLVE_DATE, TYPE, PROJECT_ID, ORGANISER, CO_ORGANISER, MONEY
@@ -320,6 +325,18 @@
 
     <select id="getLatestCase" resultType="java.lang.String">
         SELECT REGISTER_DATE FROM `CASE` ORDER BY REGISTER_DATE DESC LIMIT 1
+    </select>
+
+    <select id="getCaseCountByDate" resultMap="SimpleIndexResultMap">
+        select COUNT(*) as count,register_date as date from `case` GROUP BY register_date having REGISTER_DATE
+        BETWEEN #{registerDateStart,javaType = java.util.Date, jdbcType = TIMESTAMP} AND #{registerDateEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+        ORDER BY date
+    </select>
+
+    <select id="getCaseSolveCountByDate" resultMap="SimpleIndexResultMap">
+        select COUNT(*) as count,solve_date as date from case_solve GROUP BY solve_date having SOLVE_DATE
+        BETWEEN #{solveDateStart,javaType = java.util.Date, jdbcType = TIMESTAMP} AND #{solveDateEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+        ORDER BY date
     </select>
 
 </mapper>

@@ -35,21 +35,33 @@ public class AlarmReceiptListener extends CustomizeListener<AlarmReceipt> {
     public String dataDeal() {
         List<AlarmReceipt> dzList = new ArrayList<>();
         for (AlarmReceipt alarmReceipt:list){
-            if (alarmReceipt.getType().contains("电信网络诈骗")){
+            if (!StringUtils.isEmpty(alarmReceipt.getJqno())&&alarmReceipt.getType().contains("电信网络诈骗")){
                 String[] typeArray = alarmReceipt.getType().split("/");
                 if (typeArray.length>0){
                     String type = typeArray[typeArray.length-1];
                     alarmReceipt.setType(type);
                 }
-                String[] jurisdictionArray = alarmReceipt.getJurisdiction().split("/");
-                if (jurisdictionArray.length>0){
-                    String jurisdiction = typeArray[0];
-                    alarmReceipt.setJurisdiction2(jurisdiction);
+                if (!StringUtils.isEmpty(alarmReceipt.getJurisdiction())){
+                    String[] jurisdictionArray = alarmReceipt.getJurisdiction().split("/");
+                    if (jurisdictionArray.length>0){
+                        String jurisdiction = jurisdictionArray[0];
+                        alarmReceipt.setJurisdiction(jurisdiction);
+                        if (jurisdictionArray.length>1){
+                            alarmReceipt.setPcs(jurisdictionArray[1]);
+                        }else {
+                            alarmReceipt.setPcs("未知");
+                        }
+                        if (jurisdictionArray.length>2){
+                            alarmReceipt.setCommunity(jurisdictionArray[2]);
+                        }else {
+                            alarmReceipt.setCommunity("未知");
+                        }
+                    }
                 }
-                if (StringUtils.isEmpty(alarmReceipt.getVictim())){
+                if (!StringUtils.isEmpty(alarmReceipt.getVictim())){
                     alarmReceipt.setVictim(RegexMatcher.matchNameRegex(alarmReceipt.getContent()));
                 }
-                if (StringUtils.isEmpty(alarmReceipt.getId())){
+                if (!StringUtils.isEmpty(alarmReceipt.getId())){
                     alarmReceipt.setId(RegexMatcher.matchIdRegex(alarmReceipt.getContent()));
                 }
                 dzList.add(alarmReceipt);

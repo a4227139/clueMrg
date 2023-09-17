@@ -3,6 +3,7 @@ package com.wa.cluemrg.service;
 import com.alibaba.excel.EasyExcelFactory;
 import com.wa.cluemrg.dao.AlarmReceiptMapper;
 import com.wa.cluemrg.entity.AlarmReceipt;
+import com.wa.cluemrg.entity.SimpleIndex;
 import com.wa.cluemrg.listener.AlarmReceiptListener;
 import com.wa.cluemrg.util.UploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,5 +46,17 @@ public class AlarmReceiptService {
         ThreadLocal<String> message = new ThreadLocal<>();
         EasyExcelFactory.read(fileName, new AlarmReceiptListener(AlarmReceipt.class,alarmReceiptMapper,message)).headRowNumber(2).doReadAll();
         return message.get();
+    }
+
+    public List<SimpleIndex> getAlarmReceiptCountByDate(AlarmReceipt alarmReceipt){
+        return alarmReceiptMapper.getAlarmReceiptCountByDate(alarmReceipt);
+    }
+
+    public List<SimpleIndex> getAlarmReceiptCountByType(AlarmReceipt alarmReceipt){
+        return alarmReceiptMapper.getAlarmReceiptCountByType(alarmReceipt);
+    }
+
+    public List<SimpleIndex> getAlarmReceiptCountByCommunity(AlarmReceipt alarmReceipt){
+        return alarmReceiptMapper.getAlarmReceiptCountByCommunity(alarmReceipt);
     }
 }

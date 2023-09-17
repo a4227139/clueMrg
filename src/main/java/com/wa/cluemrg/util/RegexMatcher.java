@@ -1,5 +1,7 @@
 package com.wa.cluemrg.util;
 
+import org.springframework.util.StringUtils;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,6 +25,9 @@ public class RegexMatcher {
     }
 
     public static String matchNameRegex(String text) {
+        if (StringUtils.isEmpty(text)){
+            return "";
+        }
         for (Pattern pattern : patterns) {
             Matcher matcher = pattern.matcher(text);
             if (matcher.find()) {
@@ -42,6 +47,9 @@ public class RegexMatcher {
     static String regexId = "(\\b|是|为|证|号)(\\d{17}(\\d|X|x))\\b";
     static Pattern patternId = Pattern.compile(regexId);
     public static String matchIdRegex(String text) {
+        if (StringUtils.isEmpty(text)) {
+            return "";
+        }
         Matcher matcher = patternId.matcher(text);
         if (matcher.find()) {
             //System.out.println(regex);

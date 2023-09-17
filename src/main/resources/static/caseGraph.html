@@ -98,9 +98,16 @@
                     </span>
                 </label>
             </span>
+            <div id="content3" style="height: 400px"><div id="container3" style="height: 100%"></div></div>
+            <br/>
             <div id="content" style="height: 400px"><div id="container" style="height: 100%"></div></div>
             <br/>
             <div id="content2" style="height: 400px"><div id="container2" style="height: 100%"></div></div>
+            <br/>
+            <div id="content4" style="height: 400px"><div id="container4" style="height: 100%"></div></div>
+            <br/>
+            <div id="content5" style="height: 400px"><div id="container5" style="height: 100%"></div></div>
+            <br/>
             </div>
             </div>
         </div>
@@ -144,6 +151,24 @@
 
         var dom2 = document.getElementById('container2');
         var myChart2 = echarts.init(dom2, null, {
+            renderer: 'canvas',
+            useDirtyRect: false
+        });
+
+        var dom3 = document.getElementById('container3');
+        var myChart3 = echarts.init(dom3, null, {
+            renderer: 'canvas',
+            useDirtyRect: false
+        });
+
+        var dom4 = document.getElementById('container4');
+        var myChart4 = echarts.init(dom4, null, {
+            renderer: 'canvas',
+            useDirtyRect: false
+        });
+
+        var dom5 = document.getElementById('container5');
+        var myChart5 = echarts.init(dom5, null, {
             renderer: 'canvas',
             useDirtyRect: false
         });
@@ -324,9 +349,199 @@
                     myChart2.setOption(option2);
                 }
             });
+
+            $.get(ROOT_PATH + "/case/getCaseLineIndex?dateStart="+dateStart+"&dateEnd="+dateEnd, function (data) {
+                var caseIndexList=data.caseIndexList;
+                var caseSolveIndexList=data.caseSolveIndexList;
+                var alarmReceiptIndexList=data.alarmReceiptIndexList;
+                //var case_data = [["2000-06-05", 116], ["2000-06-06", 129], ["2000-06-07", 135], ["2000-06-08", 86], ["2000-06-09", 73], ["2000-06-10", 85], ["2000-06-11", 73], ["2000-06-12", 68], ["2000-06-13", 92], ["2000-06-14", 130], ["2000-06-15", 245], ["2000-06-16", 139], ["2000-06-17", 115], ["2000-06-18", 111], ["2000-06-19", 309], ["2000-06-20", 206], ["2000-06-21", 137], ["2000-06-22", 128], ["2000-06-23", 85], ["2000-06-24", 94], ["2000-06-25", 71], ["2000-06-26", 106], ["2000-06-27", 84], ["2000-06-28", 93], ["2000-06-29", 85], ["2000-06-30", 73], ["2000-07-01", 83], ["2000-07-02", 125], ["2000-07-03", 107], ["2000-07-04", 82], ["2000-07-05", 44], ["2000-07-06", 72], ["2000-07-07", 106], ["2000-07-08", 107], ["2000-07-09", 66], ["2000-07-10", 91], ["2000-07-11", 92], ["2000-07-12", 113], ["2000-07-13", 107], ["2000-07-14", 131], ["2000-07-15", 111], ["2000-07-16", 64], ["2000-07-17", 69], ["2000-07-18", 88], ["2000-07-19", 77], ["2000-07-20", 83], ["2000-07-21", 111], ["2000-07-22", 57], ["2000-07-23", 55], ["2000-07-24", 60]];
+                //var solve_data = [["2000-06-05", 23], ["2000-06-06", 23], ["2000-06-07", 42], ["2000-06-08", 86], ["2000-06-09", 73], ["2000-06-10", 85], ["2000-06-11", 73], ["2000-06-12", 54], ["2000-06-13", 13], ["2000-06-14", 78], ["2000-06-15", 245], ["2000-06-16", 139], ["2000-06-17", 115], ["2000-06-18", 111], ["2000-06-19", 309], ["2000-06-20", 206], ["2000-06-21", 137], ["2000-06-22", 128], ["2000-06-23", 85], ["2000-06-24", 94], ["2000-06-25", 71], ["2000-06-26", 106], ["2000-06-27", 84], ["2000-06-28", 93], ["2000-06-29", 85], ["2000-06-30", 73], ["2000-07-01", 83], ["2000-07-02", 125], ["2000-07-03", 107], ["2000-07-04", 82], ["2000-07-05", 44], ["2000-07-06", 72], ["2000-07-07", 106], ["2000-07-08", 107], ["2000-07-09", 66], ["2000-07-10", 91], ["2000-07-11", 92], ["2000-07-12", 113], ["2000-07-13", 107], ["2000-07-14", 131], ["2000-07-15", 111], ["2000-07-16", 64], ["2000-07-17", 69], ["2000-07-18", 88], ["2000-07-19", 77], ["2000-07-20", 83], ["2000-07-21", 111], ["2000-07-22", 57], ["2000-07-23", 55], ["2000-07-24", 60]];
+                var dateList = alarmReceiptIndexList.map(function (item) {
+                    return item.date;
+                });
+                var valueList1 = alarmReceiptIndexList.map(function (item) {
+                    return item.count;
+                });
+                var valueList2 = caseIndexList.map(function (item) {
+                    return item.count;
+                });
+                var valueList3 = caseSolveIndexList.map(function (item) {
+                    return item.count;
+                });
+                option3 = {
+                    // Make gradient line here
+                    /*visualMap: [
+                        {
+                            show: true,
+                            type: 'continuous',
+                            seriesIndex: [0,1],
+                            min: 0,
+                            max: 400
+                        }
+                    ],*/
+                    title: [
+                        {
+                            left: 'top',
+                            text: '发/立/破案趋势图'
+                        }
+                    ],
+                    legend: {
+                        data: ['发案', '立案', '破案']
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    xAxis: [
+                        {
+                            data: dateList,
+                            gridIndex: 1
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            gridIndex: 1
+                        }
+                    ],
+                    grid: [
+                        {
+                            bottom: '30%'
+                        },
+                        {
+                            //top: '60%'
+                        }
+                    ],
+                    series: [
+                        {
+                            type: 'line',
+                            name: '发案',
+                            showSymbol: false,
+                            label: {
+                                show: true,
+                                position: 'top'
+                            },
+                            data: valueList1,
+                            xAxisIndex: 0,
+                            yAxisIndex: 0
+                        },
+                        {
+                            type: 'line',
+                            name: '立案',
+                            showSymbol: false,
+                            label: {
+                                show: true,
+                                position: 'top'
+                            },
+                            data: valueList2,
+                            xAxisIndex: 0,
+                            yAxisIndex: 0
+                        },
+                        {
+                            type: 'line',
+                            name: '破案',
+                            showSymbol: false,
+                            label: {
+                                show: true,
+                                position: 'top'
+                            },
+                            data: valueList3,
+                            xAxisIndex: 0,
+                            yAxisIndex: 0
+                        }
+                    ]
+                };
+                if (option3 && typeof option3 === 'object') {
+                    console.log("myChart3.setOption(option3)")
+                    myChart3.setOption(option3);
+                }
+            });
+
+            $.get(ROOT_PATH + "/case/getAlarmReceiptTypeIndex?dateStart="+dateStart+"&dateEnd="+dateEnd, function (data) {
+                option4 = {
+                    title: {
+                        text: '发案类型',
+                        subtext: '全年累计',
+                        left: 'center'
+                    },
+                    tooltip: {
+                        trigger: 'item'
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        left: 'left'
+                    },
+                    series: [
+                        {
+                            name: '发案类型',
+                            type: 'pie',
+                            radius: '50%',
+                            data: data,
+                            label: {
+                                show: true,
+                                //position: 'inside', // 设置标签位置为饼图内部
+                                formatter: '{b}: {c}'  // 设置标签内容为name和value
+                            },
+                            emphasis: {
+                                itemStyle: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            }
+                        }
+                    ]
+                };
+                if (option4 && typeof option4 === 'object') {
+                    console.log("myChart4.setOption(option4)")
+                    myChart4.setOption(option4);
+                }
+            });
+
+            $.get(ROOT_PATH + "/case/getAlarmReceiptCommunityIndex?dateStart="+dateStart+"&dateEnd="+dateEnd, function (data) {
+                option5 = {
+                    title: {
+                        text: '发案社区（前十）',
+                        subtext: '全年累计',
+                        left: 'center'
+                    },
+                    tooltip: {
+                        trigger: 'item'
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        left: 'left'
+                    },
+                    series: [
+                        {
+                            name: '发案社区',
+                            type: 'pie',
+                            radius: '50%',
+                            data: data,
+                            label: {
+                                show: true,
+                                //position: 'inside', // 设置标签位置为饼图内部
+                                formatter: '{b}: {c}'  // 设置标签内容为name和value
+                            },
+                            emphasis: {
+                                itemStyle: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            }
+                        }
+                    ]
+                };
+                if (option5 && typeof option5 === 'object') {
+                    console.log("myChart5.setOption(option5)")
+                    myChart5.setOption(option5);
+                }
+            });
         });
+
         window.addEventListener('resize', myChart.resize);
         window.addEventListener('resize', myChart2.resize);
+        window.addEventListener('resize', myChart3.resize);
+        window.addEventListener('resize', myChart4.resize);
 
         $("#data").keydown(function (event) {
             if (event.keyCode == 13) {

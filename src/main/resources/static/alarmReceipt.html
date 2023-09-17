@@ -266,7 +266,7 @@
             }
         },
         fields: [
-            {name: "seq", type: "text", title: "序号",visible:false},
+            {name: "jqno", type: "text", title: "警情编号"},
             {name: "alarmTime", type: "text", title: "报警时间",width: 150,
                 itemTemplate: function(value) {
                 return formatDate(new Date(value));
@@ -277,6 +277,8 @@
             {name: "victim", type: "text", title: "报警人",width: 100, validate: "required"},
             {name: "id", type: "text", title: "报警人身份证",width: 180},
             {name: "jurisdiction", type: "text", title: "所属辖区",width: 200},
+            {name: "pcs", type: "text", title: "派出所",width: 200},
+            {name: "community", type: "text", title: "社区",width: 200},
             {name: "address", type: "text", title: "案发地址",width: 200},
             {name: "content", type: "text", title: "警情内容",width: 300},
             {name: "type", type: "text", title: "警情类别",width: 180},
@@ -302,7 +304,6 @@
             },
             {name: "stopPaymentAccount", type: "text", title: "止付账户"},
             {name: "state", type: "text", title: "案件状态"},
-            {name: "jqno", type: "text", title: "警情编号"},
             {type: "control",width: 100}
         ]
     })

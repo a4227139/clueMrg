@@ -1,6 +1,7 @@
 package com.wa.cluemrg.dao;
 
 import com.wa.cluemrg.entity.Case;
+import com.wa.cluemrg.entity.SimpleIndex;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -35,4 +36,8 @@ public interface CaseMapper extends MyBatisBaseDao<Case, String> {
     int batchInsertOrUpdate(List<Case> caseList);
 
     int batchInsertOrUpdateSolve(List<Case> caseList);
+
+    List<SimpleIndex> getCaseCountByDate(Case caseObj);
+
+    List<SimpleIndex> getCaseSolveCountByDate(Case caseObj);
 }

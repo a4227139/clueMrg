@@ -2,6 +2,7 @@ package com.wa.cluemrg.service;
 
 import com.wa.cluemrg.dao.CaseMapper;
 import com.wa.cluemrg.entity.Case;
+import com.wa.cluemrg.entity.SimpleIndex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,5 +63,13 @@ public class CaseService {
     }
     public int batchDeleteSolve(List<String> list) {
         return caseMapper.batchDeleteSolve(list);
+    }
+
+    public List<SimpleIndex> getCaseCountByDate(Case caseObj) {
+        return caseMapper.getCaseCountByDate(caseObj);
+    }
+
+    public List<SimpleIndex> getCaseSolveCountByDate(Case caseObj) {
+        return caseMapper.getCaseSolveCountByDate(caseObj);
     }
 }
