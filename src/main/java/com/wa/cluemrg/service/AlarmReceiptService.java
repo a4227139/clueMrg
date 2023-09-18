@@ -3,6 +3,7 @@ package com.wa.cluemrg.service;
 import com.alibaba.excel.EasyExcelFactory;
 import com.wa.cluemrg.dao.AlarmReceiptMapper;
 import com.wa.cluemrg.entity.AlarmReceipt;
+import com.wa.cluemrg.entity.AlarmReceiptIndex;
 import com.wa.cluemrg.entity.SimpleIndex;
 import com.wa.cluemrg.listener.AlarmReceiptListener;
 import com.wa.cluemrg.util.UploadUtil;
@@ -58,5 +59,9 @@ public class AlarmReceiptService {
 
     public List<SimpleIndex> getAlarmReceiptCountByCommunity(AlarmReceipt alarmReceipt){
         return alarmReceiptMapper.getAlarmReceiptCountByCommunity(alarmReceipt);
+    }
+
+    public List<AlarmReceiptIndex> getAlarmReceiptIndex(AlarmReceipt alarmReceipt){
+        return alarmReceiptMapper.getAlarmReceiptIndex(alarmReceipt);
     }
 }

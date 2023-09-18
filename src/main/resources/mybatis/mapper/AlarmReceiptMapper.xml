@@ -30,6 +30,16 @@
         <result property="name" column="NAME"/>
     </resultMap>
 
+    <resultMap id="AlarmReceiptIndexResultMap" type="com.wa.cluemrg.entity.AlarmReceiptIndex">
+        <result property="count" column="COUNT"/>
+        <result property="lossMoney" column="LOSS_MONEY"/>
+        <result property="stopPaymentMoney" column="STOP_PAYMENT_MONEY"/>
+        <result property="stopPaymentAccount" column="STOP_PAYMENT_ACCOUNT"/>
+        <result property="stopPaymentMoney" column="STOP_PAYMENT_MONEY"/>
+        <result property="stopPaymentAccount" column="STOP_PAYMENT_ACCOUNT"/>
+        <result property="date" column="DATE"/>
+    </resultMap>
+
     <!-- 根据所有字段查找Clue -->
     <select id="selectAll" resultMap="AlarmReceiptResultMap">
         SELECT *
@@ -111,7 +121,7 @@
             JURISDICTION = #{jurisdiction}, COMMUNITY=#{community}, PCS=#{pcs},ADDRESS = #{address}, CONTENT = #{content},
             TYPE = #{type}, LOSS_MONEY = #{lossMoney}, STOP_PAYMENT_MONEY = #{stopPaymentMoney},
             STOP_PAYMENT_ACCOUNT = #{stopPaymentAccount}, STATE = #{state}
-        WHERE jqno = #{JQNO}
+        WHERE JQNO = #{jqno}
     </update>
 
     <!-- 删除数据操作 -->
@@ -132,6 +142,7 @@
         DEPARTMENT = VALUES(DEPARTMENT),
         PHONE = VALUES(PHONE),
         VICTIM = VALUES(VICTIM),
+        ID=VALUES(ID),
         JURISDICTION = VALUES(JURISDICTION),
         COMMUNITY = VALUES(COMMUNITY),
         PCS = VALUES(PCS),
@@ -168,5 +179,13 @@
         GROUP BY name
         ORDER BY value desc
         LIMIT 10
+    </select>
+
+    <select id="getAlarmReceiptIndex" resultMap="AlarmReceiptIndexResultMap">
+        select COUNT(*) AS count ,SUM(loss_money) as loss_money,SUM(stop_payment_money) as stop_payment_money ,
+        SUM(stop_payment_account) as stop_payment_account,DATE(alarm_time) as date
+        from alarm_receipt GROUP BY DATE(alarm_time) HAVING date
+        BETWEEN #{alarmTimeStart,javaType = java.util.Date, jdbcType = TIMESTAMP} AND #{alarmTimeEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+        ORDER BY date
     </select>
 </mapper>

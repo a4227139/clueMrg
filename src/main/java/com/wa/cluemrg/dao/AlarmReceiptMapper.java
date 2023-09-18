@@ -1,6 +1,7 @@
 package com.wa.cluemrg.dao;
 
 import com.wa.cluemrg.entity.AlarmReceipt;
+import com.wa.cluemrg.entity.AlarmReceiptIndex;
 import com.wa.cluemrg.entity.SimpleIndex;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -35,4 +36,6 @@ public interface AlarmReceiptMapper extends MyBatisBaseDao<AlarmReceipt, String>
     List<SimpleIndex> getAlarmReceiptCountByType(AlarmReceipt alarmReceipt);
 
     List<SimpleIndex> getAlarmReceiptCountByCommunity(AlarmReceipt alarmReceipt);
+
+    List<AlarmReceiptIndex> getAlarmReceiptIndex(AlarmReceipt alarmReceipt);
 }

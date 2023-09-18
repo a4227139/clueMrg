@@ -35,9 +35,9 @@ public class AlarmReceipt {
     @ExcelProperty(value={"警情类别","警情分类"})
     private String type;
     @ExcelProperty(value={"损失金额(万元)"})
-    private Double lossMoney;
+    private Float lossMoney;
     @ExcelProperty(value={"止付金额"})
-    private Double stopPaymentMoney;
+    private Float stopPaymentMoney;
     @ExcelProperty(value={"止付账户"})
     private Integer stopPaymentAccount;
     @ExcelProperty(value={"案件状态（已立案、已破案）"})

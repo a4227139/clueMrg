@@ -9,17 +9,16 @@ import com.deepoove.poi.util.PoitlIOUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wa.cluemrg.bo.PageBO;
-import com.wa.cluemrg.entity.AlarmReceipt;
-import com.wa.cluemrg.entity.Case;
-import com.wa.cluemrg.entity.CaseIndex;
-import com.wa.cluemrg.entity.SimpleIndex;
+import com.wa.cluemrg.entity.*;
 import com.wa.cluemrg.exception.BusinessException;
 import com.wa.cluemrg.response.ResponseResult;
 import com.wa.cluemrg.service.AlarmReceiptService;
 import com.wa.cluemrg.service.CaseService;
+import com.wa.cluemrg.util.DateIntervalCalculator;
 import com.wa.cluemrg.util.JurisdictionUtil;
 import com.wa.cluemrg.vo.JsGridVO;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.io.IOUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -136,6 +135,7 @@ public class CaseController {
     public void exportExcel(@RequestParam("dateStart")  String dateStart,
                             @RequestParam("dateEnd") String dateEnd,
                             HttpServletResponse response) throws IOException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
             if (StringUtils.isEmpty(dateStart)){
                 dateStart="2023-01-01";
@@ -147,7 +147,7 @@ public class CaseController {
             response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             response.setCharacterEncoding("utf-8");
             // 这里URLEncoder.encode可以防止中文乱码
-            String fileName = URLEncoder.encode("2023年全市电诈案件情况统计表（1.1-9.16）", "UTF-8").replaceAll("\\+", "%20");
+            String fileName = URLEncoder.encode("2023年全市电诈案件情况统计表", "UTF-8").replaceAll("\\+", "%20");
             response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xlsx");
             workbook.write(response.getOutputStream());
             response.flushBuffer();
@@ -175,9 +175,16 @@ public class CaseController {
         }
         //获取指标
         List<CaseIndex> caseIndexList = getCaseIndex(dateStart,dateEnd,"");
-        String filePath = this.getClass().getClassLoader().getResource("templates/caseTemplate.xlsx").getPath();
-        try (FileInputStream fis = new FileInputStream(filePath);
-             Workbook workbook = new XSSFWorkbook(fis)) {
+        InputStream inputStream =  this.getClass().getClassLoader().getResourceAsStream("templates/caseTemplate.xlsx");
+        try {
+            // 创建临时文件
+            File tempFile = File.createTempFile("tempTemplate", ".xlsx");
+            // 将资源复制到临时文件
+            copyInputStreamToFile(inputStream, tempFile);
+            // 使用 FileInputStream 包装临时文件
+            FileInputStream fis = new FileInputStream(tempFile);
+            Workbook workbook = new XSSFWorkbook(fis);
+
             Sheet sheet = workbook.getSheetAt(0);
             Row row = sheet.getRow(0); // Assuming you want to modify the second row
             Cell cell = row.getCell(0); // Assuming you want to modify the second cell in that row
@@ -221,6 +228,12 @@ public class CaseController {
         return null;
     }
 
+    private static void copyInputStreamToFile(InputStream inputStream, File file) throws IOException {
+        try (FileOutputStream outputStream = new FileOutputStream(file)) {
+            IOUtils.copy(inputStream, outputStream);
+        }
+    }
+
     @GetMapping("/exportWord")
     public void exportWord(@RequestParam("dateStart") String dateStart,
                            @RequestParam("dateEnd") String dateEnd,
@@ -230,22 +243,19 @@ public class CaseController {
             response.setContentType("application/octet-stream");
             response.setCharacterEncoding("utf-8");
             // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
-            String fileName = URLEncoder.encode("案件报告", "UTF-8").replaceAll("\\+", "%20");
+            String fileName = URLEncoder.encode(dateEnd+"柳州市公安局每日电诈警情研判报告", "UTF-8").replaceAll("\\+", "%20");
             response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".docx");
+            if (StringUtils.isEmpty(dateStart)){
+                dateStart="2023-01-01";
+            }
+            if (StringUtils.isEmpty(dateEnd)) {
+                dateEnd = dateFormat.format(new Date());
+            }
             //获取指标
             List<CaseIndex> caseIndexList = getCaseIndex(dateStart,dateEnd,"");
             //填充文档
             Map<String, Object> dataMap = new HashMap<>();
             dataMap.put("list", caseIndexList);
-            // 创建一个新列表存储排序后的指标
-            /*List<CaseIndex> caseIndexListSortByCount = new ArrayList<>();
-            caseIndexListSortByCount.addAll(caseIndexList);
-            caseIndexListSortByCount.remove(0);
-            // 创建一个自定义的Comparator，按照数量升序排序
-            Comparator<CaseIndex> countComparator = Comparator.comparingInt(CaseIndex::getCount);
-            // 使用Collections.sort()对列表进行排序
-            Collections.sort(caseIndexListSortByCount, countComparator);
-            dataMap.put("caseIndexListSortByCount", caseIndexListSortByCount);*/
 
             // 创建一个新列表存储排序后的指标
             List<CaseIndex> caseIndexListSortBySolveRate = new ArrayList<>();
@@ -276,6 +286,9 @@ public class CaseController {
             // 使用Collections.sort()对列表进行排序
             Collections.sort(caseIndexListSortByAverageLossMoney, averageLossMoneyComparator);
             dataMap.put("caseIndexListSortByAverageLossMoney", caseIndexListSortByAverageLossMoney);
+
+            //获取指标
+            //List<AlarmReceiptIndex> alarmReceiptIndexList = getAlarmReceiptIndex(dateStart,dateEnd,"");
 
             OutputStream out = response.getOutputStream();
             BufferedOutputStream bos = new BufferedOutputStream(out);
@@ -329,7 +342,106 @@ public class CaseController {
         return caseIndexList;
     }
 
+    @GetMapping("/getAlarmReceiptIndex")
+    public List<AlarmReceiptIndex> getAlarmReceiptIndex(@RequestParam("dateStart")  String dateStart,
+                                        @RequestParam("dateEnd") String dateEnd,
+                                        @RequestParam(value = "jurisdiction",required = false) String jurisdiction) throws ParseException {
+        if (StringUtils.isEmpty(dateStart)){
+            dateStart="2023-01-01";
+        }
+        if (StringUtils.isEmpty(dateEnd)) {
+            dateEnd = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        }
+        LocalDate currDate = LocalDate.parse(dateEnd);
+        LocalDate dateEnd1=currDate.minusDays(1);
+        LocalDate dateEnd2=currDate.minusDays(2);
+        LocalDate dateEnd3=currDate.minusDays(3);
+
+        AlarmReceipt param = new AlarmReceipt();
+        param.setAlarmTimeStart(dateFormat.parse(dateEnd3.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
+        param.setAlarmTimeEnd(dateFormat.parse(dateEnd));
+        List<AlarmReceipt> list = alarmReceiptService.selectAll(param);
+        List<AlarmReceiptIndex> listIndex = alarmReceiptService.getAlarmReceiptIndex(param);
+        List<AlarmReceiptIndex> alarmReceiptIndexList = dealAlarmReceiptIndex(list,listIndex,dateEnd3.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),dateEnd);
+        return alarmReceiptIndexList;
+    }
+
+    private List<AlarmReceiptIndex> dealAlarmReceiptIndex(List<AlarmReceipt> list,List<AlarmReceiptIndex> listIndex, String dateStart, String dateEnd) throws ParseException {
+        Case param = new Case();
+
+        param.setRegisterDateStart(dateFormat.parse(dateStart));
+        param.setRegisterDateEnd(dateFormat.parse(dateEnd));
+        List<Case> listRegister = caseService.selectAll(param);
+
+        Case paramSolve = new Case();
+        paramSolve.setSolveDateStart(dateFormat.parse(dateStart));
+        paramSolve.setSolveDateEnd(dateFormat.parse(dateEnd));
+        List<Case> listSolve = caseService.selectAllSolve(paramSolve);
+
+        LocalDate currDate = LocalDate.parse(dateEnd);
+        LocalDate dateEnd1=currDate.minusDays(1);
+        LocalDate dateEnd2=currDate.minusDays(2);
+        LocalDate dateEnd3=currDate.minusDays(3);
+        for (Case caseObj:listRegister){
+            if (dateFormat.format(caseObj.getRegisterDate()).contains(dateEnd3.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))){
+                listIndex.get(0).setRegisterCount(listIndex.get(0).getCount()+1);
+                continue;
+            }else if (dateFormat.format(caseObj.getRegisterDate()).contains(dateEnd2.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))){
+                listIndex.get(1).setRegisterCount(listIndex.get(1).getCount()+1);
+                continue;
+            }else if (dateFormat.format(caseObj.getRegisterDate()).contains(dateEnd1.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))){
+                listIndex.get(2).setRegisterCount(listIndex.get(2).getCount()+1);
+                continue;
+            }else if (dateFormat.format(caseObj.getRegisterDate()).contains(dateEnd)){
+                listIndex.get(3).setRegisterCount(listIndex.get(3).getCount()+1);
+                continue;
+            }
+        }
+
+        for (Case caseObj:listSolve){
+            if (dateFormat.format(caseObj.getRegisterDate()).contains(dateEnd3.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))){
+                listIndex.get(0).setSolveCount(listIndex.get(0).getSolveCount()+1);
+                continue;
+            }else if (dateFormat.format(caseObj.getRegisterDate()).contains(dateEnd2.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))){
+                listIndex.get(1).setSolveCount(listIndex.get(1).getSolveCount()+1);
+                continue;
+            }else if (dateFormat.format(caseObj.getRegisterDate()).contains(dateEnd1.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))){
+                listIndex.get(2).setSolveCount(listIndex.get(2).getSolveCount()+1);
+                continue;
+            }else if (dateFormat.format(caseObj.getRegisterDate()).contains(dateEnd)){
+                listIndex.get(3).setSolveCount(listIndex.get(3).getSolveCount()+1);
+                continue;
+            }
+        }
+
+        int baseCount;
+        float baseLossMoney;
+        DecimalFormat decimalFormat = new DecimalFormat("#.#");
+        for (int i=1;i<listIndex.size();i++){
+            baseCount = listIndex.get(i-1).getCount();
+            baseLossMoney = listIndex.get(i-1).getLossMoney();
+            if (baseCount!=0){
+                float countRate = (float) (listIndex.get(i).getCount()-baseCount)/baseCount*100;
+                listIndex.get(i).setCountRate(countRate);
+                listIndex.get(i).setCountRateFormat(decimalFormat.format(countRate));
+            }
+            if (baseLossMoney!=0){
+                float lossMoneyRate = (listIndex.get(i).getLossMoney()-baseLossMoney)/baseLossMoney*100;
+                listIndex.get(i).setLossMoneyRate(lossMoneyRate);
+                listIndex.get(i).setLossMoneyRateFormat(decimalFormat.format(lossMoneyRate));
+            }
+        }
+
+        listIndex.get(0).setDateChinese(dateEnd3.format(DateTimeFormatter.ofPattern("yyyy年MM月dd日")));
+        listIndex.get(1).setDateChinese(dateEnd2.format(DateTimeFormatter.ofPattern("yyyy年MM月dd日")));
+        listIndex.get(2).setDateChinese(dateEnd1.format(DateTimeFormatter.ofPattern("yyyy年MM月dd日")));
+        listIndex.get(3).setDateChinese(dateEnd.substring(0,4)+"年"+dateEnd.substring(5,7)+"月"+dateEnd.substring(8,10)+"日");
+
+        return listIndex;
+    }
+
     public List<CaseIndex> dealCaseIndex(List<Case> caseList,List<Case> solveCaseList,List<Case> historyCaseList,String dateStart,String dateEnd) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String[] jurisdictionArray=new String[]{"市本级","城中分局","鱼峰分局","柳南分局","柳北分局","柳江分局","柳东分局","柳城县局","鹿寨县局","融安县局","融水县局","三江县局"};
         Map<String,Integer> jurisdictionMap = new HashMap<String,Integer>() {
             {
@@ -463,6 +575,7 @@ public class CaseController {
                                 @RequestParam("dateEnd") String dateEnd) throws ParseException {
         List<Case> list = syncCaseList(dateStart,dateEnd,jzurl);
         Case param = new Case();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         if (!StringUtils.isEmpty(dateStart)){
             param.setRegisterDateStart(dateFormat.parse(dateStart));
         }else {
@@ -536,7 +649,7 @@ public class CaseController {
     public Map<String,List<SimpleIndex>> getCaseLineIndex(@RequestParam("dateStart")  String dateStart,
                                                           @RequestParam("dateEnd") String dateEnd,
                                                           @RequestParam(value = "jurisdiction",required = false) String jurisdiction) throws ParseException {
-
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         if (StringUtils.isEmpty(dateEnd)){
             dateEnd= LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         }
@@ -557,9 +670,9 @@ public class CaseController {
         AlarmReceipt alarmReceipt = new AlarmReceipt();
         alarmReceipt.setAlarmTimeStart(start);
         alarmReceipt.setAlarmTimeEnd(end);
-        List<SimpleIndex> caseIndexList = caseService.getCaseCountByDate(caseObj);
-        List<SimpleIndex> caseSolveIndexList = caseService.getCaseSolveCountByDate(solveCase);
-        List<SimpleIndex> alarmReceiptIndexList = alarmReceiptService.getAlarmReceiptCountByDate(alarmReceipt);
+        List<SimpleIndex> caseIndexList = addZeroSimpleIndex(caseService.getCaseCountByDate(caseObj),dateStart,dateEnd);
+        List<SimpleIndex> caseSolveIndexList = addZeroSimpleIndex(caseService.getCaseSolveCountByDate(solveCase),dateStart,dateEnd);
+        List<SimpleIndex> alarmReceiptIndexList = addZeroSimpleIndex(alarmReceiptService.getAlarmReceiptCountByDate(alarmReceipt),dateStart,dateEnd);
         Map<String,List<SimpleIndex>> index = new HashMap<>();
         index.put("caseIndexList",caseIndexList);
         index.put("caseSolveIndexList",caseSolveIndexList);
@@ -567,10 +680,39 @@ public class CaseController {
         return index;
     }
 
+    private List<SimpleIndex> addZeroSimpleIndex(List<SimpleIndex> list,String dateStart,String dateEnd){
+        List<LocalDate> dateList = DateIntervalCalculator.getDateRange(dateStart,dateEnd);
+        List<LocalDate> zeroDateList=new ArrayList<>();
+        List<SimpleIndex> zeroSimpleIndexList = new ArrayList<>();
+        for (LocalDate date:dateList){
+            boolean exist=false;
+            for (SimpleIndex index:list){
+                if (index.getDate().equals(date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))){
+                    exist=true;
+                    break;
+                }
+            }
+            if (!exist){
+                zeroDateList.add(date);
+            }
+        }
+        for (LocalDate date:zeroDateList){
+            SimpleIndex simpleIndex = new SimpleIndex();
+            simpleIndex.setDate(date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            simpleIndex.setCount(0);
+            list.add(simpleIndex);
+        }
+        // 创建一个自定义的Comparator，按照破案率升序排序
+        // 使用Collections.sort()对列表进行排序
+        Collections.sort(list, new StringFieldComparator());
+        return list;
+    }
+
     @GetMapping("/getAlarmReceiptTypeIndex")
     public List<SimpleIndex> getAlarmReceiptTypeIndex(@RequestParam("dateStart")  String dateStart,
                                                           @RequestParam("dateEnd") String dateEnd,
                                                           @RequestParam(value = "jurisdiction",required = false) String jurisdiction) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         if (StringUtils.isEmpty(dateEnd)){
             dateEnd= LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         }
@@ -591,6 +733,7 @@ public class CaseController {
     public List<SimpleIndex> getAlarmReceiptCommunityIndex(@RequestParam("dateStart")  String dateStart,
                                                       @RequestParam("dateEnd") String dateEnd,
                                                       @RequestParam(value = "jurisdiction",required = false) String jurisdiction) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         if (StringUtils.isEmpty(dateEnd)){
             dateEnd= LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         }
@@ -630,6 +773,7 @@ public class CaseController {
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public List<Case> syncCaseList(String dateStart,String dateEnd,String urlString) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
             if (StringUtils.isEmpty(dateStart)){
                 dateStart="2023-01-01";
@@ -748,4 +892,10 @@ public class CaseController {
     }
 }
 
-
+class StringFieldComparator implements Comparator<SimpleIndex> {
+    @Override
+    public int compare(SimpleIndex obj1, SimpleIndex obj2) {
+        // 按照 name 字段的字母顺序进行比较
+        return obj1.getDate().compareTo(obj2.getDate());
+    }
+}

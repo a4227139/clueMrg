@@ -23,14 +23,14 @@ public class DateIntervalCalculator {
         System.out.println("Number of days between " + dateStartString + " and " + dateEndString + ": " + daysBetween);
 
         // Generate and print the list of dates in the range
-        List<LocalDate> dateList = getDateRange(dateStart, dateEnd);
+        List<LocalDate> dateList = getDateRange(dateStartString, dateEndString);
         System.out.println("Dates in the range:");
         for (LocalDate date : dateList) {
             System.out.println(date);
         }
     }
 
-    private static  int daysBetween(String dateStartString,String dateEndString){
+    public static  int daysBetween(String dateStartString,String dateEndString){
 
         if (StringUtils.isEmpty(dateEndString)){
             dateEndString=LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -54,7 +54,9 @@ public class DateIntervalCalculator {
         return daysBetween;
     }
 
-    private static List<LocalDate> getDateRange(LocalDate start, LocalDate end) {
+    public static List<LocalDate> getDateRange(String dateStartString, String dateEndString) {
+        LocalDate start = LocalDate.parse(dateStartString);
+        LocalDate end = LocalDate.parse(dateEndString);
         List<LocalDate> dateList = new ArrayList<>();
 
         LocalDate current = start;

@@ -58,10 +58,10 @@ public class AlarmReceiptListener extends CustomizeListener<AlarmReceipt> {
                         }
                     }
                 }
-                if (!StringUtils.isEmpty(alarmReceipt.getVictim())){
+                if (StringUtils.isEmpty(alarmReceipt.getVictim())){
                     alarmReceipt.setVictim(RegexMatcher.matchNameRegex(alarmReceipt.getContent()));
                 }
-                if (!StringUtils.isEmpty(alarmReceipt.getId())){
+                if (StringUtils.isEmpty(alarmReceipt.getId())){
                     alarmReceipt.setId(RegexMatcher.matchIdRegex(alarmReceipt.getContent()));
                 }
                 dzList.add(alarmReceipt);

@@ -266,7 +266,7 @@
             }
         },
         fields: [
-            {name: "jqno", type: "text", title: "警情编号"},
+            {name: "jqno", type: "text", title: "警情编号",width: 180},
             {name: "alarmTime", type: "text", title: "报警时间",width: 150,
                 itemTemplate: function(value) {
                 return formatDate(new Date(value));
@@ -276,33 +276,33 @@
             {name: "phone", type: "text", title: "报警电话",width: 120},
             {name: "victim", type: "text", title: "报警人",width: 100, validate: "required"},
             {name: "id", type: "text", title: "报警人身份证",width: 180},
-            {name: "jurisdiction", type: "text", title: "所属辖区",width: 200},
+            {name: "jurisdiction", type: "text", title: "辖区分局",width: 200},
             {name: "pcs", type: "text", title: "派出所",width: 200},
             {name: "community", type: "text", title: "社区",width: 200},
             {name: "address", type: "text", title: "案发地址",width: 200},
             {name: "content", type: "text", title: "警情内容",width: 300},
             {name: "type", type: "text", title: "警情类别",width: 180},
             {
-                name: "lossMoney", type: "number", title: "损失金额(万元)",
+                name: "lossMoney", type: "number", title: "损失金额(万元)",width: 150,
                 itemTemplate: function (value) {
                     if (value) {
-                        return value + "元";
+                        return value + "万元";
                     } else {
                         return "0元"
                     }
                 }
             },
             {
-                name: "stopPaymentMoney", type: "number", title: "止付金额(万元)",
+                name: "stopPaymentMoney", type: "number", title: "止付金额(万元)",width: 150,
                 itemTemplate: function (value) {
                     if (value) {
-                        return value + "元";
+                        return value + "万元";
                     } else {
                         return "0元"
                     }
                 }
             },
-            {name: "stopPaymentAccount", type: "text", title: "止付账户"},
+            {name: "stopPaymentAccount", type: "text", title: "止付账户(个)"},
             {name: "state", type: "text", title: "案件状态"},
             {type: "control",width: 100}
         ]
