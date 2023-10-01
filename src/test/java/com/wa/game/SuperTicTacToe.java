@@ -1,35 +1,24 @@
 package com.wa.game;
 
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SuperTicTacToe {
-    private static char[][][] boards;
-    private static char currentPlayer = 'X';
-    private static char currentBoard = ' ';
+    private static char[][][] boards; // 3D array to represent the 9 boards
+    private static boolean[] boardWon; // Array to track if a board is won
+    private char currentPlayer;
+    private char nextBoard; // Represents the next board to play in
 
-    public static void main(String[] args) {
+    public SuperTicTacToe() {
+        boards = new char[9][3][3];
+        boardWon = new boolean[9]; // Initialize all boards as not won
+        currentPlayer = 'X'; // Player 'X' starts the game
+        nextBoard = '0'; // Start on any board
         initializeBoards();
-        System.out.println("Welcome to Super Tic-Tac-Toe!");
-        System.out.println("Row and Column Start With 1.");
-        displayBoard();
-
-        while (true) {
-            getPlayerMove();
-            displayBoard();
-            if (checkForWinner()) {
-                System.out.println("Player " + currentPlayer + " wins! Congratulations!");
-                break;
-            }
-            if (isBoardFull()) {
-                System.out.println("It's a draw! The game is a stalemate.");
-                break;
-            }
-            togglePlayer();
-        }
     }
 
-    private static void initializeBoards() {
-        boards = new char[9][3][3];
+    private void initializeBoards() {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 3; j++) {
                 for (int k = 0; k < 3; k++) {
@@ -52,7 +41,6 @@ public class SuperTicTacToe {
             for (int k = 0; k < 3; k++) {
                 // Loop through each board in a row
                 for (int j = 0; j < 3; j++) {
-                    char boardLabel = (char) ('A' + (i * 3) + j);
                     System.out.print("| ");
                     int boardIndex = (i * 3) + j;
 
@@ -77,104 +65,10 @@ public class SuperTicTacToe {
         System.out.println("");
     }
 
-
-
-
-
-
-    private static void getPlayerMove() {
-        Scanner scanner = new Scanner(System.in);
-        String move;
-
-        while (true) {
-            System.out.print("Player " + currentPlayer + ", enter your move (board_row,col): ");
-            move = scanner.nextLine().toUpperCase();
-
-            if (move.length() != 5 || move.charAt(3) != ',' || !isValidBoard(move.charAt(0)) || !isValidCell(move.charAt(2), move.charAt(4))) {
-                System.out.println("Invalid move format. Please use the format 'board_row,col'.");
-            } else {
-                int boardIndex = move.charAt(0) - 'A';
-                int row = Character.getNumericValue(move.charAt(2)) - 1;
-                int col = Character.getNumericValue(move.charAt(4)) - 1;
-
-                if (boards[boardIndex][row][col] == ' ') {
-                    boards[boardIndex][row][col] = currentPlayer;
-                    currentBoard = move.charAt(0);
-                    break;
-                } else {
-                    System.out.println("Invalid move. Try again.");
-                }
-            }
-        }
-    }
-
-    private static boolean isValidBoard(char board) {
-        return board >= 'A' && board <= 'I';
-    }
-
-    private static boolean isValidCell(char row, char col) {
-        return row >= '1' && row <= '3' && col >= '1' && col <= '3';
-    }
-
-    private static boolean checkForWinner() {
-        return checkRowsForWinner() || checkColumnsForWinner() || checkDiagonalsForWinner() || checkBoardsForWinner();
-    }
-
-    private static boolean checkRowsForWinner() {
-        int boardIndex = currentBoard - 'A';
-        for (int i = 0; i < 3; i++) {
-            if (checkLine(boards[boardIndex][i][0], boards[boardIndex][i][1], boards[boardIndex][i][2])) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static boolean checkColumnsForWinner() {
-        int boardIndex = currentBoard - 'A';
-        for (int i = 0; i < 3; i++) {
-            if (checkLine(boards[boardIndex][0][i], boards[boardIndex][1][i], boards[boardIndex][2][i])) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static boolean checkDiagonalsForWinner() {
-        int boardIndex = currentBoard - 'A';
-        return checkLine(boards[boardIndex][0][0], boards[boardIndex][1][1], boards[boardIndex][2][2]) ||
-                checkLine(boards[boardIndex][0][2], boards[boardIndex][1][1], boards[boardIndex][2][0]);
-    }
-
-    private static boolean checkBoardsForWinner() {
-        int row = (currentBoard - 'A') / 3;
-        int col = (currentBoard - 'A') % 3;
-
-        // Check if the current board's move leads to a win
-        return checkLine(getBoardSymbol(row, col, 0, 0), getBoardSymbol(row, col, 0, 1), getBoardSymbol(row, col, 0, 2)) ||
-                checkLine(getBoardSymbol(row, col, 1, 0), getBoardSymbol(row, col, 1, 1), getBoardSymbol(row, col, 1, 2)) ||
-                checkLine(getBoardSymbol(row, col, 2, 0), getBoardSymbol(row, col, 2, 1), getBoardSymbol(row, col, 2, 2)) ||
-                checkLine(getBoardSymbol(row, col, 0, 0), getBoardSymbol(row, col, 1, 0), getBoardSymbol(row, col, 2, 0)) ||
-                checkLine(getBoardSymbol(row, col, 0, 1), getBoardSymbol(row, col, 1, 1), getBoardSymbol(row, col, 2, 1)) ||
-                checkLine(getBoardSymbol(row, col, 0, 2), getBoardSymbol(row, col, 1, 2), getBoardSymbol(row, col, 2, 2)) ||
-                checkLine(getBoardSymbol(row, col, 0, 0), getBoardSymbol(row, col, 1, 1), getBoardSymbol(row, col, 2, 2)) ||
-                checkLine(getBoardSymbol(row, col, 0, 2), getBoardSymbol(row, col, 1, 1), getBoardSymbol(row, col, 2, 0));
-    }
-
-    private static char getBoardSymbol(int row, int col, int subRow, int subCol) {
-        int boardIndex = (row * 3) + col;
-        return boards[boardIndex][subRow][subCol];
-    }
-
-    private static boolean checkLine(char a, char b, char c) {
-        return a != ' ' && a == b && b == c;
-    }
-
-    private static boolean isBoardFull() {
-        int boardIndex = currentBoard - 'A';
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (boards[boardIndex][i][j] == ' ') {
+    private boolean isBoardFull(char[][] board) {
+        for (char[] row : board) {
+            for (char cell : row) {
+                if (cell == ' ') {
                     return false;
                 }
             }
@@ -182,8 +76,151 @@ public class SuperTicTacToe {
         return true;
     }
 
-    private static void togglePlayer() {
+
+    private boolean updateBoardWon(char[][] board, char player, int boardIndex) {
+        // Update the boardWon array for the specified board
+        boardWon[boardIndex] = isBoardWon(board, player);
+        return boardWon[boardIndex];
+    }
+
+    private boolean isBoardWon(char[][] board, char player) {
+        // Check rows, columns, and diagonals for a win
+        for (int i = 0; i < 3; i++) {
+            if (board[i][0] == player && board[i][1] == player && board[i][2] == player) {
+                return true; // Row win
+            }
+            if (board[0][i] == player && board[1][i] == player && board[2][i] == player) {
+                return true; // Column win
+            }
+        }
+        if (board[0][0] == player && board[1][1] == player && board[2][2] == player) {
+            return true; // Diagonal win (top-left to bottom-right)
+        }
+        if (board[0][2] == player && board[1][1] == player && board[2][0] == player) {
+            return true; // Diagonal win (top-right to bottom-left)
+        }
+        return false;
+    }
+
+    private boolean isGameWon(char player) {
+        // Check if the player has won the game (won three boards in a line)
+        // ... (updated logic)
+
+        // Check rows, columns, and diagonals for a win
+        for (int i = 0; i < 3; i++) {
+            if (boardWon[i] && boardWon[i + 3] && boardWon[i + 6]) {
+                return true; // Column win
+            }
+            if (boardWon[i * 3] && boardWon[i * 3 + 1] && boardWon[i * 3 + 2]) {
+                return true; // Row win
+            }
+        }
+        if (boardWon[0] && boardWon[4] && boardWon[8]) {
+            return true; // Diagonal win (top-left to bottom-right)
+        }
+        if (boardWon[2] && boardWon[4] && boardWon[6]) {
+            return true; // Diagonal win (top-right to bottom-left)
+        }
+
+        return false;
+    }
+
+    private char getNextBoard(char currentBoard) {
+        char next = (char) (currentBoard + 1);
+        if (next > 'I') {
+            next = 'A';
+        }
+        return next;
+    }
+
+    private void switchPlayer() {
         currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+    }
+
+    String regex = "^[A-Ia-i][,\\s][1-9][,\\s][1-9]$";
+
+    Pattern pattern = Pattern.compile(regex);
+
+    public void playGame() {
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("Current board: " + (nextBoard=='0'?"Any":nextBoard));
+            displayBoard();
+
+            System.out.print("Player " + currentPlayer + ", enter your move (e.g., E 1,1): ");
+            String move = scanner.nextLine().toUpperCase();
+            if (move.equals("QUIT")) {
+                System.out.println("Game ended.");
+                break;
+            }
+
+            Matcher matcher = pattern.matcher(move);
+            if (!matcher.matches()) {
+                System.out.println("Invalid move.(e.g., E 1,1)");
+                continue;
+            }
+
+            char selectedBoard = move.charAt(0);
+            //to upper case
+            if (selectedBoard>='a'&&selectedBoard<='i'){
+                selectedBoard-=('a'-'A');
+            }
+            int row = Character.getNumericValue(move.charAt(2)) - 1;
+            int col = Character.getNumericValue(move.charAt(4)) - 1;
+
+            if (selectedBoard<'A'||selectedBoard>'I') {
+                System.out.println("Invalid board, board must in A to I");
+                continue;
+            }
+            int selectedBoardIndex = selectedBoard-'A';
+            if (boardWon[selectedBoardIndex]) {
+                System.out.println("Invalid board, board "+selectedBoard+" already end");
+                continue;
+            }
+
+            if (nextBoard!='0'&&selectedBoard != nextBoard) {
+                System.out.println("Invalid move. You must play in board " + nextBoard);
+                continue;
+            }
+
+            int boardIndex = selectedBoard - 'A';
+
+            if (boards[boardIndex][row][col] != ' ') {
+                System.out.println("Invalid move. Cell already taken.");
+                continue;
+            }
+
+            boards[boardIndex][row][col] = currentPlayer;
+            nextBoard='1';//just mean it should be changed
+            if (updateBoardWon(boards[boardIndex], currentPlayer, boardIndex)){
+                System.out.println("Player "+currentPlayer+" Won Board "+(char)('A'+boardIndex));
+                nextBoard='0';//Any
+            }
+
+            if (isGameWon(currentPlayer)) {
+                System.out.println("Player " + currentPlayer + " wins the game!");
+                break;
+            } else if (isBoardFull(boards[boardIndex])) {
+                System.out.println("Board " + selectedBoard + " is full. It's a draw on this board.");
+                nextBoard='0';//Any
+            } else if (nextBoard!='0'){
+                nextBoard = (char) ('A' + (row * 3 + col));
+                //if the next board already end,player can pick any board to continue
+                if (boardWon[nextBoard-'A']){
+                    nextBoard='0';
+                }
+            }
+
+            switchPlayer();
+        }
+
+        scanner.close();
+    }
+
+    public static void main(String[] args) {
+        SuperTicTacToe game = new SuperTicTacToe();
+        game.playGame();
     }
 }
 
