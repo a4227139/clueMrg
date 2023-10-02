@@ -1,13 +1,16 @@
-package com.wa.game;
-
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class TicTacToe {
-    private static char[][] board;
-    private static char currentPlayer = 'X';
+public class TicTacToe extends Game{
+    private char[][] board;
+    private Player currentPlayer;
 
-    public static void main(String[] args) {
+    public void on(Player player1,Player player2) {
+        this.player1=player1;
+        this.player2=player2;
+        player1.setPlay(player1.getPlay()+1);
+        player2.setPlay(player2.getPlay()+1);
+        currentPlayer=player1;
         Scanner scanner = new Scanner(System.in);
         int rows, columns;
 
@@ -17,10 +20,7 @@ public class TicTacToe {
             rows = scanner.nextInt();
         } while (rows < 3);
 
-        do {
-            System.out.print("Enter the number of columns (must be >= 3): ");
-            columns = scanner.nextInt();
-        } while (columns < 3);
+        columns=rows;
 
         initializeBoard(rows, columns);
         System.out.println("Welcome to Tic Tac Toe!");
@@ -31,7 +31,8 @@ public class TicTacToe {
             getPlayerMove();
             displayBoard();
             if (checkForWinner()) {
-                System.out.println("Player " + currentPlayer + " wins! Congratulations!");
+                System.out.println("Player " + currentPlayer.getName() + " wins! Congratulations!");
+                currentPlayer.setWin(currentPlayer.getWin()+1);
                 break;
             }
             if (isBoardFull()) {
@@ -42,7 +43,7 @@ public class TicTacToe {
         }
     }
 
-    private static void initializeBoard(int rows, int columns) {
+    private void initializeBoard(int rows, int columns) {
         board = new char[rows][columns];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
@@ -59,7 +60,7 @@ public class TicTacToe {
         return result.toString();
     }
 
-    private static void displayBoard() {
+    private void displayBoard() {
         System.out.println(repeatString("----+", board[0].length - 1) + "----");
         for (int i = 0; i < board.length; i++) {
             System.out.print("|");
@@ -79,12 +80,12 @@ public class TicTacToe {
 
 
 
-    private static void getPlayerMove() {
+    private void getPlayerMove() {
         Scanner scanner = new Scanner(System.in);
         int row, col;
 
         while (true) {
-            System.out.print("Player " + currentPlayer + ", enter your move (row,column): ");
+            System.out.print("Player " + currentPlayer.getName() + " it's your turn! Enter your move (row,column): ");
             String input = scanner.next();
             String[] parts = input.split(",");
 
@@ -105,17 +106,17 @@ public class TicTacToe {
             if (row < 0 || row >= board.length || col < 0 || col >= board[0].length || board[row][col] != ' ') {
                 System.out.println("Invalid move. Try again.");
             } else {
-                board[row][col] = currentPlayer;
+                board[row][col] = currentPlayer.getSymbol();
                 break;
             }
         }
     }
 
-    private static boolean checkForWinner() {
+    private boolean checkForWinner() {
         return checkRowsForWinner() || checkColumnsForWinner() || checkDiagonalsForWinner();
     }
 
-    private static boolean checkRowsForWinner() {
+    private boolean checkRowsForWinner() {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j <= board[i].length - 3; j++) {
                 if (checkLine(board[i][j], Arrays.copyOfRange(board[i], j + 1, j + 3))) {
@@ -126,7 +127,7 @@ public class TicTacToe {
         return false;
     }
 
-    private static boolean checkColumnsForWinner() {
+    private boolean checkColumnsForWinner() {
         for (int i = 0; i < board[0].length; i++) {
             for (int j = 0; j <= board.length - 3; j++) {
                 char[] column = new char[3];
@@ -141,7 +142,7 @@ public class TicTacToe {
         return false;
     }
 
-    private static boolean checkDiagonalsForWinner() {
+    private boolean checkDiagonalsForWinner() {
         int rows = board.length;
         int columns = board[0].length;
 
@@ -168,8 +169,6 @@ public class TicTacToe {
         return false;
     }
 
-
-
     private static boolean checkLine(char firstSymbol, char[] line) {
         if (firstSymbol == ' ') {
             return false;
@@ -183,9 +182,7 @@ public class TicTacToe {
         return true;
     }
 
-
-
-    private static boolean isBoardFull() {
+    private boolean isBoardFull() {
         for (char[] row : board) {
             for (char cell : row) {
                 if (cell == ' ') {
@@ -196,8 +193,8 @@ public class TicTacToe {
         return true;
     }
 
-    private static void togglePlayer() {
-        currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+    private void togglePlayer() {
+        currentPlayer = (currentPlayer == player1) ? player2 : player1;
     }
 }
 

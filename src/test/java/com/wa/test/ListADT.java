@@ -1,3 +1,5 @@
+package com.wa.test;
+
 public interface ListADT<ElementType> {
 
 	// adds the specified element to the end of the list

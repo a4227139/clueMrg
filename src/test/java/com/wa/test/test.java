@@ -1,3 +1,5 @@
+package com.wa.test;
+
 import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;

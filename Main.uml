@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>Main</OriginalElement>
+  <nodes>
+    <node x="21.5" y="394.0">SuperTicTacToe</node>
+    <node x="946.0" y="428.50000000000006">Player</node>
+    <node x="1543.75" y="428.50000000000006">Board</node>
+    <node x="681.3681289640592" y="891.0">Game</node>
+    <node x="347.5" y="394.0">OrderAndChaos</node>
+    <node x="656.5" y="405.5">TicTacToe</node>
+    <node x="1131.25" y="428.50000000000006">Team</node>
+    <node x="1004.9931289640592" y="1369.0">Main</node>
+    <node x="1360.5" y="428.50000000000006">Display</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="SuperTicTacToe" target="Game" relationship="GENERALIZATION">
+      <point x="76.5" y="201.5" />
+      <point x="251.0" y="819.0" />
+      <point x="481.3681289640592" y="819.0" />
+      <point x="481.3681289640592" y="869.0" />
+      <point x="748.5044926004229" y="869.0" />
+      <point x="-38.363636363636374" y="-213.0" />
+    </edge>
+    <edge source="Team" target="Player" relationship="TO_MANY">
+      <point x="-54.5" y="-132.5" />
+      <point x="1185.75" y="374.0" />
+      <point x="1033.0" y="374.0" />
+      <point x="0.0" y="167.0" />
+    </edge>
+    <edge source="OrderAndChaos" target="Game" relationship="GENERALIZATION">
+      <point x="-72.25" y="201.5" />
+      <point x="419.75" y="819.0" />
+      <point x="481.3681289640592" y="819.0" />
+      <point x="481.3681289640592" y="869.0" />
+      <point x="748.5044926004229" y="869.0" />
+      <point x="-38.363636363636374" y="-213.0" />
+    </edge>
+    <edge source="Game" target="Display" relationship="DEPENDENCY">
+      <point x="95.90909090909088" y="-213.0" />
+      <point x="882.7772198731501" y="869.0" />
+      <point x="1446.5" y="869.0" />
+      <point x="0.0" y="52.0" />
+    </edge>
+    <edge source="Game" target="OrderAndChaos" relationship="CREATE">
+      <point x="-19.181818181818244" y="-213.0" />
+      <point x="767.686310782241" y="829.0" />
+      <point x="564.25" y="829.0" />
+      <point x="72.24999999999994" y="201.5" />
+    </edge>
+    <edge source="Game" target="Team" relationship="CREATE">
+      <point x="38.363636363636374" y="-213.0" />
+      <point x="825.2317653276956" y="839.0" />
+      <point x="1294.75" y="839.0" />
+      <point x="54.5" y="132.5" />
+    </edge>
+    <edge source="OrderAndChaos" target="Player" relationship="TO_ONE">
+      <point x="-72.25000000000006" y="-201.5" />
+      <point x="419.74999999999994" y="374.0" />
+      <point x="1033.0" y="374.0" />
+      <point x="0.0" y="167.0" />
+    </edge>
+    <edge source="Team" target="Player" relationship="DEPENDENCY">
+      <point x="54.5" y="-132.5" />
+      <point x="1294.75" y="364.0" />
+      <point x="862.1165433403808" y="364.0" />
+      <point x="862.1165433403808" y="354.0" />
+      <point x="1091.0" y="354.0" />
+      <point x="58.0" y="167.0" />
+    </edge>
+    <edge source="OrderAndChaos" target="Player" relationship="DEPENDENCY">
+      <point x="72.24999999999994" y="-201.5" />
+      <point x="564.25" y="364.0" />
+      <point x="862.1165433403808" y="364.0" />
+      <point x="862.1165433403808" y="354.0" />
+      <point x="1091.0" y="354.0" />
+      <point x="58.0" y="167.0" />
+    </edge>
+    <edge source="SuperTicTacToe" target="Player" relationship="TO_ONE">
+      <point x="-76.5" y="-201.5" />
+      <point x="98.0" y="374.0" />
+      <point x="1033.0" y="374.0" />
+      <point x="0.0" y="167.0" />
+    </edge>
+    <edge source="Main" target="Display" relationship="CREATE">
+      <point x="39.5" y="-40.0" />
+      <point x="1123.4931289640592" y="1343.0" />
+      <point x="1446.5" y="1343.0" />
+      <point x="0.0" y="52.0" />
+    </edge>
+    <edge source="Game" target="Board" relationship="TO_ONE">
+      <point x="57.545454545454504" y="-213.0" />
+      <point x="844.4135835095137" y="849.0" />
+      <point x="1625.75" y="849.0" />
+      <point x="0.0" y="98.0" />
+    </edge>
+    <edge source="TicTacToe" target="Player" relationship="TO_ONE">
+      <point x="-65.25" y="-190.0" />
+      <point x="721.75" y="374.0" />
+      <point x="1033.0" y="374.0" />
+      <point x="0.0" y="167.0" />
+    </edge>
+    <edge source="Game" target="Team" relationship="TO_MANY">
+      <point x="19.18181818181813" y="-213.0" />
+      <point x="806.0499471458774" y="829.0" />
+      <point x="1185.75" y="829.0" />
+      <point x="-54.5" y="132.5" />
+    </edge>
+    <edge source="SuperTicTacToe" target="Player" relationship="DEPENDENCY">
+      <point x="76.5" y="-201.5" />
+      <point x="251.0" y="364.0" />
+      <point x="862.1165433403808" y="364.0" />
+      <point x="862.1165433403808" y="354.0" />
+      <point x="1091.0" y="354.0" />
+      <point x="58.0" y="167.0" />
+    </edge>
+    <edge source="Game" target="Player" relationship="CREATE">
+      <point x="76.72727272727275" y="-213.0" />
+      <point x="863.595401691332" y="859.0" />
+      <point x="1350.0" y="859.0" />
+      <point x="1350.0" y="364.0" />
+      <point x="862.1165433403808" y="364.0" />
+      <point x="862.1165433403808" y="354.0" />
+      <point x="1091.0" y="354.0" />
+      <point x="58.0" y="167.0" />
+    </edge>
+    <edge source="Game" target="Player" relationship="TO_ONE">
+      <point x="-76.72727272727275" y="-213.0" />
+      <point x="710.1408562367865" y="849.0" />
+      <point x="11.0" y="849.0" />
+      <point x="11.0" y="374.0" />
+      <point x="1033.0" y="374.0" />
+      <point x="0.0" y="167.0" />
+    </edge>
+    <edge source="TicTacToe" target="Game" relationship="GENERALIZATION">
+      <point x="-65.25" y="190.0" />
+      <point x="721.75" y="819.0" />
+      <point x="481.3681289640592" y="819.0" />
+      <point x="481.3681289640592" y="869.0" />
+      <point x="748.5044926004229" y="869.0" />
+      <point x="-38.363636363636374" y="-213.0" />
+    </edge>
+    <edge source="Game" target="SuperTicTacToe" relationship="CREATE">
+      <point x="-57.545454545454504" y="-213.0" />
+      <point x="729.3226744186047" y="839.0" />
+      <point x="98.0" y="839.0" />
+      <point x="-76.5" y="201.5" />
+    </edge>
+    <edge source="Main" target="Game" relationship="CREATE">
+      <point x="-39.5" y="-40.0" />
+      <point x="1044.4931289640592" y="1343.0" />
+      <point x="786.8681289640592" y="1343.0" />
+      <point x="0.0" y="213.0" />
+    </edge>
+    <edge source="Game" target="Player" relationship="GENERALIZATION">
+      <point x="-95.90909090909099" y="-213.0" />
+      <point x="690.9590380549682" y="859.0" />
+      <point x="0.0" y="859.0" />
+      <point x="0.0" y="354.0" />
+      <point x="975.0" y="354.0" />
+      <point x="-58.0" y="167.0" />
+    </edge>
+    <edge source="Game" target="TicTacToe" relationship="CREATE">
+      <point x="0.0" y="-213.0" />
+      <point x="786.8681289640592" y="819.0" />
+      <point x="852.25" y="819.0" />
+      <point x="65.25" y="190.0" />
+    </edge>
+    <edge source="TicTacToe" target="Player" relationship="DEPENDENCY">
+      <point x="65.25" y="-190.0" />
+      <point x="852.25" y="364.0" />
+      <point x="862.1165433403808" y="364.0" />
+      <point x="862.1165433403808" y="354.0" />
+      <point x="1091.0" y="354.0" />
+      <point x="58.0" y="167.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.5499999999999999" showDependencies="true" x="880.1103896103896" y="555.0909090909091" />
+  <SelectedNodes>
+    <node>Board</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

@@ -1,5 +1,7 @@
+package com.wa.test;
+
 /**
- * An implementation of the ListADT interface using arrays internally.
+ * An implementation of the com.wa.test.ListADT interface using arrays internally.
  */
 public class MyList<ElementType> implements ListADT<ElementType> {
 	

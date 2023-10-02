@@ -1,12 +1,15 @@
-package com.wa.game;
-
 import java.util.Scanner;
 
-public class OrderAndChaos {
-    private static char[][] board;
-    private static char currentPlayer = 'X';
+public class OrderAndChaos extends Game{
+    private char[][] board;
+    private Player currentPlayer;
 
-    public static void main(String[] args) {
+    public void on(Player player1,Player player2) {
+        this.player1=player1;
+        this.player2=player2;
+        player1.setPlay(player1.getPlay()+1);
+        player2.setPlay(player2.getPlay()+1);
+        currentPlayer=player1;
         int rows = 6;
         int columns = 6;
         initializeBoard(rows, columns);
@@ -18,7 +21,8 @@ public class OrderAndChaos {
             getPlayerMove();
             displayBoard();
             if (checkForWinner()) {
-                System.out.println("Player " + currentPlayer + " wins! Congratulations!");
+                System.out.println("Player " + currentPlayer.getName() + " wins! Congratulations!");
+                currentPlayer.setWin(currentPlayer.getWin()+1);
                 break;
             }
             if (isBoardFull()) {
@@ -29,7 +33,7 @@ public class OrderAndChaos {
         }
     }
 
-    private static void initializeBoard(int rows, int columns) {
+    private  void initializeBoard(int rows, int columns) {
         board = new char[rows][columns];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
@@ -38,7 +42,7 @@ public class OrderAndChaos {
         }
     }
 
-    private static void displayBoard() {
+    private void displayBoard() {
         System.out.println("-+-+-+-+-+-+-+");
         for (int i = 0; i < board.length; i++) {
             System.out.print("|");
@@ -50,12 +54,12 @@ public class OrderAndChaos {
         }
     }
 
-    private static void getPlayerMove() {
+    private  void getPlayerMove() {
         Scanner scanner = new Scanner(System.in);
         int row, col;
 
         while (true) {
-            System.out.print("Player " + currentPlayer + ", enter your move (row[1-6],column[1-6]): ");
+            System.out.print("Player " + currentPlayer.getName() + " it's your turn! Enter your move (row[1-6],column[1-6]): ");
             String move = scanner.nextLine();
             String[] parts = move.split(",");
 
@@ -71,7 +75,7 @@ public class OrderAndChaos {
                 if (row < 0 || row >= board.length || col < 0 || col >= board[0].length || board[row][col] != ' ') {
                     System.out.println("Invalid move. Try again.");
                 } else {
-                    board[row][col] = currentPlayer;
+                    board[row][col] = currentPlayer.getSymbol();
                     break;
                 }
             } catch (NumberFormatException e) {
@@ -80,11 +84,11 @@ public class OrderAndChaos {
         }
     }
 
-    private static boolean checkForWinner() {
+    private  boolean checkForWinner() {
         return checkRowsForWinner() || checkColumnsForWinner() || checkDiagonalsForWinner();
     }
 
-    private static boolean checkRowsForWinner() {
+    private  boolean checkRowsForWinner() {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j <= board[i].length - 5; j++) {
                 if (checkLine(board[i][j], board[i][j + 1], board[i][j + 2], board[i][j + 3], board[i][j + 4])) {
@@ -95,7 +99,7 @@ public class OrderAndChaos {
         return false;
     }
 
-    private static boolean checkColumnsForWinner() {
+    private  boolean checkColumnsForWinner() {
         for (int i = 0; i < board[0].length; i++) {
             for (int j = 0; j <= board.length - 5; j++) {
                 if (checkLine(board[j][i], board[j + 1][i], board[j + 2][i], board[j + 3][i], board[j + 4][i])) {
@@ -106,11 +110,11 @@ public class OrderAndChaos {
         return false;
     }
 
-    private static boolean checkDiagonalsForWinner() {
+    private  boolean checkDiagonalsForWinner() {
         return checkMainDiagonalsForWinner() || checkAntiDiagonalsForWinner();
     }
 
-    private static boolean checkMainDiagonalsForWinner() {
+    private  boolean checkMainDiagonalsForWinner() {
         for (int i = 0; i <= board.length - 5; i++) {
             for (int j = 0; j <= board[i].length - 5; j++) {
                 if (checkLine(board[i][j], board[i + 1][j + 1], board[i + 2][j + 2], board[i + 3][j + 3], board[i + 4][j + 4])) {
@@ -121,7 +125,7 @@ public class OrderAndChaos {
         return false;
     }
 
-    private static boolean checkAntiDiagonalsForWinner() {
+    private  boolean checkAntiDiagonalsForWinner() {
         for (int i = 0; i <= board.length - 5; i++) {
             for (int j = board[i].length - 1; j >= 4; j--) {
                 if (checkLine(board[i][j], board[i + 1][j - 1], board[i + 2][j - 2], board[i + 3][j - 3], board[i + 4][j - 4])) {
@@ -132,24 +136,24 @@ public class OrderAndChaos {
         return false;
     }
 
-    private static boolean checkLine(char... symbols) {
+    private  boolean checkLine(char... symbols) {
         int count = 0;
         char prevSymbol = ' ';
         for (char symbol : symbols) {
             if (symbol != ' ' && symbol == prevSymbol) {
                 count++;
                 if (count >= 5) {
-                    return true;  // Exactly 5 in a row, it's a win
+                    return true;
                 }
             } else {
                 count = 1;
                 prevSymbol = symbol;
             }
         }
-        return false;  // Less than 5 in a row, not a win
+        return false;
     }
 
-    private static boolean isBoardFull() {
+    private  boolean isBoardFull() {
         for (char[] row : board) {
             for (char cell : row) {
                 if (cell == ' ') {
@@ -160,7 +164,7 @@ public class OrderAndChaos {
         return true;
     }
 
-    private static void togglePlayer() {
-        currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+    private  void togglePlayer() {
+        currentPlayer = (currentPlayer == player1) ? player2 : player1;
     }
 }

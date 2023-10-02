@@ -1,3 +1,5 @@
+package com.wa.test;
+
 import java.io.Serializable;
 
 public class Flight implements Serializable {
@@ -33,7 +35,7 @@ public class Flight implements Serializable {
 
     @Override
     public String toString() {
-        return "Flight{" +
+        return "com.wa.test.Flight{" +
                 "flightId='" + flightId + '\'' +
                 ", destination='" + destination + '\'' +
                 ", cost=" + cost +

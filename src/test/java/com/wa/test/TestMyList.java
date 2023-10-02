@@ -1,6 +1,6 @@
-/*** JUnit imports ***/
+package com.wa.test; /*** JUnit imports ***/
 // We will use the BeforeEach and Test annotation types to mark methods in
-// our test class.
+// our com.wa.test.test class.
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 // The Assertions class that we import from here includes assertion methods like assertEquals()
@@ -15,14 +15,14 @@ public class TestMyList {
     protected ListADT<Integer> _instance = null;
 
     //BeforeEach annotation makes a method invocked automatically
-    //before each test
+    //before each com.wa.test.test
     @BeforeEach
     public void createInstane() {
         _instance = new MyList<Integer>();
     }
 
     //The @Test annotation allows JUnit to recognize its following
-    //method as a test method
+    //method as a com.wa.test.test method
     @Test
     public void test1000Inserts() {
 	// This tests inserts 1000 integers into the list and then
@@ -37,17 +37,17 @@ public class TestMyList {
 
     @Test
     public void testInsertSize() {
-	// TODO: Complete this test. The test should insert 10 integers, and check if the .size()
-	// method of ListADT returns the correct result after inserting each one of them into the list.
+	// TODO: Complete this com.wa.test.test. The com.wa.test.test should insert 10 integers, and check if the .size()
+	// method of com.wa.test.ListADT returns the correct result after inserting each one of them into the list.
         for (int i = 0; i < 10; i++)
             _instance.add(i);
         assertEquals(10, _instance.size());
     }
 
-    // TODO: Write a third test method that 
+    // TODO: Write a third com.wa.test.test method that
     // 1) inserts 10 integers into the list
     // 2) after all insertions are done, removes them
-    // and checks after each remove if the .size() method of ListADT returns the correct result.
+    // and checks after each remove if the .size() method of com.wa.test.ListADT returns the correct result.
     @Test
     public void testRemoveSize() {
         for (int i = 0; i < 10; i++)
