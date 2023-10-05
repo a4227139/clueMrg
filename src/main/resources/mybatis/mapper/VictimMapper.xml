@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wa.cluemrg.dao.VictimMapper">
+
+    <!-- Result Map -->
+    <resultMap id="victimResultMap" type="com.wa.cluemrg.entity.Victim">
+        <id property="seq" column="SEQ" />
+        <result property="name" column="NAME" />
+        <result property="gender" column="GENDER" />
+        <result property="id" column="ID" />
+        <result property="age" column="AGE" />
+        <result property="householdRegistration" column="HOUSEHOLD_REGISTRATION" />
+        <result property="education" column="EDUCATION" />
+        <result property="job" column="JOB" />
+        <result property="employer" column="EMPLOYER" />
+        <result property="location" column="LOCATION" />
+        <result property="period" column="PERIOD" />
+        <result property="type" column="TYPE" />
+        <result property="source" column="SOURCE" />
+        <result property="appFunction" column="APP_FUNCTION" />
+        <result property="dissuade" column="DISSUADE" />
+        <result property="publicity" column="PUBLICITY" />
+        <result property="suggestion" column="SUGGESTION" />
+        <result property="remark" column="REMARK" />
+        <result property="time" column="TIME" />
+        <result property="department" column="DEPARTMENT" />
+    </resultMap>
+
+    <select id="selectAll" resultMap="victimResultMap">
+        SELECT *
+        FROM victim
+        <where>
+            <if test="seq != null and seq != 0">
+                AND SEQ LIKE CONCAT('%', #{seq}, '%')
+            </if>
+            <if test="name != null and name != ''">
+                AND NAME LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <if test="gender != null and gender != ''">
+                AND GENDER LIKE CONCAT('%', #{gender}, '%')
+            </if>
+            <if test="id != null and id != ''">
+                AND ID LIKE CONCAT('%', #{id}, '%')
+            </if>
+            <if test="age != null and age !=0">
+                AND AGE = #{age}
+            </if>
+            <if test="householdRegistration != null and householdRegistration != 0">
+                AND HOUSEHOLD_REGISTRATION LIKE CONCAT('%', #{householdRegistration}, '%')
+            </if>
+            <if test="education != null and education != ''">
+                AND EDUCATION LIKE CONCAT('%', #{education}, '%')
+            </if>
+            <if test="job != null and job != ''">
+                AND JOB LIKE CONCAT('%', #{job}, '%')
+            </if>
+            <if test="employer != null and employer != ''">
+                AND EMPLOYER LIKE CONCAT('%', #{employer}, '%')
+            </if>
+            <if test="location != null and location != ''">
+                AND LOCATION LIKE CONCAT('%', #{location}, '%')
+            </if>
+            <if test="period != null and period != ''">
+                AND PERIOD LIKE CONCAT('%', #{period}, '%')
+            </if>
+            <if test="type != null and type != ''">
+                AND TYPE LIKE CONCAT('%', #{type}, '%')
+            </if>
+            <if test="source != null and source != ''">
+                AND SOURCE LIKE CONCAT('%', #{source}, '%')
+            </if>
+            <if test="appFunction != null and appFunction != ''">
+                AND APP_FUNCTION LIKE CONCAT('%', #{appFunction}, '%')
+            </if>
+            <if test="dissuade != null and dissuade != ''">
+                AND DISSUADE LIKE CONCAT('%', #{dissuade}, '%')
+            </if>
+            <if test="publicity != null and publicity != ''">
+                AND PUBLICITY LIKE CONCAT('%', #{publicity}, '%')
+            </if>
+            <if test="suggestion != null and suggestion != ''">
+                AND SUGGESTION LIKE CONCAT('%', #{suggestion}, '%')
+            </if>
+            <if test="remark != null and remark != ''">
+                AND REMARK LIKE CONCAT('%', #{remark}, '%')
+            </if>
+            <if test="department != null and department != ''">
+                AND DEPARTMENT LIKE CONCAT('%', #{department}, '%')
+            </if>
+            <if test="timeStart != null and timeEnd != null">
+                AND TIME BETWEEN #{timeStart,javaType = java.util.Date, jdbcType = TIMESTAMP} AND #{timeEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+            </if>
+            <if test="timeStart != null and timeEnd == null">
+                AND TIME &gt;= #{timeStart,javaType = java.util.Date, jdbcType = TIMESTAMP}
+            </if>
+            <if test="timeStart == null and timeEnd != null">
+                AND TIME &lt;= #{timeEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+            </if>
+        </where>
+    </select>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO victim
+        (SEQ, NAME, GENDER, ID, AGE, EDUCATION,HOUSEHOLD_REGISTRATION,LOCATION, JOB, EMPLOYER, PERIOD, TYPE, SOURCE, APP_FUNCTION, DISSUADE, PUBLICITY, SUGGESTION, REMARK,TIME,DEPARTMENT )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.seq}, #{item.name}, #{item.gender}, #{item.id}, #{item.age}, #{item.education},#{item.householdRegistration},#{item.location}, #{item.job}, #{item.employer}, #{item.period}, #{item.type}, #{item.source}, #{item.appFunction}, #{item.dissuade}, #{item.publicity}, #{item.suggestion}, #{item.remark}, #{item.time},#{item.department})
+        </foreach>
+    </insert>
+
+    <!-- Insert -->
+    <insert id="insert" parameterType="com.wa.cluemrg.entity.Victim">
+        INSERT INTO `victim` (`SEQ`, `NAME`, `GENDER`, `ID`, `AGE`, `EDUCATION`,`HOUSEHOLD_REGISTRATION`,`LOCATION`, `JOB`, `EMPLOYER`, `PERIOD`, `TYPE`, `SOURCE`, `APP_FUNCTION`, `DISSUADE`, `PUBLICITY`, `SUGGESTION`, `REMARK`, `TIME`,`DEPARTMENT`)
+        VALUES (#{seq}, #{name}, #{gender}, #{id}, #{age}, #{education},#{householdRegistration},#{location}, #{job}, #{employer}, #{period}, #{type}, #{source}, #{appFunction}, #{dissuade}, #{publicity}, #{suggestion}, #{remark}, #{time},#{department})
+    </insert>
+
+    <!-- Select -->
+    <select id="selectById" resultMap="victimResultMap">
+        SELECT * FROM `victim` WHERE `SEQ` = #{seq}
+    </select>
+
+    <!-- Update -->
+    <update id="update" parameterType="com.wa.cluemrg.entity.Victim">
+        UPDATE `victim`
+        SET `NAME` = #{name}, `GENDER` = #{gender}, `ID` = #{id}, `AGE` = #{age}, `EDUCATION` = #{education},`HOUSEHOLD_REGISTRATION`=#{householdRegistration},`LOCATION`=#{location}, `JOB` = #{job}, `EMPLOYER` = #{employer},
+            `PERIOD` = #{period}, `TYPE` = #{type}, `SOURCE` = #{source}, `APP_FUNCTION` = #{appFunction}, `DISSUADE` = #{dissuade}, `PUBLICITY` = #{publicity},
+            `SUGGESTION` = #{suggestion}, `REMARK` = #{remark}, `TIME` = #{time},`DEPARTMENT`=#{department}
+        WHERE `SEQ` = #{seq}
+    </update>
+
+    <!-- Delete -->
+    <delete id="delete" parameterType="int">
+        DELETE FROM `victim` WHERE `SEQ` = #{seq}
+    </delete>
+
+</mapper>

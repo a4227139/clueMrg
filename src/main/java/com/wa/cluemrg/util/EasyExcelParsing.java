@@ -46,7 +46,11 @@ public class EasyExcelParsing {
                     String fieldName = field.getName();
                     Integer index = fieldValue.get(field.getName());
                     String value = valueMap.get(index);
-                    field.set(obj, valueMap.get(fieldValue.get(field.getName())));
+                    if (field.getType()==int.class||field.getType()==Integer.class){
+                        field.set(obj, Integer.parseInt(valueMap.get(fieldValue.get(field.getName()))));
+                    }else {
+                        field.set(obj, valueMap.get(fieldValue.get(field.getName())));
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

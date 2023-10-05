@@ -31,10 +31,15 @@ public class test {
         String strUTF = new String(bytes,"UTF-8");
         System.out.println(strUTF);*/
 
-        String[] array = new String[]{"a","b"};
+        /*String[] array = new String[]{"a","b"};
         List<String> list  = new ArrayList<>();
         list.add("a");
         list.add("b");
-        System.out.println(String.join(",",array));
+        System.out.println(String.join(",",array));*/
+
+        char a = '\u0004';
+        char b ='4';
+
+        System.out.println(a==b);
     }
 }
