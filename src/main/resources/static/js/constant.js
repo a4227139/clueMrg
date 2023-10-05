@@ -10,3 +10,10 @@ function formatDate(date) {
     var seconds = ("0" + date.getSeconds()).slice(-2);
     return year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
 }
+
+function formatDate2(date) {
+    var year = date.getFullYear();
+    var month = ("0" + (date.getMonth() + 1)).slice(-2);
+    var day = ("0" + date.getDate()).slice(-2);
+    return year + "-" + month + "-" + day;
+}

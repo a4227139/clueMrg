@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>受害人信息列表</title>
+    <title>战果列表</title>
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.css" rel="stylesheet">
@@ -56,7 +56,7 @@
                 <li><a href="ttClue.html"><i class="fa fa-table"></i> 厅推线索（柳州）</a></li>
                 <li><a href="qgBtClue.html"><i class="fa fa-bar-chart-o"></i> 部推线索（全国）</a></li>
                 <li><a href="qgDkClue.html"><i class="fa fa-bar-chart-o"></i> 断卡线索（全国）</a></li>
-                <li class="active"><a href="victim.html"><i class="fa fa-bar-chart-o"></i> 电诈接处警信息</a></li>
+                <li class="active"><a href="effect.html"><i class="fa fa-bar-chart-o"></i> 电诈接处警信息</a></li>
                 <li><a href="callLog.html"><i class="fa fa-bar-chart-o"></i> 通话记录</a></li>
                 <li><a href="phoneImei.html"><i class="fa fa-edit"></i> 号码-机身列表</a></li>
                 <li><a href="bsLocation.html"><i class="fa fa-edit"></i> 基站列表</a></li>
@@ -78,7 +78,7 @@
 
         <div class="row">
             <div class="col-lg-12">
-                <h1>受害人信息列表 <!--<small>更新至 <span id="latestDay"></span></small>--></h1>
+                <h1>战果列表 <!--<small>更新至 <span id="latestDay"></span></small>--></h1>
                 <!--<ol class="breadcrumb">
                     <li><a href="index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
                     <li class="active"><i class="fa fa-table"></i> 部推线索</li>
@@ -100,17 +100,8 @@
                         </svg>
                     </span>
                 </label>
-                <label class="upload-btn" style="display: block" id="upload-btn">
-                    <input type="file" id="file-input" style="display: none">
-                    <span class="btn-text">上传受害人情况</span>
-                    <span class="btn-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24">
-                            <path fill="currentColor" d="M8 17v-5H6l6-7 6 7h-2v5H8zm-2 2h8v2H6v-2z"></path>
-                        </svg>
-                    </span>
-                </label>
-                    <label class="upload-btn" style="display: block" id="download-btn">
-                    <span class="btn-text">下载模板</span>
+                <label class="upload-btn" style="display: block" id="export-excel">
+                    <span class="btn-text">导出</span>
                     <span class="btn-icon">
                         <svg width="24" height="24" viewBox="0 0 24 24">
                             <path fill="currentColor" d="M8 17v-5H6l6-7 6 7h-2v5H8zm-2 2h8v2H6v-2z"></path>
@@ -165,7 +156,7 @@
         formData.append("file", file);
 
         $.ajax({
-            url: ROOT_PATH +'/victim/upload',
+            url: ROOT_PATH +'/effect/upload',
             type: 'POST',
             data: formData,
             contentType: false,
@@ -185,13 +176,16 @@
         });
     });
 
-    $.ajax({
-        type: "GET",
-        url: ROOT_PATH +"/victim/getLatestDay",
-        success: function (response) {
-            console.log(response);
-            $("#latestDay").text(response);
-        }
+    $('#export-excel').click(function() {
+        var dateStart=$('#datetimepicker1').val();
+        var dateEnd=$('#datetimepicker2').val();
+        var link = document.querySelector('#a_export_excel');
+        var originHref=link.href;
+        link.href = link.href+"?dateStart="+dateStart+"&dateEnd="+dateEnd  ;
+        console.log(link.href)
+        // 模拟点击下载链接
+        link.click();
+        link.href=originHref;
     });
 
     $('#datetimepicker1').datetimepicker({
@@ -222,20 +216,20 @@
         height: "auto",
         dragging: true,
         editing: true,
-        filtering: true,
-        inserting: true,
+        filtering: false,
+        inserting: false,
         sorting: true,
         paging: true,
         pageLoading: true,
         pageIndex: 1,
         autoload: true,
         scrolling: true,
-        pageSize: 10,
+        pageSize: 11,
         pageButtonCount: 5,
         autowidth: true,
-        deleteConfirm: "确定删除?",
+        deleteConfirm: "无法删除",
         onDataLoaded:function(){
-            var url = ROOT_PATH +"/victim/downloadTemplate";
+            var url = ROOT_PATH +"/effect/downloadTemplate";
             var link = document.querySelector('#a_download_template');
             if (!link){
                 // 创建一个隐藏的 <a> 元素
@@ -245,6 +239,19 @@
             link.style.display = "none";
             link.href = url;
             document.body.appendChild(link);
+
+            var url_excel = ROOT_PATH +"/effect/exportExcel";
+            var link_excel = document.querySelector('#a_export_excel');
+            if (!link_excel){
+                // 创建一个隐藏的 <a> 元素
+                link_excel = document.createElement("a");
+            }
+            link_excel.id="a_export_excel";
+            link_excel.style.display = "none";
+            link_excel.href = url_excel;
+            //link.download = filename;
+            // 将 <a> 元素添加到页面中
+            document.body.appendChild(link_excel);
         },
         controller: {
             loadData: function (filter) {
@@ -257,8 +264,8 @@
                 console.log("loadData:" + JSON.stringify(filter))
                 var d = $.Deferred();
                 var param = {};
-                filter.timeStart=$('#datetimepicker1').val();
-                filter.timeEnd=$('#datetimepicker2').val();
+                filter.dateStart=$('#datetimepicker1').val();
+                filter.dateEnd=$('#datetimepicker2').val();
                 param.data = filter;
                 param.pageIndex = filter.pageIndex;
                 param.pageSize = filter.pageSize;
@@ -266,7 +273,7 @@
                 param.sortOrder = filter.sortOrder;
                 console.log(JSON.stringify(param));
                 $.ajax({
-                    url: ROOT_PATH +"/victim/getVictimList",
+                    url: ROOT_PATH +"/effect/getEffectList",
                     type: 'POST',
                     dataType: "json",
                     contentType: "application/json",
@@ -279,7 +286,7 @@
             insertItem: function (item) {
                 return $.ajax({
                     type: "POST",
-                    url: ROOT_PATH +"/victim/insertVictim",
+                    url: ROOT_PATH +"/effect/insertEffect",
                     dataType: "json",
                     contentType: "application/json",
                     data: JSON.stringify(item),
@@ -295,7 +302,7 @@
             updateItem: function (item) {
                 return $.ajax({
                     type: "PUT",
-                    url: ROOT_PATH +"/victim/updateVictim",
+                    url: ROOT_PATH +"/effect/updateEffect",
                     dataType: "json",
                     contentType: "application/json",
                     data: JSON.stringify(item),
@@ -309,10 +316,10 @@
                 });
             },
             deleteItem: function (item) {
-                var currentPage = $("#jsGrid").jsGrid("option", "pageIndex");  // 获取当前页码
+                /*var currentPage = $("#jsGrid").jsGrid("option", "pageIndex");  // 获取当前页码
                 return $.ajax({
                     type: "DELETE",
-                    url: ROOT_PATH +"/victim/deleteVictim?seq=" + item.seq,
+                    url: ROOT_PATH +"/effect/deleteEffect?seq=" + item.seq,
                     success: function (response) {
                         console.log("Delete successfully");
                         $("#jsGrid").jsGrid("loadData", {pageIndex: currentPage});
@@ -320,39 +327,19 @@
                     error: function () {
                         alert("Delete failed");
                     }
-                });
+                });*/
             }
         },
         fields: [
             {name: "seq", type: "text", title: "序号",width: 100,visible: false},
-            {name: "incidentDate", type: "text", title: "案发日期",
+            {name: "date", type: "text", title: "日期",readOnly:true,
                 itemTemplate: function(value) {
                     return formatDate2(new Date(value));
                 }
             },
-            {name: "name", type: "text", title: "姓名",width: 100},
-            {name: "gender", type: "text", title: "性别",width: 80},
-            {name: "id", type: "text", title: "身份证号",width: 180},
-            {name: "age", type: "text", title: "年龄",width: 80},
-            {name: "householdRegistration", type: "text", title: "户籍",width: 200},
-            {name: "education", type: "text", title: "受教育程度",width: 100},
-            {name: "job", type: "text", title: "职业",width: 100},
-            {name: "employer", type: "text", title: "工作单位",width: 150},
-            {name: "location", type: "text", title: "发案地点",width: 200},
-            {name: "period", type: "text", title: "发案时间段",width: 100},
-            {name: "type", type: "text", title: "案件类型",width: 150},
-            {name: "source", type: "text", title: "诈骗信息来源",width: 150},
-            {name: "appFunction", type: "text", title: "APP安装及预警情况",width: 150},
-            {name: "dissuade", type: "text", title: "预警劝阻情况",width: 150},
-            {name: "publicity", type: "text", title: "反诈宣传情况",width: 200},
-            {name: "suggestion", type: "text", title: "防范措施",width: 300},
-            {name: "remark", type: "text", title: "备注",width: 200},
-            {name: "department", type: "text", title: "分县局",width: 100},
-            {name: "time", type: "text", title: "上传时间",width: 150,readOnly:true,
-                itemTemplate: function(value) {
-                    return formatDate(new Date(value));
-                }
-            },
+            {name: "department", type: "text", title: "分县局",readOnly:true},
+            {name: "detention", type: "text", title: "刑拘"},
+            {name: "sue", type: "text", title: "起诉"},
             {type: "control",width: 100}
         ]
     })

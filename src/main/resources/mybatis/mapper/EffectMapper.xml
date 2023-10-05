@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wa.cluemrg.dao.EffectMapper">
+
+    <!-- Result Map -->
+    <resultMap id="effectResultMap" type="com.wa.cluemrg.entity.Effect">
+        <id property="seq" column="SEQ" />
+        <result property="department" column="DEPARTMENT" />
+        <result property="date" column="DATE" />
+        <result property="detention" column="DETENTION" />
+        <result property="sue" column="SUE" />
+    </resultMap>
+
+    <select id="selectAll" resultMap="effectResultMap">
+        SELECT *
+        FROM effect
+        <where>
+            <if test="seq != null and seq != 0">
+                AND SEQ LIKE CONCAT('%', #{seq}, '%')
+            </if>
+            <if test="department != null and department != ''">
+                AND DEPARTMENT LIKE CONCAT('%', #{department}, '%')
+            </if>
+            <if test="detention != null">
+                AND DETENTION = #{detention}
+            </if>
+            <if test="sue != null">
+                AND SUE = #{sue}
+            </if>
+            <if test="dateStart != null and dateEnd != null">
+                AND DATE BETWEEN #{dateStart,javaType = java.util.Date, jdbcType = TIMESTAMP} AND #{dateEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+            </if>
+            <if test="dateStart != null and dateEnd == null">
+                AND DATE &gt;= #{dateStart,javaType = java.util.Date, jdbcType = TIMESTAMP}
+            </if>
+            <if test="dateStart == null and dateEnd != null">
+                AND DATE &lt;= #{dateEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+            </if>
+        </where>
+    </select>
+
+
+    <!-- Insert -->
+    <insert id="insert" parameterType="com.wa.cluemrg.entity.Effect">
+        INSERT INTO `effect` (`DEPARTMENT`, `DATE`, `DETENTION`, `SUE`)
+        VALUES (#{department}, #{date}, #{detention}, #{sue})
+    </insert>
+
+    <!-- Select -->
+    <select id="selectById" resultMap="effectResultMap">
+        SELECT * FROM `effect` WHERE `SEQ` = #{seq}
+    </select>
+
+    <!-- Update -->
+    <update id="update" parameterType="com.wa.cluemrg.entity.Effect">
+        UPDATE `effect`
+        SET `DEPARTMENT` = #{department}, `DATE` = #{date}, `DETENTION` = #{detention}, `SUE` = #{sue}
+        WHERE `SEQ` = #{seq}
+    </update>
+
+    <!-- Delete -->
+    <delete id="delete" parameterType="int">
+        DELETE FROM `effect` WHERE `SEQ` = #{seq}
+    </delete>
+
+</mapper>

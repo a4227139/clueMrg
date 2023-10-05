@@ -5,6 +5,9 @@ import com.alibaba.excel.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -12,7 +15,8 @@ import java.util.*;
  */
 public class EasyExcelParsing {
 
-    static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    static SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     static Calendar calendar = Calendar.getInstance();
     static int year = calendar.get(Calendar.YEAR);
     /**
@@ -34,8 +38,23 @@ public class EasyExcelParsing {
                         dataString=TurnToUniDateFormat(dataString);
                         if (!StringUtils.isEmpty(dataString)&&!dataString.equals("\"\"")){
                             if (field.getType().equals(Date.class)){
-                                Date date = simpleDateFormat.parse(dataString);
+                                Date date;
+                                if (dataString.length()==10){
+                                    date = simpleDateFormat.parse(dataString);
+                                }else {
+                                    date = simpleDateFormat2.parse(dataString);
+                                }
                                 field.set(obj, date);
+                                continue;
+                            }else if(field.getType().equals(LocalDate.class)){
+                                LocalDate localDate;
+                                localDate=LocalDate.parse(dataString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                field.set(obj,localDate);
+                                continue;
+                            }else if(field.getType().equals(LocalDateTime.class)){
+                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                                LocalDateTime localDateTime=LocalDateTime.parse(dataString, formatter);
+                                field.set(obj,localDateTime);
                                 continue;
                             }else if(field.getType().equals(String.class)){
                                 field.set(obj, dataString);
@@ -76,6 +95,8 @@ public class EasyExcelParsing {
         }else if (dateArray.length==6){
             dateBuilder.append(fillZero(dateArray[0])).append("-").append(fillZero(dateArray[1])).append("-").append(fillZero(dateArray[2])).append(" ")
                     .append(fillZero(dateArray[3])).append(":").append(fillZero(dateArray[4])).append(":").append(fillZero(dateArray[5]));
+        }else if (dateArray.length==3){
+            dateBuilder.append(fillZero(dateArray[0])).append("-").append(fillZero(dateArray[1])).append("-").append(fillZero(dateArray[2]));
         }else {
             return "";
         }

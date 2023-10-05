@@ -27,6 +27,7 @@
         <result property="remark" column="REMARK" />
         <result property="time" column="TIME" />
         <result property="department" column="DEPARTMENT" />
+        <result property="incidentDate" column="INCIDENT_DATE" />
     </resultMap>
 
     <select id="selectAll" resultMap="victimResultMap">
@@ -90,31 +91,34 @@
             <if test="department != null and department != ''">
                 AND DEPARTMENT LIKE CONCAT('%', #{department}, '%')
             </if>
+            <!--<if test="incidentDate != null and incidentDate != ''">
+                AND INCIDENT_DATE LIKE CONCAT('%', #{incidentDate}, '%')
+            </if>-->
             <if test="timeStart != null and timeEnd != null">
-                AND TIME BETWEEN #{timeStart,javaType = java.util.Date, jdbcType = TIMESTAMP} AND #{timeEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+                AND INCIDENT_DATE BETWEEN #{timeStart,javaType = java.util.Date, jdbcType = TIMESTAMP} AND #{timeEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
             </if>
             <if test="timeStart != null and timeEnd == null">
-                AND TIME &gt;= #{timeStart,javaType = java.util.Date, jdbcType = TIMESTAMP}
+                AND INCIDENT_DATE &gt;= #{timeStart,javaType = java.util.Date, jdbcType = TIMESTAMP}
             </if>
             <if test="timeStart == null and timeEnd != null">
-                AND TIME &lt;= #{timeEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+                AND INCIDENT_DATE &lt;= #{timeEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
             </if>
         </where>
     </select>
 
     <insert id="batchInsert" parameterType="java.util.List">
         INSERT INTO victim
-        (SEQ, NAME, GENDER, ID, AGE, EDUCATION,HOUSEHOLD_REGISTRATION,LOCATION, JOB, EMPLOYER, PERIOD, TYPE, SOURCE, APP_FUNCTION, DISSUADE, PUBLICITY, SUGGESTION, REMARK,TIME,DEPARTMENT )
+        (SEQ, NAME, GENDER, ID, AGE, EDUCATION,HOUSEHOLD_REGISTRATION,LOCATION, JOB, EMPLOYER, PERIOD, TYPE, SOURCE, APP_FUNCTION, DISSUADE, PUBLICITY, SUGGESTION, REMARK,TIME,DEPARTMENT,INCIDENT_DATE )
         VALUES
         <foreach collection="list" item="item" separator=",">
-            (#{item.seq}, #{item.name}, #{item.gender}, #{item.id}, #{item.age}, #{item.education},#{item.householdRegistration},#{item.location}, #{item.job}, #{item.employer}, #{item.period}, #{item.type}, #{item.source}, #{item.appFunction}, #{item.dissuade}, #{item.publicity}, #{item.suggestion}, #{item.remark}, #{item.time},#{item.department})
+            (#{item.seq}, #{item.name}, #{item.gender}, #{item.id}, #{item.age}, #{item.education},#{item.householdRegistration},#{item.location}, #{item.job}, #{item.employer}, #{item.period}, #{item.type}, #{item.source}, #{item.appFunction}, #{item.dissuade}, #{item.publicity}, #{item.suggestion}, #{item.remark}, #{item.time},#{item.department},#{item.incidentDate})
         </foreach>
     </insert>
 
     <!-- Insert -->
     <insert id="insert" parameterType="com.wa.cluemrg.entity.Victim">
-        INSERT INTO `victim` (`SEQ`, `NAME`, `GENDER`, `ID`, `AGE`, `EDUCATION`,`HOUSEHOLD_REGISTRATION`,`LOCATION`, `JOB`, `EMPLOYER`, `PERIOD`, `TYPE`, `SOURCE`, `APP_FUNCTION`, `DISSUADE`, `PUBLICITY`, `SUGGESTION`, `REMARK`, `TIME`,`DEPARTMENT`)
-        VALUES (#{seq}, #{name}, #{gender}, #{id}, #{age}, #{education},#{householdRegistration},#{location}, #{job}, #{employer}, #{period}, #{type}, #{source}, #{appFunction}, #{dissuade}, #{publicity}, #{suggestion}, #{remark}, #{time},#{department})
+        INSERT INTO `victim` (`SEQ`, `NAME`, `GENDER`, `ID`, `AGE`, `EDUCATION`,`HOUSEHOLD_REGISTRATION`,`LOCATION`, `JOB`, `EMPLOYER`, `PERIOD`, `TYPE`, `SOURCE`, `APP_FUNCTION`, `DISSUADE`, `PUBLICITY`, `SUGGESTION`, `REMARK`, `TIME`,`DEPARTMENT`,`INCIDENT_DATE`)
+        VALUES (#{seq}, #{name}, #{gender}, #{id}, #{age}, #{education},#{householdRegistration},#{location}, #{job}, #{employer}, #{period}, #{type}, #{source}, #{appFunction}, #{dissuade}, #{publicity}, #{suggestion}, #{remark}, #{time},#{department},#{incidentDate})
     </insert>
 
     <!-- Select -->
@@ -127,7 +131,7 @@
         UPDATE `victim`
         SET `NAME` = #{name}, `GENDER` = #{gender}, `ID` = #{id}, `AGE` = #{age}, `EDUCATION` = #{education},`HOUSEHOLD_REGISTRATION`=#{householdRegistration},`LOCATION`=#{location}, `JOB` = #{job}, `EMPLOYER` = #{employer},
             `PERIOD` = #{period}, `TYPE` = #{type}, `SOURCE` = #{source}, `APP_FUNCTION` = #{appFunction}, `DISSUADE` = #{dissuade}, `PUBLICITY` = #{publicity},
-            `SUGGESTION` = #{suggestion}, `REMARK` = #{remark}, `TIME` = #{time},`DEPARTMENT`=#{department}
+            `SUGGESTION` = #{suggestion}, `REMARK` = #{remark}, `TIME` = #{time},`DEPARTMENT`=#{department},`INCIDENT_DATE`=#{incidentDate}
         WHERE `SEQ` = #{seq}
     </update>
 
