@@ -190,7 +190,7 @@ public class SuperTicTacToe extends Game{
             nextBoard='1';//just mean it should be changed
             if (updateBoardWon(boards[boardIndex], currentPlayer.getSymbol(), boardIndex)){
                 System.out.println("Player "+currentPlayer.getName()+" Won Board "+(char)('A'+boardIndex));
-                nextBoard='0';//Any
+                //nextBoard='0';//Any
             }
 
             if (isGameWon(currentPlayer)) {

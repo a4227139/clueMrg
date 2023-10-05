@@ -16,7 +16,7 @@ public class TicTacToe extends Game{
 
         // Get the number of rows and columns from the user, ensuring they are at least 3
         do {
-            System.out.print("Enter the number of rows (must be >= 3): ");
+            System.out.print("Enter the number of rows (must be >= 3) to play Tic Tac Toe: ");
             rows = scanner.nextInt();
         } while (rows < 3);
 
@@ -117,53 +117,47 @@ public class TicTacToe extends Game{
     }
 
     private boolean checkRowsForWinner() {
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j <= board[i].length - 3; j++) {
-                if (checkLine(board[i][j], Arrays.copyOfRange(board[i], j + 1, j + 3))) {
-                    return true;
-                }
+        int n = board.length;
+        for (int i = 0; i < n; i++) {
+            if (checkLine(board[i][0], board[i])) {
+                return true;
             }
         }
         return false;
     }
 
     private boolean checkColumnsForWinner() {
-        for (int i = 0; i < board[0].length; i++) {
-            for (int j = 0; j <= board.length - 3; j++) {
-                char[] column = new char[3];
-                for (int k = 0; k < 3; k++) {
-                    column[k] = board[j + k][i];
-                }
-                if (checkLine(column[0], Arrays.copyOfRange(column, 1, 3))) {
-                    return true;
-                }
+        int n = board.length;
+        for (int j = 0; j < n; j++) {
+            char[] column = new char[n];
+            for (int i = 0; i < n; i++) {
+                column[i] = board[i][j];
+            }
+            if (checkLine(column[0], column)) {
+                return true;
             }
         }
         return false;
     }
 
     private boolean checkDiagonalsForWinner() {
-        int rows = board.length;
-        int columns = board[0].length;
-
+        int n = board.length;
         // Check main diagonal
-        for (int i = 0; i <= rows - 3; i++) {
-            for (int j = 0; j <= columns - 3; j++) {
-                char[] mainDiagonal = { board[i][j], board[i + 1][j + 1], board[i + 2][j + 2] };
-                if (checkLine(board[i][j], mainDiagonal)) {
-                    return true;
-                }
-            }
+        char[] mainDiagonal = new char[n];
+        for (int i = 0; i < n; i++) {
+            mainDiagonal[i] = board[i][i];
+        }
+        if (checkLine(mainDiagonal[0], mainDiagonal)) {
+            return true;
         }
 
         // Check anti-diagonal
-        for (int i = 0; i <= rows - 3; i++) {
-            for (int j = columns - 1; j >= 2; j--) {
-                char[] antiDiagonal = { board[i][j], board[i + 1][j - 1], board[i + 2][j - 2] };
-                if (checkLine(board[i][j], antiDiagonal)) {
-                    return true;
-                }
-            }
+        char[] antiDiagonal = new char[n];
+        for (int i = 0; i < n; i++) {
+            antiDiagonal[i] = board[i][n - 1 - i];
+        }
+        if (checkLine(antiDiagonal[0], antiDiagonal)) {
+            return true;
         }
 
         return false;

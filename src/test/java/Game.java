@@ -50,7 +50,11 @@ public class Game extends Player {
         System.out.print("[+] Enter the number of teams: \nInput: ");
         int numTeams = scanner.nextInt();
         scanner.nextLine();  // Consume the newline character
-
+        while (numTeams<2){
+            System.out.print("[+] Enter the number of teams(at least 2): \nInput: ");
+            numTeams = scanner.nextInt();
+            scanner.nextLine();
+        }
         teams = new ArrayList<>();
         for (int i = 1; i <= numTeams; i++) {
             Team team = new Team();

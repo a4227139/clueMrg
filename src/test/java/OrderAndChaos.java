@@ -14,6 +14,7 @@ public class OrderAndChaos extends Game{
         int columns = 6;
         initializeBoard(rows, columns);
         System.out.println("Welcome to Order and Chaos!");
+        System.out.println("Player " +player1.getName()+",you represent order. "+"Player " +player2.getName()+",you represent chaos.");
         System.out.println("Row and Column Start With 1.");
         displayBoard();
 
@@ -21,12 +22,13 @@ public class OrderAndChaos extends Game{
             getPlayerMove();
             displayBoard();
             if (checkForWinner()) {
-                System.out.println("Player " + currentPlayer.getName() + " wins! Congratulations!");
-                currentPlayer.setWin(currentPlayer.getWin()+1);
+                System.out.println("Player " + currentPlayer.getName() + ",order wins! Congratulations!");
+                player1.setWin(currentPlayer.getWin()+1);
                 break;
             }
             if (isBoardFull()) {
-                System.out.println("It's a draw! The game is a stalemate.");
+                System.out.println("Player " + currentPlayer.getName() + ",chaos wins! Congratulations!");
+                player2.setWin(currentPlayer.getWin()+1);
                 break;
             }
             togglePlayer();
@@ -59,23 +61,24 @@ public class OrderAndChaos extends Game{
         int row, col;
 
         while (true) {
-            System.out.print("Player " + currentPlayer.getName() + " it's your turn! Enter your move (row[1-6],column[1-6]): ");
+            System.out.print("Player " + currentPlayer.getName() + " it's your turn! Enter your move (symbol(X or O),row[1-6],column[1-6]): ");
             String move = scanner.nextLine();
             String[] parts = move.split(",");
 
-            if (parts.length != 2) {
-                System.out.println("Invalid move format. Please use the format 'row,column'.");
+            if (parts.length != 3||(!move.startsWith("X")&&!move.startsWith("x")&&!move.startsWith("O")&&!move.startsWith("o"))) {
+                System.out.println("Invalid move format. Please use the format 'symbol(X or O),row,column'.");
                 continue;
             }
 
             try {
-                row = Integer.parseInt(parts[0]) - 1;
-                col = Integer.parseInt(parts[1]) - 1;
+                char symbol = parts[0].charAt(0);
+                row = Integer.parseInt(parts[1]) - 1;
+                col = Integer.parseInt(parts[2]) - 1;
 
                 if (row < 0 || row >= board.length || col < 0 || col >= board[0].length || board[row][col] != ' ') {
                     System.out.println("Invalid move. Try again.");
                 } else {
-                    board[row][col] = currentPlayer.getSymbol();
+                    board[row][col] = symbol;
                     break;
                 }
             } catch (NumberFormatException e) {

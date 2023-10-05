@@ -1,8 +1,11 @@
+import java.util.List;
+
 public class Player {
     String name;
     char symbol;
     int play;
     int win;
+    List<Piece> pieces;
 
     public String getName() {
         return name;
@@ -34,5 +37,13 @@ public class Player {
 
     public void setWin(int win) {
         this.win = win;
+    }
+
+    public List<Piece> getPieces() {
+        return pieces;
+    }
+
+    public void setPieces(List<Piece> pieces) {
+        this.pieces = pieces;
     }
 }
