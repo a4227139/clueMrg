@@ -14,7 +14,20 @@ public class OrderAndChaos extends Game{
         int columns = 6;
         initializeBoard(rows, columns);
         System.out.println("Welcome to Order and Chaos!");
-        System.out.println("Player " +player1.getName()+",you represent order. "+"Player " +player2.getName()+",you represent chaos.");
+        System.out.println("Player " +player1.getName()+",are you order(o) or chaos(c)? Input o or c: ");
+        Scanner scanner = new Scanner(System.in);
+        char c = scanner.nextLine().charAt(0);
+        while (c!='o'&&c!='O'&&c!='x'&&c!='X'){
+            System.out.print("just 2 option(o or c): ");
+            c = scanner.nextLine().charAt(0);
+        }
+        if (c=='o'||c=='O'){
+            System.out.println("Player " +player1.getName()+",you represent order. "+"Player " +player2.getName()+",you represent chaos.");
+            currentPlayer=player1;
+        }else {
+            System.out.println("Player " +player2.getName()+",you represent order. "+"Player " +player1.getName()+",you represent chaos.");
+            currentPlayer=player2;
+        }
         System.out.println("Row and Column Start With 1.");
         displayBoard();
 
