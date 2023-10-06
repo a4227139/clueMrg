@@ -92,6 +92,9 @@ public class EasyExcelParsing {
             if (dataString.startsWith("20")&&dataString.length()==16){
                 dateBuilder.append(fillZero(dateArray[0])).append("-").append(fillZero(dateArray[1])).append("-").append(fillZero(dateArray[2])).append(" ")
                         .append(fillZero(dateArray[3])).append(":").append(fillZero(dateArray[4])).append(":").append("00");
+            }else if(dateArray[0].length()==4){// 2023/10/7 4:53
+                dateBuilder.append(fillZero(dateArray[0])).append("-").append(fillZero(dateArray[1])).append("-").append(fillZero(dateArray[2])).append(" ")
+                        .append(fillZero(dateArray[3])).append(":").append(fillZero(dateArray[4])).append(":").append("00");
             }else {// 08-01 17:44:01
                 dateBuilder.append(year).append("-").append(fillZero(dateArray[0])).append("-").append(fillZero(dateArray[1])).append(" ")
                         .append(fillZero(dateArray[2])).append(":").append(fillZero(dateArray[3])).append(":").append(fillZero(dateArray[4]));

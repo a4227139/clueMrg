@@ -45,7 +45,7 @@ public class AlarmReceiptService {
     public String dealUpload(MultipartFile file){
         String fileName = uploadUtil.saveFile(file);
         ThreadLocal<String> message = new ThreadLocal<>();
-        EasyExcelFactory.read(fileName, new AlarmReceiptListener(AlarmReceipt.class,alarmReceiptMapper,message)).headRowNumber(2).doReadAll();
+        EasyExcelFactory.read(fileName, new AlarmReceiptListener(AlarmReceipt.class,alarmReceiptMapper,message)).headRowNumber(2).sheet(0).doRead();
         return message.get();
     }
 

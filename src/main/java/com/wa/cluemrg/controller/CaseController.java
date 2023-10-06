@@ -288,7 +288,8 @@ public class CaseController {
             dataMap.put("caseIndexListSortByAverageLossMoney", caseIndexListSortByAverageLossMoney);
 
             //获取指标
-            //List<AlarmReceiptIndex> alarmReceiptIndexList = getAlarmReceiptIndex(dateStart,dateEnd,"");
+            List<AlarmReceiptIndex> alarmReceiptIndexList = getAlarmReceiptIndex(dateStart,dateEnd,"");
+            dataMap.put("alarmReceiptIndexList", alarmReceiptIndexList);
 
             OutputStream out = response.getOutputStream();
             BufferedOutputStream bos = new BufferedOutputStream(out);
@@ -346,10 +347,8 @@ public class CaseController {
     public List<AlarmReceiptIndex> getAlarmReceiptIndex(@RequestParam("dateStart")  String dateStart,
                                         @RequestParam("dateEnd") String dateEnd,
                                         @RequestParam(value = "jurisdiction",required = false) String jurisdiction) throws ParseException {
-        if (StringUtils.isEmpty(dateStart)){
-            dateStart="2023-01-01";
-        }
-        if (StringUtils.isEmpty(dateEnd)) {
+        if (StringUtils.isEmpty(dateEnd)||
+                dateEnd.equals(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))) {//如果是今天也要变昨天
             dateEnd = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         }
         LocalDate currDate = LocalDate.parse(dateEnd);
@@ -382,6 +381,11 @@ public class CaseController {
         LocalDate dateEnd1=currDate.minusDays(1);
         LocalDate dateEnd2=currDate.minusDays(2);
         LocalDate dateEnd3=currDate.minusDays(3);
+
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        for (int i=0;i<listIndex.size();i++){
+            listIndex.get(i).setLossMoneyFormat(decimalFormat.format(listIndex.get(i).getLossMoney()));
+        }
         for (Case caseObj:listRegister){
             if (dateFormat.format(caseObj.getRegisterDate()).contains(dateEnd3.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))){
                 listIndex.get(0).setRegisterCount(listIndex.get(0).getCount()+1);
@@ -416,26 +420,34 @@ public class CaseController {
 
         int baseCount;
         float baseLossMoney;
-        DecimalFormat decimalFormat = new DecimalFormat("#.#");
+
         for (int i=1;i<listIndex.size();i++){
             baseCount = listIndex.get(i-1).getCount();
             baseLossMoney = listIndex.get(i-1).getLossMoney();
             if (baseCount!=0){
                 float countRate = (float) (listIndex.get(i).getCount()-baseCount)/baseCount*100;
                 listIndex.get(i).setCountRate(countRate);
-                listIndex.get(i).setCountRateFormat(decimalFormat.format(countRate));
+                if (countRate!=0){
+                    listIndex.get(i).setCountRateFormat(decimalFormat.format(countRate)+"%");
+                }else {
+                    listIndex.get(i).setCountRateFormat("");
+                }
             }
             if (baseLossMoney!=0){
                 float lossMoneyRate = (listIndex.get(i).getLossMoney()-baseLossMoney)/baseLossMoney*100;
                 listIndex.get(i).setLossMoneyRate(lossMoneyRate);
-                listIndex.get(i).setLossMoneyRateFormat(decimalFormat.format(lossMoneyRate));
+                if (lossMoneyRate!=0){
+                    listIndex.get(i).setLossMoneyRateFormat(decimalFormat.format(lossMoneyRate)+"%");
+                }else {
+                    listIndex.get(i).setCountRateFormat("");
+                }
             }
         }
 
-        listIndex.get(0).setDateChinese(dateEnd3.format(DateTimeFormatter.ofPattern("yyyy年MM月dd日")));
-        listIndex.get(1).setDateChinese(dateEnd2.format(DateTimeFormatter.ofPattern("yyyy年MM月dd日")));
-        listIndex.get(2).setDateChinese(dateEnd1.format(DateTimeFormatter.ofPattern("yyyy年MM月dd日")));
-        listIndex.get(3).setDateChinese(dateEnd.substring(0,4)+"年"+dateEnd.substring(5,7)+"月"+dateEnd.substring(8,10)+"日");
+        listIndex.get(0).setDateChinese(dateEnd3.format(DateTimeFormatter.ofPattern("MM月dd日")));
+        listIndex.get(1).setDateChinese(dateEnd2.format(DateTimeFormatter.ofPattern("MM月dd日")));
+        listIndex.get(2).setDateChinese(dateEnd1.format(DateTimeFormatter.ofPattern("MM月dd日")));
+        listIndex.get(3).setDateChinese(dateEnd.substring(5,7)+"月"+dateEnd.substring(8,10)+"日");
 
         return listIndex;
     }
