@@ -5,9 +5,11 @@ import org.springframework.util.StringUtils;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
-public class DateIntervalCalculator {
+public class DateUtil {
     public static void main(String[] args) {
         String dateStartString = "2023-09-01";
         String dateEndString = "2023-09-17";
@@ -66,6 +68,31 @@ public class DateIntervalCalculator {
         }
 
         return dateList;
+    }
+
+    public static Date formatDateToStart(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        // Set the time components (hour, minute, second) to zero
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        return calendar.getTime();
+    }
+
+    public static Date formatDateToEnd(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+
+        return calendar.getTime();
     }
 }
 

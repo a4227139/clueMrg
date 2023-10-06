@@ -21,6 +21,19 @@
         <result property="stopPaymentMoney" column="STOP_PAYMENT_MONEY"/>
         <result property="stopPaymentAccount" column="STOP_PAYMENT_ACCOUNT"/>
         <result property="state" column="STATE"/>
+        <result property="stopPayment" column="STOP_PAYMENT"/>
+        <result property="oneLevel" column="ONE_LEVEL"/>
+        <result property="secondLevel" column="SECOND_LEVEL"/>
+        <result property="withdraw" column="WITHDRAW"/>
+        <result property="drainage" column="DRAINAGE"/>
+        <result property="capture" column="CAPTURE"/>
+        <result property="recover" column="RECOVER"/>
+        <result property="jointCase" column="JOINT_CASE"/>
+        <result property="outside" column="OUTSIDE"/>
+        <result property="app" column="APP"/>
+        <result property="advocate" column="ADVOCATE"/>
+        <result property="remark" column="REMARK"/>
+        <result property="lastReviseTime" column="LAST_REVISE_TIME"/>
     </resultMap>
 
     <resultMap id="SimpleIndexResultMap" type="com.wa.cluemrg.entity.SimpleIndex">
@@ -102,6 +115,42 @@
             <if test="state != null and state != ''">
                 AND STATE LIKE CONCAT('%', #{state}, '%')
             </if>
+            <if test="stopPayment != null and stopPayment != ''">
+                AND STOP_PAYMENT LIKE CONCAT('%', #{stopPayment}, '%')
+            </if>
+            <if test="oneLevel != null and oneLevel != ''">
+                AND ONE_LEVEL LIKE CONCAT('%', #{oneLevel}, '%')
+            </if>
+            <if test="secondLevel != null and secondLevel != ''">
+                AND SECOND_LEVEL LIKE CONCAT('%', #{secondLevel}, '%')
+            </if>
+            <if test="withdraw != null and withdraw != ''">
+                AND WITHDRAW LIKE CONCAT('%', #{withdraw}, '%')
+            </if>
+            <if test="drainage != null and drainage != ''">
+                AND DRAINAGE LIKE CONCAT('%', #{drainage}, '%')
+            </if>
+            <if test="capture != null and capture != ''">
+                AND CAPTURE LIKE CONCAT('%', #{capture}, '%')
+            </if>
+            <if test="recover != null and recover != ''">
+                AND RECOVER LIKE CONCAT('%', #{recover}, '%')
+            </if>
+            <if test="jointCase != null and jointCase != ''">
+                AND JOINT_CASE LIKE CONCAT('%', #{jointCase}, '%')
+            </if>
+            <if test="outside != null and outside != ''">
+                AND OUTSIDE LIKE CONCAT('%', #{outside}, '%')
+            </if>
+            <if test="app != null and app != ''">
+                AND APP LIKE CONCAT('%', #{app}, '%')
+            </if>
+            <if test="advocate != null and advocate != ''">
+                AND ADVOCATE LIKE CONCAT('%', #{advocate}, '%')
+            </if>
+            <if test="remark != null and remark != ''">
+                AND REMARK LIKE CONCAT('%', #{remark}, '%')
+            </if>
         </where>
         order by ALARM_TIME desc
     </select>
@@ -109,9 +158,12 @@
     <!-- 增加数据操作 -->
     <insert id="insert" parameterType="com.wa.cluemrg.entity.AlarmReceipt">
         INSERT INTO alarm_receipt (JQNO,ALARM_TIME, DEPARTMENT, PHONE, VICTIM, ID, JURISDICTION,COMMUNITY, PCS,
-                                   ADDRESS, CONTENT, TYPE, LOSS_MONEY, STOP_PAYMENT_MONEY, STOP_PAYMENT_ACCOUNT, STATE, JQNO)
-        VALUES (#{jqno},#{alarmTime}, #{department}, #{phone}, #{victim}, #{id}, #{jurisdiction},#{community},#{pcs}
-                #{address}, #{content}, #{type}, #{lossMoney}, #{stopPaymentMoney}, #{stopPaymentAccount}, #{state}, #{jqno})
+                                   ADDRESS, CONTENT, TYPE, LOSS_MONEY, STOP_PAYMENT_MONEY, STOP_PAYMENT_ACCOUNT, STATE,
+                                   STOP_PAYMENT,ONE_LEVEL,SECOND_LEVEL,WITHDRAW,DRAINAGE,CAPTURE,RECOVER,JOINT_CASE,OUTSIDE,APP,ADVOCATE,REMARK,LAST_REVISE_TIME)
+        VALUES (#{jqno}, #{alarmTime}, #{department}, #{phone}, #{victim}, #{id}, #{jurisdiction}, #{community}, #{pcs},
+                #{address}, #{content}, #{type}, #{lossMoney}, #{stopPaymentMoney}, #{stopPaymentAccount}, #{state},
+                #{stopPayment}, #{oneLevel}, #{secondLevel}, #{withdraw}, #{drainage}, #{capture}, #{recover}, #{jointCase}, #{outside}, #{app}, #{advocate}, #{remark}, #{lastReviseTime}
+                )
     </insert>
 
     <!-- 更新数据操作 -->
@@ -120,7 +172,8 @@
         SET ALARM_TIME = #{alarmTime}, DEPARTMENT = #{department}, PHONE = #{phone}, VICTIM = #{victim}, ID = #{id},
             JURISDICTION = #{jurisdiction}, COMMUNITY=#{community}, PCS=#{pcs},ADDRESS = #{address}, CONTENT = #{content},
             TYPE = #{type}, LOSS_MONEY = #{lossMoney}, STOP_PAYMENT_MONEY = #{stopPaymentMoney},
-            STOP_PAYMENT_ACCOUNT = #{stopPaymentAccount}, STATE = #{state}
+            STOP_PAYMENT_ACCOUNT = #{stopPaymentAccount}, STATE = #{state},
+            STOP_PAYMENT=#{stopPayment},ONE_LEVEL=#{oneLevel} ,SECOND_LEVEL=#{secondLevel} , WITHDRAW=#{withdraw}, DRAINAGE=#{drainage}, CAPTURE=#{capture}, RECOVER=#{recover}, JOINT_CASE=#{jointCase}, OUTSIDE=#{outside}, APP=#{app}, ADVOCATE=#{advocate}, REMARK=#{remark},LAST_REVISE_TIME=#{lastReviseTime}
         WHERE JQNO = #{jqno}
     </update>
 
@@ -129,13 +182,24 @@
         DELETE FROM alarm_receipt WHERE JQNO = #{jqno}
     </delete>
 
+    <insert id="batchInsert" parameterType="com.wa.cluemrg.entity.AlarmReceipt">
+        INSERT IGNORE alarm_receipt(JQNO,ALARM_TIME,DEPARTMENT,PHONE,VICTIM,ID,JURISDICTION,COMMUNITY,PCS,ADDRESS,CONTENT,TYPE,LOSS_MONEY,STOP_PAYMENT_MONEY,STOP_PAYMENT_ACCOUNT,STATE,STOP_PAYMENT,ONE_LEVEL,SECOND_LEVEL,WITHDRAW,DRAINAGE,CAPTURE,RECOVER,JOINT_CASE,OUTSIDE,APP,ADVOCATE,REMARK,LAST_REVISE_TIME)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.jqno},#{item.alarmTime},#{item.department},#{item.phone},#{item.victim},#{item.id},#{item.jurisdiction},#{item.community},#{item.pcs},#{item.address},#{item.content},#{item.type},#{item.lossMoney},#{item.stopPaymentMoney},#{item.stopPaymentAccount},#{item.state},#{item.stopPayment},#{item.oneLevel} ,#{item.secondLevel} ,#{item.withdraw},#{item.drainage},#{item.capture},#{item.recover},#{item.jointCase},#{item.outside},#{item.app},#{item.advocate},#{item.remark},#{item.lastReviseTime}
+            )
+        </foreach>
+    </insert>
+
     <!-- 插入操作/更新 -->
     <insert id="batchInsertOrUpdate" parameterType="com.wa.cluemrg.entity.AlarmReceipt">
         INSERT IGNORE alarm_receipt (JQNO,ALARM_TIME, DEPARTMENT, PHONE, VICTIM, ID, JURISDICTION,COMMUNITY, PCS,
-        ADDRESS, CONTENT, TYPE, LOSS_MONEY, STOP_PAYMENT_MONEY, STOP_PAYMENT_ACCOUNT, STATE)
+        ADDRESS, CONTENT, TYPE, LOSS_MONEY, STOP_PAYMENT_MONEY, STOP_PAYMENT_ACCOUNT, STATE,STOP_PAYMENT,ONE_LEVEL,SECOND_LEVEL,WITHDRAW,DRAINAGE,CAPTURE,RECOVER,JOINT_CASE,OUTSIDE,APP,ADVOCATE,REMARK,LAST_REVISE_TIME)
         VALUES
         <foreach collection="list" item="item" separator=",">
-            (  #{item.jqno},#{item.alarmTime}, #{item.department}, #{item.phone}, #{item.victim}, #{item.id}, #{item.jurisdiction},#{item.community},#{item.pcs},#{item.address}, #{item.content}, #{item.type}, #{item.lossMoney}, #{item.stopPaymentMoney},#{item.stopPaymentAccount}, #{item.state})
+            (  #{item.jqno}, #{item.alarmTime}, #{item.department}, #{item.phone}, #{item.victim}, #{item.id}, #{item.jurisdiction}, #{item.community}, #{item.pcs}, #{item.address}, #{item.content}, #{item.type}, #{item.lossMoney}, #{item.stopPaymentMoney}, #{item.stopPaymentAccount}, #{item.state},
+            #{item.stopPayment}, #{item.oneLevel} , #{item.secondLevel} , #{item.withdraw}, #{item.drainage}, #{item.capture}, #{item.recover}, #{item.jointCase}, #{item.outside}, #{item.app}, #{item.advocate}, #{item.remark}, #{item.lastReviseTime})
         </foreach>
         ON DUPLICATE KEY UPDATE
         ALARM_TIME = VALUES(ALARM_TIME),
@@ -152,7 +216,20 @@
         LOSS_MONEY = VALUES(LOSS_MONEY),
         STOP_PAYMENT_MONEY = VALUES(STOP_PAYMENT_MONEY),
         STOP_PAYMENT_ACCOUNT = VALUES(STOP_PAYMENT_ACCOUNT),
-        STATE = VALUES(STATE)
+        STATE = VALUES(STATE),
+        STOP_PAYMENT=VALUES(STOP_PAYMENT),
+        ONE_LEVEL=VALUES(ONE_LEVEL) ,
+        SECOND_LEVEL=VALUES(SECOND_LEVEL) ,
+        WITHDRAW=VALUES(WITHDRAW),
+        DRAINAGE=VALUES(DRAINAGE),
+        CAPTURE=VALUES(CAPTURE),
+        RECOVER=VALUES(RECOVER),
+        JOINT_CASE=VALUES(JOINT_CASE),
+        OUTSIDE=VALUES(OUTSIDE),
+        APP=VALUES(APP),
+        ADVOCATE=VALUES(ADVOCATE),
+        REMARK=VALUES(REMARK),
+        LAST_REVISE_TIME=VALUES(LAST_REVISE_TIME)
     </insert>
 
     <select id="getLatestDate" resultType="string">

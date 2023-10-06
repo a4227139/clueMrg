@@ -6,7 +6,9 @@ import com.wa.cluemrg.util.RegexMatcher;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -31,8 +33,8 @@ public class AlarmReceiptListener extends CustomizeListener<AlarmReceipt> {
         this.message=message;
     }
 
-    @Override
-    public String dataDeal() {
+    /*@Override
+    public String dataDeal() {//导入三台合一的文件
         List<AlarmReceipt> dzList = new ArrayList<>();
         for (AlarmReceipt alarmReceipt:list){
             if (!StringUtils.isEmpty(alarmReceipt.getJqno())&&alarmReceipt.getType().contains("电信网络诈骗")){
@@ -67,7 +69,29 @@ public class AlarmReceiptListener extends CustomizeListener<AlarmReceipt> {
                 dzList.add(alarmReceipt);
             }
         }
-        int success = alarmReceiptMapper.batchInsertOrUpdate(dzList);
+        int success = alarmReceiptMapper.batchInsert(dzList);
+        String result = "导入成功数："+success+" 导入失败数："+(dzList.size()-success);
+        message.set(result);
+        log.info("dealBtClue: "+result);
+        return result;
+    }*/
+
+    @Override
+    public String dataDeal() {
+        List<AlarmReceipt> dzList = new ArrayList<>();
+        Date today = new Date();
+        for (AlarmReceipt alarmReceipt:list){
+            if (StringUtils.isEmpty(alarmReceipt.getContent())||alarmReceipt.getAlarmTime()==null){
+                continue;
+            }
+            //超过一天的历史数据不收
+            /*if (today.getTime()-alarmReceipt.getAlarmTime().getTime()>86400*1000){
+                continue;
+            }*/
+            alarmReceipt.setLastReviseTime(LocalDateTime.now());
+            dzList.add(alarmReceipt);
+        }
+        int success = alarmReceiptMapper.batchInsert(dzList);
         String result = "导入成功数："+success+" 导入失败数："+(dzList.size()-success);
         message.set(result);
         log.info("dealBtClue: "+result);

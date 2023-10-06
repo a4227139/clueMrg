@@ -17,3 +17,22 @@ function formatDate2(date) {
     var day = ("0" + date.getDate()).slice(-2);
     return year + "-" + month + "-" + day;
 }
+
+function objectToUrlParams(obj) {
+    var params = [];
+    for (var key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            var value = obj[key];
+            if (Array.isArray(value)) {
+                // 如果值是数组，则按照 key[]=value1&key[]=value2 的格式处理
+                for (var i = 0; i < value.length; i++) {
+                    params.push(encodeURIComponent(key) + "[]=" + encodeURIComponent(value[i]));
+                }
+            } else {
+                // 否则按照 key=value 的格式处理
+                params.push(encodeURIComponent(key) + "=" + encodeURIComponent(value));
+            }
+        }
+    }
+    return params.join("&");
+}

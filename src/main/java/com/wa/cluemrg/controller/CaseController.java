@@ -14,7 +14,7 @@ import com.wa.cluemrg.exception.BusinessException;
 import com.wa.cluemrg.response.ResponseResult;
 import com.wa.cluemrg.service.AlarmReceiptService;
 import com.wa.cluemrg.service.CaseService;
-import com.wa.cluemrg.util.DateIntervalCalculator;
+import com.wa.cluemrg.util.DateUtil;
 import com.wa.cluemrg.util.JurisdictionUtil;
 import com.wa.cluemrg.vo.JsGridVO;
 import lombok.extern.log4j.Log4j2;
@@ -681,7 +681,7 @@ public class CaseController {
     }
 
     private List<SimpleIndex> addZeroSimpleIndex(List<SimpleIndex> list,String dateStart,String dateEnd){
-        List<LocalDate> dateList = DateIntervalCalculator.getDateRange(dateStart,dateEnd);
+        List<LocalDate> dateList = DateUtil.getDateRange(dateStart,dateEnd);
         List<LocalDate> zeroDateList=new ArrayList<>();
         List<SimpleIndex> zeroSimpleIndexList = new ArrayList<>();
         for (LocalDate date:dateList){

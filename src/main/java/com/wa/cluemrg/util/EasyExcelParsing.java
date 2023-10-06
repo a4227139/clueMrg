@@ -67,6 +67,10 @@ public class EasyExcelParsing {
                     String value = valueMap.get(index);
                     if (field.getType()==int.class||field.getType()==Integer.class){
                         field.set(obj, Integer.parseInt(valueMap.get(fieldValue.get(field.getName()))));
+                    }else if (field.getType()==float.class||field.getType()==Float.class){
+                        field.set(obj, Float.parseFloat(valueMap.get(fieldValue.get(field.getName()))));
+                    }else if (field.getType()==double.class||field.getType()==Double.class){
+                        field.set(obj, Double.parseDouble(valueMap.get(fieldValue.get(field.getName()))));
                     }else {
                         field.set(obj, valueMap.get(fieldValue.get(field.getName())));
                     }
