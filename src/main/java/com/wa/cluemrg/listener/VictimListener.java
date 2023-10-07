@@ -157,8 +157,6 @@ public class VictimListener extends CustomizeListener<Victim> {
         }
         int remainder = sum % 11;
         char expectedCheckSum = (char) checkSumValues[remainder];
-        System.out.println(lastChar+":"+expectedCheckSum);
-        System.out.println(lastChar == expectedCheckSum);
         return (lastChar == expectedCheckSum);
     }
 

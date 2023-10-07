@@ -48,12 +48,20 @@ public class EasyExcelParsing {
                                 continue;
                             }else if(field.getType().equals(LocalDate.class)){
                                 LocalDate localDate;
-                                localDate=LocalDate.parse(dataString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                if (dataString.length()==19){
+                                    localDate=LocalDate.parse(dataString, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                                }else {
+                                    localDate=LocalDate.parse(dataString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                }
                                 field.set(obj,localDate);
                                 continue;
                             }else if(field.getType().equals(LocalDateTime.class)){
-                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                                LocalDateTime localDateTime=LocalDateTime.parse(dataString, formatter);
+                                LocalDateTime localDateTime;
+                                if (dataString.length()==19){
+                                    localDateTime=LocalDateTime.parse(dataString,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                                }else {
+                                    localDateTime=LocalDateTime.parse(dataString,DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                }
                                 field.set(obj,localDateTime);
                                 continue;
                             }else if(field.getType().equals(String.class)){

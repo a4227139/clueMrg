@@ -14,6 +14,7 @@ import com.wa.cluemrg.exception.BusinessException;
 import com.wa.cluemrg.response.ResponseResult;
 import com.wa.cluemrg.service.AlarmReceiptService;
 import com.wa.cluemrg.service.CaseService;
+import com.wa.cluemrg.service.VictimService;
 import com.wa.cluemrg.util.DateUtil;
 import com.wa.cluemrg.util.JurisdictionUtil;
 import com.wa.cluemrg.vo.JsGridVO;
@@ -50,6 +51,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -64,6 +66,8 @@ public class CaseController {
     CaseService caseService;
     @Autowired
     AlarmReceiptService alarmReceiptService;
+    @Autowired
+    VictimService victimService;
     @Value("${base.host}")
     String host;
     @Value("${base.port}")
@@ -287,10 +291,13 @@ public class CaseController {
             Collections.sort(caseIndexListSortByAverageLossMoney, averageLossMoneyComparator);
             dataMap.put("caseIndexListSortByAverageLossMoney", caseIndexListSortByAverageLossMoney);
 
-            //获取指标
+            //获取警情指标
             List<AlarmReceiptIndex> alarmReceiptIndexList = getAlarmReceiptIndex(dateStart,dateEnd,"");
             dataMap.put("alarmReceiptIndexList", alarmReceiptIndexList);
 
+            //获取受害人指标
+            VictimIndex victimIndex = getVictimIndex("",dateEnd,"");
+            dataMap.put("victimIndex", victimIndex);
             OutputStream out = response.getOutputStream();
             BufferedOutputStream bos = new BufferedOutputStream(out);
             Configure config = Configure.builder().useSpringEL().build();
@@ -341,6 +348,163 @@ public class CaseController {
 
         List<CaseIndex> caseIndexList = dealCaseIndex(list,listSolve,listHistory,dateStart,dateEnd);
         return caseIndexList;
+    }
+
+    @GetMapping("/getVictimIndex")
+    public VictimIndex getVictimIndex(@RequestParam("dateStart")  String dateStart,
+                                                        @RequestParam("dateEnd") String dateEnd,
+                                                        @RequestParam(value = "jurisdiction",required = false) String jurisdiction) throws ParseException {
+        Date start,end;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        if (!StringUtils.isEmpty(dateStart)){
+            start = dateFormat.parse(dateStart);
+        }else {
+            start = Date.from(LocalDate.now().minusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+        }
+        if (StringUtils.isEmpty(dateEnd)||
+                dateEnd.equals(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))) {//如果是今天也要变昨天
+            end = Date.from(LocalDate.now().minusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+        }else {
+            end = dateFormat.parse(dateEnd);
+        }
+        Victim param = new Victim();
+        param.setTimeStart(DateUtil.formatDateToStart(start));
+        param.setTimeEnd(DateUtil.formatDateToEnd(end));
+        List<Victim> list = victimService.selectAll(param);
+        VictimIndex index = dealVictimIndex(list);
+        index.setDateChinese(dateFormat.format(end).substring(5,10));
+        return index;
+    }
+
+    private VictimIndex dealVictimIndex(List<Victim> list) {
+        Map<String,Integer> employerMap = new HashMap<>();
+        Map<String,Integer> genderMap = new HashMap<>();
+        Map<String,Integer> typeMap = new HashMap<>();
+        Map<String,Integer> ageMap = new HashMap<String,Integer>(){{put("不详",0);put("18岁以下",0);put("18岁-30岁",0);put("30岁-45岁",0);put("45岁-60岁",0);put("60岁以上",0);}};
+        for (Victim victim:list){
+            //职业
+            if (employerMap.get(victim.getEmployer())==null){
+                employerMap.put(victim.getEmployer(),1);
+            }else {
+                employerMap.put(victim.getEmployer(),employerMap.get(victim.getEmployer())+1);
+            }
+            //性别
+            if (genderMap.get(victim.getGender())==null){
+                genderMap.put(victim.getGender(),1);
+            }else {
+                genderMap.put(victim.getGender(),genderMap.get(victim.getGender())+1);
+            }
+            //类型
+            if (typeMap.get(victim.getType())==null){
+                typeMap.put(victim.getType(),1);
+            }else {
+                typeMap.put(victim.getType(),typeMap.get(victim.getType())+1);
+            }
+            //年龄
+            int age = victim.getAge();
+            if (age<=0){
+                ageMap.put("不详",ageMap.get("不详")+1);
+            }else if (age<18){
+                ageMap.put("18岁以下",ageMap.get("18岁以下")+1);
+            }else if (age>=18&&age<30){
+                ageMap.put("18岁-30岁",ageMap.get("18岁-30岁")+1);
+            }else if (age>=30&&age<45){
+                ageMap.put("30岁-45岁",ageMap.get("30岁-45岁")+1);
+            }else if (age>=45&&age<60){
+                ageMap.put("45岁-60岁",ageMap.get("45岁-60岁")+1);
+            }else {
+                ageMap.put("60岁以上",ageMap.get("60岁以上")+1);
+            }
+        }
+        VictimIndex victimIndex = new VictimIndex();
+        int size = list.size();
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        //职业
+        StringBuilder employerSituationBuilder=new StringBuilder();//"单位人员x人（x），其余为自谋职业或无业。";
+        StringBuilder employerListBuilder=new StringBuilder();
+        int employeeCount=0;
+        for (Map.Entry<String,Integer> entry : employerMap.entrySet()){
+            String employer = entry.getKey();
+            if (StringUtils.isEmpty(employer)||employer.equals("无业")||employer.equals("无")||employer.equals("个体户")
+                    ||employer.equals("自由职业")||employer.equals("待业")||employer.equals("不详")||employer.equals("不愿透露")){
+                continue;
+            }
+            employeeCount++;
+            employerListBuilder.append(entry.getKey()).append(entry.getValue()).append("人,");
+        }
+        if (employeeCount>0){
+            employerSituationBuilder.append("单位人员").append(employeeCount).append("人（")
+                    .append(employerListBuilder.subSequence(0,employerListBuilder.length()-1)).append("），其余为自谋职业或无业。");
+        }else {
+            employerSituationBuilder.append("均为为自谋职业或无业。");
+        }
+        victimIndex.setEmployerSituation(employerSituationBuilder.toString());
+        //性别
+        int male=genderMap.get("男"),female = genderMap.get("女");
+        float maleRatio = (float) male/size*100;
+        float femaleRatio = (float) female/size*100;
+        String genderSituation ;
+        if (female>=male){
+            genderSituation = "女性"+female+"人（占比"+decimalFormat.format(femaleRatio)+"%），"+"男性"+male+"人（占比"+decimalFormat.format(maleRatio)+"%）。";
+        }else {
+            genderSituation = "男性"+male+"人（占比"+decimalFormat.format(maleRatio)+"%），"+"女性"+female+"人（占比"+decimalFormat.format(femaleRatio)+"%）。";
+        }
+        victimIndex.setGenderSituation(genderSituation);
+        //年龄
+        int max=-9999;
+        String maxString="";
+        for (Map.Entry<String,Integer> entry : ageMap.entrySet()){
+            if (entry.getValue()>max){
+                maxString=entry.getKey();
+                max=entry.getValue();
+            }
+        }
+        float ageRatio = (float) max/size*100;
+        String ageSituation="主要年龄段为"+maxString+"，共"+max+"人（占比"+decimalFormat.format(ageRatio)+"%）";
+        int second=-9999;
+        String secondString="";
+        ageMap.remove(maxString);
+        for (Map.Entry<String,Integer> entry : ageMap.entrySet()){
+            if (entry.getValue()>max){
+                secondString=entry.getKey();
+                second=entry.getValue();
+            }
+        }
+        //两个相同
+        if (second==max){
+            ageSituation+=","+secondString+"，共"+second+"人（占比"+decimalFormat.format(ageRatio)+"%）。";
+        }else {
+            ageSituation+="。";
+        }
+        victimIndex.setAgeSituation(ageSituation);
+        //类型
+        max=-9999;
+        maxString="";
+        for (Map.Entry<String,Integer> entry : typeMap.entrySet()){
+            if (entry.getValue()>max){
+                maxString=entry.getKey();
+                max=entry.getValue();
+            }
+        }
+        float typeRatio = (float) max/size*100;
+        String typeMapSituation="主要类型为"+maxString+"，共"+max+"起（占比"+decimalFormat.format(typeRatio)+"%）";
+        second=-9999;
+        secondString="";
+        typeMap.remove(maxString);
+        for (Map.Entry<String,Integer> entry : ageMap.entrySet()){
+            if (entry.getValue()>max){
+                secondString=entry.getKey();
+                second=entry.getValue();
+            }
+        }
+        //两个相同
+        if (second==max){
+            typeMapSituation+=","+secondString+"，共"+second+"起（占比"+decimalFormat.format(typeRatio)+"%）。";
+        }else {
+            typeMapSituation+="。";
+        }
+        victimIndex.setTypeSituation(typeMapSituation);
+        return victimIndex;
     }
 
     @GetMapping("/getAlarmReceiptIndex")
