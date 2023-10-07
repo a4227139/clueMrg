@@ -38,7 +38,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-
+import com.wa.cluemrg.entity.ImportantAlarmReceiptIndex;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -306,6 +306,10 @@ public class CaseController {
             List<EffectIndex> effectIndexList = getEffectIndex(dateStart,dateEnd,"");
             dataMap.put("effectIndexList", effectIndexList);
             dataMap.put("allEffectSituation", allEffectSituation);
+            //获取重大警情
+            List<ImportantAlarmReceiptIndex> importAlarmReceiptIndixList = getImportantAlarmReceiptIndex(dateStart,dateEnd,"");
+            dataMap.put("importAlarmReceiptIndixList", importAlarmReceiptIndixList);
+
             OutputStream out = response.getOutputStream();
             BufferedOutputStream bos = new BufferedOutputStream(out);
             Configure config = Configure.builder().useSpringEL().build();
@@ -325,6 +329,39 @@ public class CaseController {
             map.put("message", "下载文件失败" + e.getMessage());
             response.getWriter().println(JSON.toJSONString(map));
         }
+    }
+
+    private List<ImportantAlarmReceiptIndex> getImportantAlarmReceiptIndex(String dateStart, String dateEnd, String s) throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        if (StringUtils.isEmpty(dateEnd)||
+                dateEnd.equals(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))) {//如果是今天也要变昨天
+            dateEnd = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        }
+        Date date = simpleDateFormat.parse(dateEnd);
+        AlarmReceipt alarmReceipt = new AlarmReceipt();
+        alarmReceipt.setAlarmTimeStart(DateUtil.formatDateToStart(date));
+        alarmReceipt.setAlarmTimeEnd(DateUtil.formatDateToEnd(date));
+        List<AlarmReceipt> list = alarmReceiptService.getImportAlarmReceipt(alarmReceipt);
+        Map<String,List<AlarmReceipt>> map = new HashMap<>();
+        for (AlarmReceipt item : list){
+            if (map.get(item.getDepartment())==null){
+                List<AlarmReceipt> list1 = new ArrayList<>();
+                item.setStopPayment("案件进展："+item.getStopPayment());
+                list1.add(item);
+                map.put(item.getDepartment(),list1);
+            }else {
+                item.setStopPayment("案件进展："+item.getStopPayment());
+                map.get(item.getDepartment()).add(item);
+            }
+        }
+        List<ImportantAlarmReceiptIndex> importantAlarmReceiptIndexList = new ArrayList<>();
+        for (Map.Entry<String,List<AlarmReceipt>> entry : map.entrySet()){
+            ImportantAlarmReceiptIndex importantAlarmReceiptIndex = new ImportantAlarmReceiptIndex();
+            importantAlarmReceiptIndex.setDepartment(entry.getKey());
+            importantAlarmReceiptIndex.setList(entry.getValue());
+            importantAlarmReceiptIndexList.add(importantAlarmReceiptIndex);
+        }
+        return importantAlarmReceiptIndexList;
     }
 
     @GetMapping("/getCaseIndex")

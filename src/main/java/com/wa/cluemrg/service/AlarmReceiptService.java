@@ -64,4 +64,9 @@ public class AlarmReceiptService {
     public List<AlarmReceiptIndex> getAlarmReceiptIndex(AlarmReceipt alarmReceipt){
         return alarmReceiptMapper.getAlarmReceiptIndex(alarmReceipt);
     }
+
+    public List<AlarmReceipt> getImportAlarmReceipt(AlarmReceipt alarmReceipt) {
+        return alarmReceiptMapper.getImportAlarmReceipt(alarmReceipt);
+    }
+
 }

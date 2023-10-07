@@ -265,4 +265,12 @@
         BETWEEN #{alarmTimeStart,javaType = java.util.Date, jdbcType = TIMESTAMP} AND #{alarmTimeEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
         ORDER BY date
     </select>
+
+
+    <select id="getImportAlarmReceipt" resultMap="AlarmReceiptResultMap">
+        select *
+        from alarm_receipt where loss_money>=10 AND ALARM_TIME BETWEEN #{alarmTimeStart,javaType = java.util.Date, jdbcType = TIMESTAMP} AND #{alarmTimeEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+        ORDER BY DEPARTMENT
+    </select>
+
 </mapper>

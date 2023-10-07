@@ -38,4 +38,7 @@ public interface AlarmReceiptMapper extends MyBatisBaseDao<AlarmReceipt, String>
     List<SimpleIndex> getAlarmReceiptCountByCommunity(AlarmReceipt alarmReceipt);
 
     List<AlarmReceiptIndex> getAlarmReceiptIndex(AlarmReceipt alarmReceipt);
+
+    List<AlarmReceipt> getImportAlarmReceipt(AlarmReceipt alarmReceipt);
+
 }
