@@ -14,6 +14,7 @@ import com.wa.cluemrg.exception.BusinessException;
 import com.wa.cluemrg.response.ResponseResult;
 import com.wa.cluemrg.service.AlarmReceiptService;
 import com.wa.cluemrg.service.CaseService;
+import com.wa.cluemrg.service.EffectService;
 import com.wa.cluemrg.service.VictimService;
 import com.wa.cluemrg.util.DateUtil;
 import com.wa.cluemrg.util.JurisdictionUtil;
@@ -68,6 +69,8 @@ public class CaseController {
     AlarmReceiptService alarmReceiptService;
     @Autowired
     VictimService victimService;
+    @Autowired
+    EffectService effectService;
     @Value("${base.host}")
     String host;
     @Value("${base.port}")
@@ -298,6 +301,11 @@ public class CaseController {
             //获取受害人指标
             VictimIndex victimIndex = getVictimIndex("",dateEnd,"");
             dataMap.put("victimIndex", victimIndex);
+
+            //获取战果指标
+            List<EffectIndex> effectIndexList = getEffectIndex(dateStart,dateEnd,"");
+            dataMap.put("effectIndexList", effectIndexList);
+            dataMap.put("allEffectSituation", allEffectSituation);
             OutputStream out = response.getOutputStream();
             BufferedOutputStream bos = new BufferedOutputStream(out);
             Configure config = Configure.builder().useSpringEL().build();
@@ -505,6 +513,95 @@ public class CaseController {
         }
         victimIndex.setTypeSituation(typeMapSituation);
         return victimIndex;
+    }
+
+    public static String allEffectSituation="72小时，全市无新增战果。";
+    @GetMapping("/getEffectIndex")
+    public List<EffectIndex> getEffectIndex(@RequestParam("dateStart")  String dateStart,
+                                      @RequestParam("dateEnd") String dateEnd,
+                                      @RequestParam(value = "jurisdiction",required = false) String jurisdiction) throws ParseException {
+        if (StringUtils.isEmpty(dateEnd)||
+                dateEnd.equals(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))) {//如果是今天也要变昨天
+            dateEnd = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        }
+        LocalDate currDate = LocalDate.parse(dateEnd);
+        LocalDate dateEnd1=currDate.minusDays(1);
+        LocalDate dateEnd2=currDate.minusDays(2);
+        //获取数据
+        Effect effect = new Effect();
+        LocalDate endDate = currDate.minusDays(2);
+        // Convert LocalDate to Date using the system default time zone
+        Date sDate = Date.from(endDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date eDate = Date.from(currDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        effect.setDateStart(sDate);
+        effect.setDateEnd(eDate);
+        List<Effect> effectList = effectService.selectAll(effect);
+        Map<LocalDate,EffectIndex> map = new TreeMap<LocalDate,EffectIndex>(){{
+            put(currDate,new EffectIndex());
+            put(dateEnd1,new EffectIndex());
+            put(dateEnd2,new EffectIndex());
+        }};
+        int detentionCount=0,sueCount=0;
+        for (Effect item:effectList){
+            EffectIndex effectIndex = map.get(item.getDate());
+            effectIndex.setDateChinese(item.getDate().format(DateTimeFormatter.ofPattern("MM月dd日")));
+            if (item.getDetention()>0){
+                detentionCount+=item.getDetention();
+                effectIndex.setDetention(effectIndex.getDetention()+item.getDetention());
+                effectIndex.getDetentionMap().put(item.getDepartment(),item.getDetention());
+            }
+            if (item.getSue()>0){
+                sueCount+=item.getSue();
+                effectIndex.setSue(effectIndex.getSue()+item.getSue());
+                effectIndex.getSueMap().put(item.getDepartment(),item.getSue());
+            }
+        }
+        List<EffectIndex> indexList = new ArrayList<>();
+        indexList.addAll(map.values());
+        for (EffectIndex effectIndex:indexList){
+            String situation="全市新增";
+            String detentionSituation ="";
+            if (effectIndex.getDetention()>0){
+                detentionSituation=effectIndex.getDetention()+"个刑拘数（";
+                Map<String,Integer> detentionMap=effectIndex.getDetentionMap();
+                for (Map.Entry<String,Integer> entry:detentionMap.entrySet()){
+                    detentionSituation+=entry.getKey()+entry.getValue()+"人，";
+                }
+                detentionSituation=detentionSituation.substring(0,detentionSituation.length()-1);
+                detentionSituation+="）。";
+            }
+
+            String sueSituation ="";
+            if (effectIndex.getSue()>0){
+                sueSituation=effectIndex.getSue()+"个起诉数（";
+                Map<String,Integer> sueMap=effectIndex.getSueMap();
+                for (Map.Entry<String,Integer> entry:sueMap.entrySet()){
+                    sueSituation+=entry.getKey()+entry.getValue()+"人，";
+                }
+                sueSituation=sueSituation.substring(0,sueSituation.length()-1);
+                sueSituation+="）。";
+            }
+            situation=situation+detentionSituation+sueSituation;
+            if (effectIndex.getDetention()<=0&&effectIndex.getSue()<=0){
+                situation="全市无新增打击战果。";
+            }
+            effectIndex.setSituation(situation);
+        }
+
+        if (detentionCount>0||sueCount>0){
+            allEffectSituation="72小时，全市新增";
+        }
+        if (detentionCount>0){
+            allEffectSituation+="刑拘战果"+detentionCount+"人，";
+        }
+        if (sueCount>0){
+            allEffectSituation+="起诉战果"+sueCount+"人。";
+        }
+        //结尾的，换成。
+        if (allEffectSituation.endsWith("，")){
+            allEffectSituation=allEffectSituation.substring(0,allEffectSituation.length()-1)+"。";
+        }
+        return indexList;
     }
 
     @GetMapping("/getAlarmReceiptIndex")
