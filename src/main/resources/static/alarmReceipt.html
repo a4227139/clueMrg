@@ -52,16 +52,34 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav side-nav">
-                <li><a href="btClue.html"><i class="fa fa-table"></i> 部推线索（柳州）</a></li>
-                <li><a href="ttClue.html"><i class="fa fa-table"></i> 厅推线索（柳州）</a></li>
-                <li><a href="qgBtClue.html"><i class="fa fa-bar-chart-o"></i> 部推线索（全国）</a></li>
-                <li><a href="qgDkClue.html"><i class="fa fa-bar-chart-o"></i> 断卡线索（全国）</a></li>
-                <li class="active"><a href="alarmReceipt.html"><i class="fa fa-bar-chart-o"></i> 电诈接处警信息</a></li>
-                <li><a href="callLog.html"><i class="fa fa-bar-chart-o"></i> 通话记录</a></li>
-                <li><a href="phoneImei.html"><i class="fa fa-edit"></i> 号码-机身列表</a></li>
-                <li><a href="bsLocation.html"><i class="fa fa-edit"></i> 基站列表</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> 线索 <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="btClue.html"><i class="fa fa-table"></i> 部推线索（柳州）</a></li>
+                        <li><a href="ttClue.html"><i class="fa fa-table"></i> 厅推线索（柳州）</a></li>
+                        <li><a href="qgBtClue.html"><i class="fa fa-bar-chart-o"></i> 部推线索（全国）</a></li>
+                        <li><a href="qgDkClue.html"><i class="fa fa-bar-chart-o"></i> 断卡线索（全国）</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> 日研判相关 <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li class="active"><a href="alarmReceipt.html"><i class="fa fa-bar-chart-o"></i> 电诈接处警信息</a></li>
+                        <li><a href="victim.html"><i class="fa fa-bar-chart-o"></i> 受害人信息</a></li>
+                        <li><a href="effect.html"><i class="fa fa-bar-chart-o"></i> 战果信息</a></li>
+                        <li><a href="case.html"><i class="fa fa-camera-retro"></i> 案件列表</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> 手机号 <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="callLog.html"><i class="fa fa-bar-chart-o"></i> 通话记录</a></li>
+                        <li><a href="attribution.html"><i class="fa fa-bar-chart-o"></i> 号码归属地查询</a></li>
+                        <li><a href="phoneImei.html"><i class="fa fa-edit"></i> 号码-机身列表</a></li>
+                        <li><a href="bsLocation.html"><i class="fa fa-edit"></i> 基站列表</a></li>
+                    </ul>
+                </li>
                 <li><a href="graph2.html"><i class="fa fa-camera-retro"></i> 关系图</a></li>
-                <li><a href="case.html"><i class="fa fa-camera-retro"></i> 案件列表</a></li>
                 <li><a href="caseGraph.html"><i class="fa fa-camera-retro"></i> 涉诈案件全景图</a></li>
             </ul>
 
@@ -151,6 +169,11 @@
 <script src="js/tablesorter/jquery.tablesorter.js"></script>
 <script src="js/tablesorter/tables.js"></script>
 <script>
+    // 监听下拉菜单按钮的点击事件
+    $('.dropdown-toggle').on('click', function() {
+        // 切换下拉菜单的显示状态
+        $(this).siblings('.dropdown-menu').toggle();
+    });
     $('#download-btn').click(function() {
         var link = document.querySelector('#a_download_template');
         // 模拟点击下载链接

@@ -19,6 +19,7 @@ import com.wa.cluemrg.service.VictimService;
 import com.wa.cluemrg.util.DateUtil;
 import com.wa.cluemrg.util.JurisdictionUtil;
 import com.wa.cluemrg.vo.JsGridVO;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.ss.usermodel.Cell;
@@ -384,14 +385,15 @@ public class CaseController {
         paramSolve.setSolveDateEnd(dateFormat.parse(dateEnd));
         List<Case> listSolve = caseService.selectAllSolve(paramSolve);
 
-        Case paramHistory = new Case();
+        //历史案件不准确
+        /*Case paramHistory = new Case();
         String lastYearDateStart=(Integer.parseInt(dateStart.substring(0,4))-1)+dateStart.substring(4);
         String lastYearDateEnd=(Integer.parseInt(dateEnd.substring(0,4))-1)+dateEnd.substring(4);
         paramHistory.setRegisterDateStart(dateFormat.parse(lastYearDateStart));
         paramHistory.setRegisterDateEnd(dateFormat.parse(lastYearDateEnd));
-        List<Case> listHistory = caseService.selectAllHistory(paramHistory);
+        List<Case> listHistory = caseService.selectAllHistory(paramHistory);*/
 
-        List<CaseIndex> caseIndexList = dealCaseIndex(list,listSolve,listHistory,dateStart,dateEnd);
+        List<CaseIndex> caseIndexList = dealCaseIndex(list,listSolve,null,dateStart,dateEnd);
         return caseIndexList;
     }
 
@@ -485,7 +487,8 @@ public class CaseController {
         }
         victimIndex.setEmployerSituation(employerSituationBuilder.toString());
         //性别
-        int male=genderMap.get("男"),female = genderMap.get("女");
+        int male=genderMap.get("男")==null?0:genderMap.get("男");
+        int female = genderMap.get("女")==null?0:genderMap.get("女");
         float maleRatio = (float) male/size*100;
         float femaleRatio = (float) female/size*100;
         String genderSituation ;
@@ -827,7 +830,8 @@ public class CaseController {
             caseIndex.setSolveCount(caseIndex.getSolveCount() + 1);
             cityCaseIndex.setSolveCount(cityCaseIndex.getSolveCount() + 1);
         }
-        for (Case caseObj:historyCaseList) {
+        //历史案件不准
+        /*for (Case caseObj:historyCaseList) {
             String jurisdiction = caseObj.getJurisdiction();
             CaseIndex caseIndex = caseIndexMap.get(jurisdictionMap.get(jurisdiction));
             //立案数
@@ -836,7 +840,8 @@ public class CaseController {
             //损失数
             caseIndex.setLossMoneyHistory(caseIndex.getLossMoneyHistory()+caseObj.getMoney());
             cityCaseIndex.setLossMoneyHistory(cityCaseIndex.getLossMoneyHistory()+caseObj.getMoney());
-        }
+        }*/
+
 
         List<CaseIndex> caseIndexList = new ArrayList<>();
         DecimalFormat decimalFormat = new DecimalFormat("#.#");
@@ -861,9 +866,16 @@ public class CaseController {
             formattedResult2 = decimalFormat2.format(lossMoney/100000000);
             caseIndex.setLossMoneyFormat(formattedResult);
             caseIndex.setLossMoneyFormat2(formattedResult2);
-            float lossMoneyHistory = caseIndex.getLossMoneyHistory();
+            /*float lossMoneyHistory = caseIndex.getLossMoneyHistory();
             caseIndex.setLossMoneyHistoryFormat(decimalFormat3.format(lossMoneyHistory/10000));
-            caseIndex.setLossMoneyHistoryFormat2(decimalFormat2.format(lossMoneyHistory/100000000));
+            caseIndex.setLossMoneyHistoryFormat2(decimalFormat2.format(lossMoneyHistory/100000000));*/
+            //历史
+            caseIndex.setCountHistory(getCountHistory(jurisdiction,dateEnd));
+            float lossMoneyHistory = getLossMoneyHistory(jurisdiction,dateEnd);
+            caseIndex.setLossMoneyHistory(lossMoneyHistory);
+            caseIndex.setLossMoneyHistoryFormat(decimalFormat.format(lossMoneyHistory));
+            formattedResult2 = decimalFormat2.format(lossMoneyHistory/10000);
+            caseIndex.setLossMoneyHistoryFormat2(formattedResult2);
             //万人发案数
             float countPerW = (float)caseIndex.getCount()/jurisdictionPopulationMap.get(jurisdiction);
             countPerW=countPerW*10000;
@@ -873,11 +885,151 @@ public class CaseController {
             float yCountRatio=(float)(caseIndex.getCount()-caseIndex.getCountHistory())/caseIndex.getCountHistory()*100;
             caseIndex.setYCountRatio(decimalFormat.format(yCountRatio));
             //损失同比
-            float yLossMoneyRatio=(caseIndex.getLossMoney()-caseIndex.getLossMoneyHistory())/caseIndex.getLossMoneyHistory()*100;
+            float yLossMoneyRatio=(caseIndex.getLossMoney()-caseIndex.getLossMoneyHistory()*10000)/(caseIndex.getLossMoneyHistory()*10000)*100;
             caseIndex.setYLossMoneyRatio(decimalFormat.format(yLossMoneyRatio));
             caseIndexList.add(caseIndex);
         }
         return caseIndexList;
+    }
+
+    Map<String,Integer> countHistory = new HashMap<String,Integer>(){{
+        put("城中分局",	302 );
+        put("鱼峰分局",	347 );
+        put("柳南分局",	366 );
+        put("柳北分局",	347 );
+        put("柳江分局",	326 );
+        put("柳东分局",	238 );
+        put("柳城县局",	142 );
+        put("鹿寨县局",	151 );
+        put("融安县局",	104 );
+        put("融水县局",	110 );
+        put("三江县局",	128 );
+        put("市本级",	2561);
+        put("南宁",8958);
+        put("柳州",2561);
+        put("桂林",2332);
+        put("梧州",900);
+        put("北海",982);
+        put("防城港",451);
+        put("钦州",1359);
+        put("贵港",1311);
+        put("玉林",2907);
+        put("百色",1660);
+        put("贺州",671);
+        put("河池",1676);
+        put("来宾",1519);
+        put("崇左",1020);
+        put("全区",28307);
+    }};
+    Map<String,Float> countIncHistory = new HashMap<String,Float>(){{
+        put("城中分局",	1.582565710f);
+        put("鱼峰分局",	1.728038324f);
+        put("柳南分局",	1.974900942f);
+        put("柳北分局",	1.609015276f);
+        put("柳江分局",	1.772120934f);
+        put("柳东分局",	1.181413956f);
+        put("柳城县局",	0.608340022f);
+        put("鹿寨县局",	0.744996114f);
+        put("融安县局",	0.515766541f);
+        put("融水县局",	0.445234364f);
+        put("三江县局",	0.652422632f);
+        put("市本级",	12.81481481f);
+        put("南宁",56.3f);
+        put("柳州",12.8f);
+        put("桂林",12.7f);
+        put("梧州",5.3f);
+        put("北海",4.4f);
+        put("防城港",1.8f);
+        put("钦州",10.9f);
+        put("贵港",7.5f);
+        put("玉林",18.6f);
+        put("百色",9.3f);
+        put("贺州",2.3f);
+        put("河池",-1.9f);
+        put("来宾",8.3f);
+        put("崇左",5.7f);
+        put("总计",154.0f);
+    }};
+
+    Map<String,Float> lossMoneyHistory = new HashMap<String,Float>(){{
+        put("城中分局",	2943.289002f);
+        put("鱼峰分局",	1625.016123f);
+        put("柳南分局",	2263.263871f);
+        put("柳北分局",	2165.154813f);
+        put("柳江分局",	1402.192074f);
+        put("柳东分局",	1283.396145f);
+        put("柳城县局",	806.289446f);
+        put("鹿寨县局",	624.510128f);
+        put("融安县局",	568.487722f);
+        put("融水县局",	805.174114f);
+        put("三江县局",	556.405987f);
+        put("市本级",	15043.179425f);
+        put("南宁",71610.51f);
+        put("柳州",15043.18f);
+        put("桂林",15421.16f);
+        put("梧州",3888.04f);
+        put("北海",6855.66f);
+        put("防城港",2860.07f);
+        put("钦州",7185.68f);
+        put("贵港",7610.42f);
+        put("玉林",12731.51f);
+        put("百色",8689.28f);
+        put("贺州",2904.86f);
+        put("河池",10337.16f);
+        put("来宾",7429.48f);
+        put("崇左",4709.05f);
+        put("总计",177276.06f);
+    }};
+    Map<String,Float> lossMoneyIncHistory = new HashMap<String,Float>(){{
+        put("城中分局",	9.52756274378982f);
+        put("鱼峰分局",	5.68993547507037f);
+        put("柳南分局",	9.86393716275945f);
+        put("柳北分局",	8.33139106857801f);
+        put("柳江分局",	6.59329502976163f);
+        put("柳东分局",	4.69371727291672f);
+        put("柳城县局",	2.16291832734297f);
+        put("鹿寨县局",	2.35475914641386f);
+        put("融安县局",	2.08100090304936f);
+        put("融水县局",	1.87436785128135f);
+        put("三江县局",	2.37563353755499f);
+        put("市本级",	55.5394102592593f);
+        put("南宁",423.71f);
+        put("柳州",55.54f);
+        put("桂林",77.97f);
+        put("梧州",13.60f);
+        put("北海",31.27f);
+        put("防城港",12.84f);
+        put("钦州",59.43f);
+        put("贵港",48.10f);
+        put("玉林",103.07f);
+        put("百色",124.78f);
+        put("贺州",14.23f);
+        put("河池",38.34f);
+        put("来宾",50.00f);
+        put("崇左",28.62f);
+        put("总计",1081.49f);
+    }};
+
+    LocalDate October1 = LocalDate.of(LocalDate.now().getYear(), 10, 1);
+    Date October_1 = Date.from(October1.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    @SneakyThrows
+    private int getCountHistory(String jurisdiction, String dateEnd) {
+        Date date = dateFormat.parse(dateEnd);
+        date = DateUtil.formatDateToStart(date);
+        long interval = date.getTime()-October_1.getTime();
+        interval = interval/(86400*1000)+1;
+        int count = Math.round(countHistory.get(jurisdiction)+interval*countIncHistory.get(jurisdiction));
+        return count;
+    }
+
+    @SneakyThrows
+    private float getLossMoneyHistory(String jurisdiction, String dateEnd) {
+        Date date = dateFormat.parse(dateEnd);
+        date = DateUtil.formatDateToStart(date);
+        long interval = date.getTime()-October_1.getTime();
+        interval = interval/(86400*1000)+1;
+        float loss = lossMoneyHistory.get(jurisdiction)+interval*lossMoneyIncHistory.get(jurisdiction);
+        return loss;
     }
 
     @GetMapping("/sync")
