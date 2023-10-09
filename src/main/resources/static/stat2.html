@@ -1,0 +1,675 @@
+<html>
+<head>
+	<title></title>
+</head>
+<body topmargin=0 leftmargin=0 rightmargin=0 bottomMargin=0>
+
+
+
+<table id=titleTable width=100% cellspacing=0 cellpadding=0 border=0 ><tr>
+	<td height="22" width=100% valign="middle"  style="font-size:13px" background="../images/ta51top.jpg">
+		<table width="100%">
+
+			<tr >
+				<td width=53% align="left"  style="font-size:13px" >&nbsp;&nbsp;&nbsp;&nbsp;</td>
+				<td width="47%" align="center" valign="middle"   style="font-size:12px" >��<span id="t_page_span"></span>ҳ/��<span id="c_page_span"></span>ҳ&nbsp;&nbsp;
+				<a href="#" onClick="report1_print();return false;"><img src='/report/images/print.gif' border=no style='vertical-align:middle'></a>
+				<a href="#" onClick="report1_saveAsExcel();return false;"><img src='/report/images/excel.gif' border=no style='vertical-align:middle'></a>
+				<a href="#" onClick="report1_saveAsPdf();return false;"><img src='/report/images/pdf.gif' border=no style='vertical-align:middle'></a>
+				<a href="#" onClick="report1_saveAsWord();return false;"><img src='/report/images/doc.gif' border=no style='vertical-align:middle'></a>
+				<a href="#" onClick="_submitTable( report1 );return false;"><img src='/report/images/savedata.gif' border=no style='vertical-align:middle'></a>
+
+				  <a href="#" onClick="try{report1_toPage( 1 );}catch(e){}return false;"><img src='/report/images/firstpage.gif' border=no style='vertical-align:middle'></a>
+				  <a href="#" onClick="try{report1_toPage(report1_getCurrPage()-1);}catch(e){}return false;"><img src='/report/images/prevpage.gif' border=no style='vertical-align:middle'></a>
+				  <a href="#" onClick="try{report1_toPage(report1_getCurrPage()+1);}catch(e){}return false;"><img src='/report/images/nextpage.gif' border=no style='vertical-align:middle'></a>
+				  <a href="#" onClick="try{report1_toPage(report1_getTotalPage());}catch(e){}return false;"><img src='/report/images/lastpage.gif' border=no style='vertical-align:middle'></a>
+			  </td>
+			</tr>
+	  </table>
+	</td>
+</tr>
+<tr height=6><td></td></tr>
+</table>
+
+<script language=javascript src="/report/servlet/com.runqian.base.util.ReadJavaScriptServlet?file=%2Fcom%2Frunqian%2Freport%2Fview%2Fhtml%2Fscroll.js"></script>
+<div id="div1" style="overflow:auto;vertical-align:top;">
+<table id=rpt align="center"><tr><td>
+
+
+<form name="report1_turnPageForm" method=post action="http://10.148.63.153:4520/report/reportJsp/showReport.jsp?1696844045763" style="display:none">
+<input type=hidden name="raq" value="/xzbb/dxzp/qqjzptzpajtj_fj.raq">
+<input type=hidden name="LADW" value="4502">
+<input type=hidden name=reportParamsId value=103816>
+<input type=hidden name=report1_currPage value="1">
+<input type=hidden name=report1_cachedId value=A3871>
+</form><script language=javascript>
+	function report1_toPage( pageNo ) {
+	if( pageNo < 1 || pageNo > report1_getTotalPage() ) return;
+		document.report1_turnPageForm.report1_currPage.value = pageNo;
+		document.report1_turnPageForm.submit();
+	}
+</script>
+<script language=javascript>
+	function report1_getCurrPage() {
+		return 1;
+	}
+	function report1_getTotalPage() {
+		return 1;
+	}
+</script>
+<script language=javascript>
+	function report1_saveAsExcel() {
+		var address = "http://10.148.63.153:4520/report/reportServlet?action=4&url=http%3A%2F%2F10.148.63.153%3A4520%2Freport%2FreportServlet%3Faction%3D3%26file%3D%2Fxzbb%2Fdxzp%2Fqqjzptzpajtj_fj.raq%26columns%3D0%26srcType%3Dfile%26width%3D-1%26height%3D-1%26reportParamsId%3D103816%26saveAsName%3Dresult%26cachedId%3DA3871%26t_i_m_e%3D1696844045763";
+		window.open( address + "&frame=report1_saveAs_frame", null, "width=300, height=180, left=250, top=200, status=no, resizable=yes" );
+	}
+</script>
+<script language=javascript>
+	function report1_saveAsPdf() {
+		document.getElementById( "report1_saveAs_frame" ).src = "http://10.148.63.153:4520/report/reportServlet?action=6&file=/xzbb/dxzp/qqjzptzpajtj_fj.raq&columns=0&srcType=file&reportParamsId=103816&saveAsName=result&cachedId=A3871&t_i_m_e=1696844045763";
+	}
+</script>
+
+<script language=javascript>
+	function report1_saveAsWord() {
+		document.getElementById( "report1_saveAs_frame" ).src = "http://10.148.63.153:4520/report/reportServlet?action=7&file=/xzbb/dxzp/qqjzptzpajtj_fj.raq&columns=0&srcType=file&reportParamsId=103816&saveAsName=result&cachedId=A3871&t_i_m_e=1696844045763";
+	}
+</script>
+
+<iframe name="report1_saveAs_frame" id="report1_saveAs_frame" src="a.html" style="display:none"></iframe>
+<script language=javascript>
+	function report1_saveAsText() {
+		document.getElementById( "report1_saveAs_frame" ).src = "http://10.148.63.153:4520/report/reportServlet?action=18&file=/xzbb/dxzp/qqjzptzpajtj_fj.raq&srcType=file&separator=%09&reportParamsId=103816&saveAsName=result&cachedId=A3871&t_i_m_e=1696844045763";
+	}
+</script>
+
+<script language=javascript>
+	function report1_print() {
+		document.getElementById( "report1_printIFrame" ).src = "http://10.148.63.153:4520/report/reportServlet?action=2&name=report1&reportFileName=/xzbb/dxzp/qqjzptzpajtj_fj.raq&srcType=file&savePrintSetup=no&appletJarName=runqianReport4Applet.jar&reportParamsId=103816&cachedId=A3871&t_i_m_e=1696844045763";
+	}
+</script>
+<iframe name="report1_printIFrame" id="report1_printIFrame" src="a.html" style="position:absolute;left:-100px;top:-100px" width=50 height=50></iframe>
+<script language=javascript>
+	var report1oldstatus = "";
+	function report1419935over(){
+		report1oldstatus = window.status;
+		window.status = "null";
+	}
+	function report1419935out(){
+		window.status = report1oldstatus;
+	}
+</script>
+<style id="report1_style"></style>
+<table id="report1" cellSpacing=0 cellPadding=0 onmouseout="report1419935out()" style="width:1475;table-layout:fixed;border-collapse:collapse">
+	<colgroup>
+		<col style="width:71px;"></col>
+		<col style="width:68px;"></col>
+		<col style="width:68px;"></col>
+		<col style="width:55px;"></col>
+		<col style="width:55px;"></col>
+		<col style="width:53px;"></col>
+		<col style="width:49px;"></col>
+		<col style="width:47px;"></col>
+		<col style="width:47px;"></col>
+		<col style="width:47px;"></col>
+		<col style="width:47px;"></col>
+		<col style="width:47px;"></col>
+		<col style="width:47px;"></col>
+		<col style="width:47px;"></col>
+		<col style="width:47px;"></col>
+		<col style="width:88px;"></col>
+		<col style="width:101px;"></col>
+		<col style="width:105px;"></col>
+		<col style="width:84px;"></col>
+		<col style="width:86px;"></col>
+		<col style="width:99px;"></col>
+		<col style="width:117px;"></col>
+	</colgroup>
+	<tr height=50 style="height:50px;">
+		<style> .report1_1_1 { text-align:center;vertical-align:middle;padding-left:0px;padding-right:0px;font-family:Dialog;font-size:26px;color:#000000;font-weight:bold;font-style:normal;text-decoration:none;border-left-style:solid;border-left-width:1px;border-left-color:#000000;border-top-style:solid;border-top-width:1px;border-top-color:#000000;border-right-style:solid;border-right-width:1px;border-right-color:#000000;border-bottom-style:solid;border-bottom-width:1px;border-bottom-color:#000000;background-color:#FFFFFF;word-break:keep-all;}</style>
+		<td colSpan=22 class="report1_1_1">ȫ������ƽ̨թƭ����ͳ��ģ��</td>
+	</tr>
+	<tr height=40 style="height:40px;">
+		<style> .report1_2_1 { text-align:center;vertical-align:middle;padding-left:0px;padding-right:0px;font-family:Dialog;font-size:16px;color:#000000;font-weight:bold;font-style:normal;text-decoration:none;border-left-style:solid;border-left-width:1px;border-left-color:#000000;border-top-style:solid;border-top-width:1px;border-top-color:#000000;border-right-style:solid;border-right-width:1px;border-right-color:#000000;border-bottom-style:solid;border-bottom-width:1px;border-bottom-color:#000000;background-color:#FFFFFF;line-height:21px;word-break:keep-all;}</style>
+		<td rowSpan=3 class="report1_2_1">��λ</td>
+		<style> .report1_2_2 { text-align:center;vertical-align:middle;padding-left:0px;padding-right:0px;font-family:Dialog;font-size:16px;color:#000000;font-weight:bold;font-style:normal;text-decoration:none;border-left-style:solid;border-left-width:1px;border-left-color:#000000;border-top-style:solid;border-top-width:1px;border-top-color:#000000;border-right-style:solid;border-right-width:1px;border-right-color:#000000;border-bottom-style:solid;border-bottom-width:1px;border-bottom-color:#000000;background-color:#FFFFFF;word-break:keep-all;}</style>
+		<td colSpan=17 class="report1_2_2"></td>
+		<td colSpan=4 onmouseover="report1419935over()" class="report1_2_2">�Ӵ���թƭ</td>
+	</tr>
+	<tr height=53 style="height:53px;">
+		<style> .report1_3_2 { text-align:center;vertical-align:middle;padding-left:0px;padding-right:0px;font-family:Dialog;font-size:15px;color:#000000;font-weight:bold;font-style:normal;text-decoration:none;border-left-style:solid;border-left-width:1px;border-left-color:#000000;border-top-style:solid;border-top-width:1px;border-top-color:#000000;border-right-style:solid;border-right-width:1px;border-right-color:#000000;border-bottom-style:solid;border-bottom-width:1px;border-bottom-color:#000000;background-color:#FFFFFF;word-break:keep-all;}</style>
+		<td colSpan=14 class="report1_3_2">����</td>
+		<style> .report1_3_16 { text-align:center;vertical-align:middle;padding-left:0px;padding-right:0px;font-family:Dialog;font-size:15px;color:#000000;font-weight:bold;font-style:normal;text-decoration:none;border-left-style:solid;border-left-width:1px;border-left-color:#000000;border-top-style:solid;border-top-width:1px;border-top-color:#000000;border-right-style:solid;border-right-width:1px;border-right-color:#000000;border-bottom-style:solid;border-bottom-width:1px;border-bottom-color:#000000;background-color:#FFFFFF;line-height:20px;word-break:keep-all;}</style>
+		<td rowSpan=2 class="report1_3_16">�ư�</td>
+		<td rowSpan=2 class="report1_3_16">��ʧ���</td>
+		<td rowSpan=2 class="report1_3_16">ץ��������</td>
+		<td rowSpan=2 class="report1_3_16">����</td>
+		<td rowSpan=2 class="report1_3_16">�ư�</td>
+		<td rowSpan=2 class="report1_3_16">��ʧ���</td>
+		<td rowSpan=2 class="report1_3_16">ץ��������</td>
+	</tr>
+	<tr height=140 style="height:140px;">
+		<td onmouseover="report1419935over()" class="report1_3_16">����</td>
+		<td onmouseover="report1419935over()" class="report1_3_16">ð�����<br>�����ͷ�<br>��</td>
+		<td onmouseover="report1419935over()" class="report1_3_16">ð�乫<br>�취��<br>������<br>����</td>
+		<td onmouseover="report1419935over()" class="report1_3_16">ˢ����<br>����</td>
+		<td onmouseover="report1419935over()" class="report1_3_16">���<br>������<br>�ÿ���</td>
+		<td class="report1_3_16">ð��<br>����<br>����<br>թƭ</td>
+		<td class="report1_3_16">ɱ��<br>��</td>
+		<td onmouseover="report1419935over()" class="report1_3_16">���<br>����<br>����<br>����</td>
+		<td onmouseover="report1419935over()" class="report1_3_16">����<br>����<br>����<br>����<br>����<br>ɱ��<br>�̣�</td>
+		<td class="report1_3_16">���<br>����<br>��</td>
+		<td onmouseover="report1419935over()" class="report1_3_16">ð��<br>�쵼<br>����<br>����</td>
+		<td onmouseover="report1419935over()" class="report1_3_16">����<br>��Ϸ<br>��Ʒ<br>���<br>����<br>��</td>
+		<td class="report1_3_16">����<br>����<br>թƭ</td>
+		<td class="report1_3_16">ɱ��<br>�̣�<br>����<br>��</td>
+	</tr>
+	<tr height=34 style="height:34px;">
+		<style> .report1_5_1 { text-align:center;vertical-align:middle;padding-left:0px;padding-right:0px;font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;border-left-style:solid;border-left-width:1px;border-left-color:#000000;border-top-style:solid;border-top-width:1px;border-top-color:#000000;border-right-style:solid;border-right-width:1px;border-right-color:#000000;border-bottom-style:solid;border-bottom-width:1px;border-bottom-color:#000000;background-color:#FFFFFF;line-height:18px;word-break:keep-all;}</style>
+		<td class="report1_5_1">�б���&nbsp;</td>
+		<style> .report1_5_2 { text-align:center;vertical-align:middle;padding-left:0px;padding-right:0px;font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;border-left-style:solid;border-left-width:1px;border-left-color:#000000;border-top-style:solid;border-top-width:1px;border-top-color:#000000;border-right-style:solid;border-right-width:1px;border-right-color:#000000;border-bottom-style:solid;border-bottom-width:1px;border-bottom-color:#000000;background-color:#FFFFFF;word-break:keep-all;}</style>
+		<td class="report1_5_2"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzpzsxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;"></a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=01&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=02&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=03&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=04&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=05&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=06&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=07&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=08&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=09&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=10&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=11&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=12&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=13&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzppaxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1">0</td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzpxyrxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzpzsxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">3</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzppaxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">2</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1">0</td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzpxyrxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+	</tr>
+	<tr height=34 style="height:34px;">
+		<td class="report1_5_1">���з־�</td>
+		<td onmouseover="report1419935over()" class="report1_5_2"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzpzsxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450202" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">429</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=01&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450202" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">48</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=02&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450202" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">13</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=03&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450202" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">99</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=04&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450202" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">18</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=05&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450202" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">2</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=06&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450202" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">60</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=07&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450202" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">62</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=08&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450202" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">3</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=09&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450202" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">59</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=10&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450202" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">22</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=11&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450202" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">10</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=12&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450202" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">25</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=13&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450202" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">8</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzppaxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450202" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">144</a></td>
+		<td class="report1_5_1">39627064.6</td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzpxyrxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450202" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">190</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzpzsxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450202" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">109</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzppaxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450202" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">57</a></td>
+		<td class="report1_5_1">28133078.57</td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzpxyrxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450202" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">70</a></td>
+	</tr>
+	<tr height=34 style="height:34px;">
+		<td class="report1_5_1">���־�</td>
+		<td onmouseover="report1419935over()" class="report1_5_2"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzpzsxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450203" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">441</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=01&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450203" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">34</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=02&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450203" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">11</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=03&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450203" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">151</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=04&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450203" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">32</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=05&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450203" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=06&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450203" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">58</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=07&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450203" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">40</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=08&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450203" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">15</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=09&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450203" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">35</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=10&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450203" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">17</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=11&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450203" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">6</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=12&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450203" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">37</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=13&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450203" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">5</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzppaxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450203" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">174</a></td>
+		<td class="report1_5_1">24148071.6</td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzpxyrxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450203" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">184</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzpzsxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450203" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">24</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzppaxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450203" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">16</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1">3530325</td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzpxyrxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450203" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">45</a></td>
+	</tr>
+	<tr height=34 style="height:34px;">
+		<td onmouseover="report1419935over()" class="report1_5_1">���Ϸ־�</td>
+		<td class="report1_5_2"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzpzsxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450204" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">755</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=01&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450204" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">72</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=02&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450204" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">33</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=03&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450204" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">205</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=04&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450204" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">51</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=05&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450204" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">7</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=06&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450204" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">97</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=07&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450204" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">79</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=08&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450204" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">15</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=09&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450204" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">50</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=10&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450204" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">22</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=11&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450204" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">21</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=12&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450204" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">88</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=13&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450204" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">15</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzppaxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450204" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">261</a></td>
+		<td class="report1_5_1">39196609.73</td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzpxyrxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450204" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">258</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzpzsxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450204" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">55</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzppaxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450204" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">19</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1">11130120.05</td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzpxyrxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450204" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">126</a></td>
+	</tr>
+	<tr height=34 style="height:34px;">
+		<td class="report1_5_1">�����־�</td>
+		<td onmouseover="report1419935over()" class="report1_5_2"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzpzsxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450205" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">492</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=01&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450205" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">42</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=02&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450205" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">21</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=03&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450205" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">125</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=04&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450205" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">34</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=05&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450205" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">1</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=06&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450205" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">77</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=07&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450205" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">34</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=08&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450205" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">4</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=09&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450205" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">61</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=10&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450205" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">21</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=11&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450205" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">12</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=12&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450205" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">54</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=13&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450205" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">6</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzppaxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450205" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">155</a></td>
+		<td class="report1_5_1">43734231.06</td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzpxyrxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450205" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">193</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzpzsxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450205" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">100</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzppaxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450205" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">38</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1">13613250.73</td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzpxyrxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450205" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">70</a></td>
+	</tr>
+	<tr height=34 style="height:34px;">
+		<td class="report1_5_1">�����־�</td>
+		<td class="report1_5_2"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzpzsxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450206" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">419</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=01&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450206" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">30</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=02&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450206" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">23</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=03&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450206" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">137</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=04&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450206" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">34</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=05&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450206" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=06&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450206" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">41</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=07&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450206" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">65</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=08&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450206" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">17</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=09&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450206" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">22</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=10&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450206" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">9</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=11&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450206" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">11</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=12&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450206" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">28</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=13&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450206" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">2</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzppaxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450206" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">125</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1">24880465.18</td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzpxyrxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450206" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">189</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzpzsxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450206" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">30</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzppaxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450206" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">17</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1">28257343</td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzpxyrxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450206" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">39</a></td>
+	</tr>
+	<tr height=34 style="height:34px;">
+		<td onmouseover="report1419935over()" class="report1_5_1">�����־�</td>
+		<td class="report1_5_2"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzpzsxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450299" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">272</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=01&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450299" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">57</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=02&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450299" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">16</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=03&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450299" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">56</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=04&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450299" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">23</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=05&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450299" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">4</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=06&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450299" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">33</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=07&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450299" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">15</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=08&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450299" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">7</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=09&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450299" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">14</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=10&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450299" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">20</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=11&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450299" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">6</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=12&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450299" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">19</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=13&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450299" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">2</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzppaxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450299" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">76</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1">20103518.28</td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzpxyrxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450299" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">51</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzpzsxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450299" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">84</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzppaxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450299" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">24</a></td>
+		<td class="report1_5_1">6925271.86</td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzpxyrxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450299" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">89</a></td>
+	</tr>
+	<tr height=36 style="height:36px;">
+		<td class="report1_5_1">�����ع�<br>����</td>
+		<td onmouseover="report1419935over()" class="report1_5_2"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzpzsxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450222" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">168</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=01&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450222" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">25</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=02&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450222" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">9</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=03&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450222" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">26</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=04&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450222" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">21</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=05&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450222" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">1</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=06&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450222" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">14</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=07&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450222" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">18</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=08&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450222" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">4</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=09&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450222" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">12</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=10&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450222" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">4</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=11&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450222" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">6</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=12&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450222" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">20</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=13&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450222" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">8</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzppaxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450222" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">59</a></td>
+		<td class="report1_5_1">6675668.64</td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzpxyrxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450222" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">45</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzpzsxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450222" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">40</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzppaxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450222" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">18</a></td>
+		<td class="report1_5_1">2238391.87</td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzpxyrxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450222" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">70</a></td>
+	</tr>
+	<tr height=36 style="height:36px;">
+		<td onmouseover="report1419935over()" class="report1_5_1">¹կ�ع�<br>����</td>
+		<td class="report1_5_2"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzpzsxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450223" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">165</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=01&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450223" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">29</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=02&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450223" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">9</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=03&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450223" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">33</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=04&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450223" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">24</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=05&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450223" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">2</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=06&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450223" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">18</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=07&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450223" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">9</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=08&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450223" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">5</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=09&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450223" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">12</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=10&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450223" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">6</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=11&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450223" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">1</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=12&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450223" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">14</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=13&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450223" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">3</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzppaxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450223" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">60</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1">6626948.52</td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzpxyrxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450223" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">102</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzpzsxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450223" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">61</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzppaxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450223" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">16</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1">2904608.55</td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzpxyrxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450223" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">67</a></td>
+	</tr>
+	<tr height=36 style="height:36px;">
+		<td onmouseover="report1419935over()" class="report1_5_1">�ڰ��ع�<br>����</td>
+		<td class="report1_5_2"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzpzsxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450224" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">90</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=01&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450224" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">20</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=02&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450224" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">4</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=03&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450224" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">21</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=04&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450224" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">13</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=05&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450224" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">1</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=06&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450224" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">6</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=07&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450224" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">7</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=08&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450224" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=09&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450224" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=10&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450224" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">4</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=11&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450224" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=12&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450224" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">13</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=13&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450224" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">1</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzppaxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450224" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">37</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1">4905343.08</td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzpxyrxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450224" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">40</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzpzsxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450224" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">49</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzppaxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450224" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">15</a></td>
+		<td class="report1_5_1">5319429.26</td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzpxyrxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450224" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">32</a></td>
+	</tr>
+	<tr height=54 style="height:54px;">
+		<td onmouseover="report1419935over()" class="report1_5_1">��ˮ����<br>�����ع�<br>����</td>
+		<td class="report1_5_2"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzpzsxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450225" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">136</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=01&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450225" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">16</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=02&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450225" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">9</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=03&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450225" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">40</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=04&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450225" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">23</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=05&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450225" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=06&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450225" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">10</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=07&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450225" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">7</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=08&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450225" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=09&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450225" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">7</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=10&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450225" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">6</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=11&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450225" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">1</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=12&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450225" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">15</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=13&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450225" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">2</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzppaxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450225" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">61</a></td>
+		<td class="report1_5_1">6636692.26</td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzpxyrxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450225" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">77</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzpzsxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450225" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">11</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzppaxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450225" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">10</a></td>
+		<td class="report1_5_1">1457700</td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzpxyrxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450225" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">73</a></td>
+	</tr>
+	<tr height=54 style="height:54px;">
+		<td class="report1_5_1">��������<br>�����ع�<br>����</td>
+		<td class="report1_5_2"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzpzsxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450226" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">152</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=01&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450226" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">12</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=02&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450226" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">7</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=03&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450226" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">31</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=04&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450226" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">18</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=05&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450226" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">2</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=06&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450226" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">10</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=07&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450226" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">16</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=08&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450226" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">6</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=09&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450226" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">12</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=10&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450226" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">7</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=11&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450226" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">4</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=12&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450226" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">22</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=13&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450226" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">5</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzppaxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450226" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">58</a></td>
+		<td class="report1_5_1">5475274.04</td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzpxyrxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450226" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">33</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzpzsxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450226" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">17</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzppaxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450226" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">6</a></td>
+		<td class="report1_5_1">4117044</td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzpxyrxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450226" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">41</a></td>
+	</tr>
+	<tr height=36 style="height:36px;">
+		<td class="report1_5_1">������ɭ<br>�ֹ�����</td>
+		<td class="report1_5_2"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzpzsxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;"></a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=01&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=02&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=03&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=04&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=05&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=06&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=07&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=08&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=09&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=10&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=11&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=12&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzplaxq.raq&ZABZ=13&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzppaxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td class="report1_5_1">0</td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzpxyrxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+		<td class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzpzsxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">3</a></td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzppaxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">2</a></td>
+		<td class="report1_5_1">0</td>
+		<td onmouseover="report1419935over()" class="report1_5_1"><a href="/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/jcdxzpxyrxq.raq&KSLASJ=2023-01-01&JSLASJ=2023-10-09&LADW=450200" style="font-family:Dialog;font-size:14px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;">0</a></td>
+	</tr>
+	<tr height=32 style="height:32px;">
+		<style> .report1_18_1 { text-align:center;vertical-align:middle;padding-left:0px;padding-right:0px;font-family:Dialog;font-size:12px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;border-left-style:solid;border-left-width:1px;border-left-color:#000000;border-top-style:solid;border-top-width:1px;border-top-color:#000000;border-right-style:solid;border-right-width:1px;border-right-color:#000000;border-bottom-style:solid;border-bottom-width:1px;border-bottom-color:#000000;background-color:#FFFFFF;line-height:16px;word-break:keep-all;}</style>
+		<td class="report1_18_1">�ϼ�</td>
+		<td class="report1_5_2">3519</td>
+		<td onmouseover="report1419935over()" class="report1_18_1">385</td>
+		<td class="report1_18_1">155</td>
+		<td onmouseover="report1419935over()" class="report1_18_1">924</td>
+		<td onmouseover="report1419935over()" class="report1_18_1">291</td>
+		<td onmouseover="report1419935over()" class="report1_18_1">20</td>
+		<td onmouseover="report1419935over()" class="report1_18_1">424</td>
+		<td onmouseover="report1419935over()" class="report1_18_1">352</td>
+		<td onmouseover="report1419935over()" class="report1_18_1">76</td>
+		<td class="report1_18_1">284</td>
+		<td onmouseover="report1419935over()" class="report1_18_1">138</td>
+		<td class="report1_18_1">78</td>
+		<td class="report1_18_1">335</td>
+		<td onmouseover="report1419935over()" class="report1_18_1">57</td>
+		<td onmouseover="report1419935over()" class="report1_18_1">1210</td>
+		<td class="report1_18_1">222009886.99</td>
+		<td onmouseover="report1419935over()" class="report1_18_1">1362</td>
+		<td class="report1_18_1">586</td>
+		<td class="report1_18_1">240</td>
+		<td onmouseover="report1419935over()" class="report1_18_1">107626562.89</td>
+		<td class="report1_18_1">722</td>
+	</tr>
+	<tr height=23 style="height:23px;">
+		<style> .report1_19_1 { text-align:left;vertical-align:middle;padding-left:0px;font-family:Dialog;font-size:12px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;border-left-style:none;border-left-width:1px;border-left-color:#000000;border-top-style:solid;border-top-width:1px;border-top-color:#000000;border-right-style:none;border-right-width:1px;border-right-color:#000000;border-bottom-style:none;border-bottom-width:1px;border-bottom-color:#000000;background-color:#FFFFFF;word-break:keep-all;}</style>
+		<td onmouseover="report1419935over()" class="report1_19_1"></td>
+		<td class="report1_19_1"></td>
+		<td class="report1_19_1"></td>
+		<td class="report1_19_1"></td>
+		<td onmouseover="report1419935over()" class="report1_19_1"></td>
+		<td onmouseover="report1419935over()" class="report1_19_1"></td>
+		<td onmouseover="report1419935over()" class="report1_19_1"></td>
+		<td onmouseover="report1419935over()" class="report1_19_1"></td>
+		<td class="report1_19_1"></td>
+		<td onmouseover="report1419935over()" class="report1_19_1"></td>
+		<td class="report1_19_1"></td>
+		<td class="report1_19_1"></td>
+		<td class="report1_19_1"></td>
+		<td class="report1_19_1"></td>
+		<td onmouseover="report1419935over()" class="report1_19_1"></td>
+		<td onmouseover="report1419935over()" class="report1_19_1"></td>
+		<td class="report1_19_1"></td>
+		<td onmouseover="report1419935over()" class="report1_19_1"></td>
+		<td class="report1_19_1"></td>
+		<td onmouseover="report1419935over()" class="report1_19_1"></td>
+		<td class="report1_19_1"></td>
+		<td onmouseover="report1419935over()" class="report1_19_1"></td>
+	</tr>
+	<tr height=23 style="height:23px;">
+		<style> .report1_20_1 { text-align:left;vertical-align:middle;padding-left:0px;font-family:Dialog;font-size:12px;color:#000000;font-weight:normal;font-style:normal;text-decoration:none;border-left-style:none;border-left-width:1px;border-left-color:#000000;border-top-style:none;border-top-width:1px;border-top-color:#000000;border-right-style:none;border-right-width:1px;border-right-color:#000000;border-bottom-style:none;border-bottom-width:1px;border-bottom-color:#000000;background-color:#FFFFFF;word-break:keep-all;}</style>
+		<td class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+	</tr>
+	<tr height=23 style="height:23px;">
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+	</tr>
+	<tr height=23 style="height:23px;">
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+	</tr>
+	<tr height=23 style="height:23px;">
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+		<td onmouseover="report1419935over()" class="report1_20_1"></td>
+	</tr>
+</table>
+</td></tr></table>
+</div>
+<div id=div2 style="width:100%;height:100%" align="center"></div>
+
+<script language="javascript">
+	document.getElementById( "t_page_span" ).innerHTML=report1_getTotalPage();
+	document.getElementById( "c_page_span" ).innerHTML=report1_getCurrPage();
+</script>
+
+<script language=javascript>
+	//var obj = parent.frames[1];
+	//obj.document.body.style.overflow = "hidden";
+	window.onresize = myResize;
+	var div1 = document.getElementById( "div1" );
+
+	function myResize() {
+		var scrolldiv = document.getElementById( "report1_scrollArea" );
+		if( scrolldiv == null ) div1.id = "report1_contentdiv";
+		if( document.all ) {
+			div2.style.display = "";
+			div1.style.height = document.body.offsetHeight - titleTable.offsetHeight;
+			div1.style.width = div2.offsetWidth;
+			div2.style.display = "none";
+		}
+		else {
+			var div22 = document.getElementById( "div2" );
+			div22.style.display = "";
+			div1.style.height = div22.offsetHeight - document.getElementById( "titleTable" ).offsetHeight;
+			div1.style.width = div22.offsetWidth;
+			div22.style.display = "none";
+		}
+		if( scrolldiv != null ) {
+			div1.style.overflow = "hidden";
+			scrolldiv.style.width = div1.clientWidth - 15;
+			var h = div1.clientHeight - 2;
+			h -= getHeightX( document.body );
+			var paramTable = document.getElementById( "param_tbl" );
+			if( paramTable != null ) h -= paramTable.offsetHeight;
+			scrolldiv.style.height = h;
+			_resizeScroll();
+		}
+	}
+	myResize();
+</script>
+
+
+</body>
+</html>

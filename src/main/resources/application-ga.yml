@@ -28,3 +28,5 @@ base:
   port: 8080
   jzurl: http://10.148.63.153:4520/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzpzsxq.raq
   jzsolveurl: http://10.148.63.153:4520/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/fjcdxzppaxq.raq
+  staturl: http://10.148.63.153:4520/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/qqjzptzpajtj.raq
+  staturl2: http://10.148.63.153:4520/report/reportJsp/showReport.jsp?raq=/xzbb/dxzp/qqjzptzpajtj_fj.raq&LADW=4502

@@ -122,6 +122,11 @@
     <script type="text/javascript" src="js/echarts.min.js"></script>
     <script type="text/javascript" src="js/constant.js"></script>
     <script type="text/javascript">
+        // 监听下拉菜单按钮的点击事件
+        $('.dropdown-toggle').on('click', function() {
+            // 切换下拉菜单的显示状态
+            $(this).siblings('.dropdown-menu').toggle();
+        });
 
         var dom = document.getElementById('container');
         var myChart = echarts.init(dom, null, {
