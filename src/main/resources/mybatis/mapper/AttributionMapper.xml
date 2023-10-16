@@ -22,6 +22,12 @@
         SELECT *
         FROM attribution
         <where>
+            <if test="segments != null and segments.length > 0">
+                AND SEGMENT IN
+                <foreach collection="segments" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
             <if test="seq != null and seq != ''">
                 AND SEQ = #{seq}
             </if>

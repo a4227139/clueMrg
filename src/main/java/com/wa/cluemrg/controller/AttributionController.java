@@ -8,11 +8,13 @@ import com.wa.cluemrg.entity.Attribution;
 import com.wa.cluemrg.response.ResponseResult;
 import com.wa.cluemrg.service.AttributionService;
 import com.wa.cluemrg.vo.JsGridVO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -23,14 +25,29 @@ public class AttributionController {
     private AttributionService attributionService;
 
     @GetMapping("/getAttribution")
-    public Attribution getAttribution(@RequestParam String phone) {
-        Attribution attribution = new Attribution();
-        attribution.setSegment(phone.substring(0,7));
-        List<Attribution> list = attributionService.selectAll(attribution);
-        if (!CollectionUtils.isEmpty(list)){
-            return list.get(0);
+    public List<Attribution> getAttribution(@RequestParam String phones) {
+        Attribution param = new Attribution();
+        String[] phoneArray = phones.split("\\s+|,|;|，|；");
+        String segments[] = new String[phoneArray.length];
+        for (int i=0;i<phoneArray.length;i++){
+            segments[i]=phoneArray[i].substring(0,7);
         }
-        return null;
+        param.setSegments(segments);
+        List<Attribution> list = attributionService.selectAll(param);
+
+
+        List<Attribution> targetList = new ArrayList<>();
+        for (String phone:phoneArray){
+            for (Attribution attribution:list){
+                if (attribution.getSegment().equals(phone.substring(0,7))){
+                    Attribution target= new Attribution();
+                    BeanUtils.copyProperties(attribution,target);
+                    target.setPhone(phone);
+                    targetList.add(target);
+                }
+            }
+        }
+        return targetList;
     }
 
     @PostMapping("/getAttributionList")

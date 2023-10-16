@@ -186,14 +186,16 @@
         }
         $.ajax({
             type: "GET",
-            url: ROOT_PATH +"/attribution/getAttribution?phone="+phones,
+            url: ROOT_PATH +"/attribution/getAttribution?phones="+phones,
             success: function (response) {
                 console.log(response);
-                var content1 = "号码： "+phones;
-                var content2 = "运营商： "+response.operator;
-                var content3 = "归属地： " +response.province+" "+response.city;
-                var content4 = "号段： " +response.segment;
-                var content="<h3>"+content1+"<br>"+content2+"<br>"+content3+"<br>"+content4+"</h3>";
+                var content="";
+                response.forEach(function(item) {
+                    var content1 = "<h3>"+item.phone+"  "+item.operator+"  "+item.province+"  "+item.city;
+                    content=content+content1+"<br>"
+                });
+                //去除末尾<br>
+                content=content.substring(0, content.length - 4);
                 document.getElementById("myPopup").style.display = "block";
                 document.querySelector(".popup-content").innerHTML = content;
             }
