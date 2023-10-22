@@ -90,7 +90,9 @@ public class CallLogListener extends CustomizeListener<CallLog> {
             //处理IMEI关系
             if (!StringUtils.isEmpty(callLog.getImei())){
                 String phoneImei=callLog.getPhone()+":"+ IMEICalculator.calculateCheckDigit(callLog.getImei());
-                phoneImeiSet.add(phoneImei);
+                if (phoneImei.length()>=27){//11+1+15
+                    phoneImeiSet.add(phoneImei);
+                }
             }
             //处理IMSI关系
             if (!StringUtils.isEmpty(callLog.getImsi())){

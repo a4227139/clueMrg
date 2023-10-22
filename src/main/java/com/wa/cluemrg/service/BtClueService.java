@@ -2,6 +2,7 @@ package com.wa.cluemrg.service;
 
 import com.alibaba.excel.EasyExcelFactory;
 import com.wa.cluemrg.dao.BtClueMapper;
+import com.wa.cluemrg.dao.NodeTagMapper;
 import com.wa.cluemrg.entity.BtClue;
 import com.wa.cluemrg.listener.BtClueListener;
 import com.wa.cluemrg.util.UploadUtil;
@@ -19,6 +20,9 @@ public class BtClueService {
 
     @Autowired
     private BtClueMapper btClueMapper;
+
+    @Autowired
+    private NodeTagMapper nodeTagMapper;
 
     public BtClue select(String clueId) {
         return btClueMapper.select(clueId);
@@ -61,7 +65,7 @@ public class BtClueService {
     public String dealUpload(MultipartFile file){
         String fileName = uploadUtil.saveFile(file);
         ThreadLocal<String> message = new ThreadLocal<>();
-        EasyExcelFactory.read(fileName, new BtClueListener(BtClue.class,btClueMapper,message)).headRowNumber(1).sheet().doRead();
+        EasyExcelFactory.read(fileName, new BtClueListener(BtClue.class,btClueMapper,nodeTagMapper,message)).headRowNumber(1).sheet().doRead();
         return message.get();
     }
 }

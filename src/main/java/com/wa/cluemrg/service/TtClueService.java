@@ -1,6 +1,7 @@
 package com.wa.cluemrg.service;
 
 import com.alibaba.excel.EasyExcelFactory;
+import com.wa.cluemrg.dao.NodeTagMapper;
 import com.wa.cluemrg.dao.PhoneImeiMapper;
 import com.wa.cluemrg.dao.TtClueMapper;
 import com.wa.cluemrg.entity.TtClue;
@@ -26,6 +27,8 @@ public class TtClueService {
     private TtClueMapper ttClueMapper;
     @Autowired
     private PhoneImeiMapper phoneImeiMapper;
+    @Autowired
+    private NodeTagMapper nodeTagMapper;
 
     public TtClue select(String clueId) {
         return ttClueMapper.select(clueId);
@@ -66,7 +69,7 @@ public class TtClueService {
     public String dealUpload(MultipartFile file){
         String fileName = uploadUtil.saveFile(file);
         ThreadLocal<String> message = new ThreadLocal<>();
-        EasyExcelFactory.read(fileName, new TtClueListener(TtClue.class,ttClueMapper,phoneImeiMapper,message)).headRowNumber(1).sheet().doRead();
+        EasyExcelFactory.read(fileName, new TtClueListener(TtClue.class,ttClueMapper,phoneImeiMapper,nodeTagMapper,message)).headRowNumber(1).sheet().doRead();
         return message.get();
     }
 

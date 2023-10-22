@@ -44,12 +44,13 @@
     </select>
 
     <select id="selectAllByKeyList" resultType="com.wa.cluemrg.entity.NodeTag">
-        select *
+        select node,GROUP_CONCAT(tag SEPARATOR ';') AS tag
         from node_tag
         where node in
         <foreach collection="list" item="item" separator="," open="(" close=")">
             #{item}
         </foreach>
+        GROUP BY node
     </select>
 
     <insert id="batchInsert" parameterType="NodeTag">

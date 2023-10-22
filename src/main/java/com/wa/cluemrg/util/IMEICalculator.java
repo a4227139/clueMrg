@@ -3,7 +3,8 @@ package com.wa.cluemrg.util;
 public class IMEICalculator {
     public static String calculateCheckDigit(String imei) {
         if (imei == null || imei.length() < 14) {
-            throw new IllegalArgumentException("IMEI must be 14 digits long.");
+            System.out.println("IMEI must be 14 digits long. Now the imei: "+imei);
+            return "";
         }else if (imei.length() > 14){
             imei=imei.substring(0,14);
         }

@@ -13,4 +13,10 @@ public class NodeTag {
     private String tag;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
+
+    public NodeTag(String node, String tag) {
+        this.node = node;
+        this.tag = tag;
+        this.createTime=LocalDateTime.now();
+    }
 }

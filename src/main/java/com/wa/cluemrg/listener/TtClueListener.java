@@ -1,7 +1,10 @@
 package com.wa.cluemrg.listener;
 
+import com.wa.cluemrg.dao.NodeTagMapper;
 import com.wa.cluemrg.dao.PhoneImeiMapper;
 import com.wa.cluemrg.dao.TtClueMapper;
+import com.wa.cluemrg.entity.TtClue;
+import com.wa.cluemrg.entity.NodeTag;
 import com.wa.cluemrg.entity.PhoneImei;
 import com.wa.cluemrg.entity.TtClue;
 import lombok.extern.log4j.Log4j2;
@@ -24,6 +27,7 @@ public class TtClueListener extends CustomizeListener<TtClue> {
 
     TtClueMapper ttClueMapper;
     PhoneImeiMapper phoneImeiMapper;
+    NodeTagMapper nodeTagMapper;
 
     ThreadLocal<String> message;
     Pattern pattern = Pattern.compile("[a-fA-F]");
@@ -33,10 +37,11 @@ public class TtClueListener extends CustomizeListener<TtClue> {
         super(classType);
     }
 
-    public TtClueListener(Class<?> classType, TtClueMapper ttClueMapper,PhoneImeiMapper phoneImeiMapper, ThreadLocal<String> message) {
+    public TtClueListener(Class<?> classType, TtClueMapper ttClueMapper, PhoneImeiMapper phoneImeiMapper, NodeTagMapper nodeTagMapper, ThreadLocal<String> message) {
         super(classType);
         this.ttClueMapper=ttClueMapper;
         this.phoneImeiMapper=phoneImeiMapper;
+        this.nodeTagMapper=nodeTagMapper;
         this.message=message;
     }
 
@@ -48,6 +53,7 @@ public class TtClueListener extends CustomizeListener<TtClue> {
         String result = "导入成功数："+(success<=list.size()?success:list.size())+" 导入失败数："+((list.size()-success)>=0?(list.size()-success):0);
         message.set(result);
         log.info("dealTtClue: "+result);
+        addTag();
         return result;
     }
 
@@ -72,6 +78,28 @@ public class TtClueListener extends CustomizeListener<TtClue> {
             log.info("新增"+success+"个imei关系");
         }
     }
+
+    private void addTag(){
+        List<NodeTag> nodeTags = new ArrayList<>();
+        for (TtClue ttClue:list){
+            NodeTag nodeTag1 = new NodeTag(ttClue.getPhone(),ttClue.getOperator());
+            nodeTags.add(nodeTag1);
+            if (com.alibaba.excel.util.StringUtils.isNotBlank(ttClue.getJurisdiction())){
+                NodeTag nodeTag2 = new NodeTag(ttClue.getPhone(),ttClue.getJurisdiction());
+                nodeTags.add(nodeTag2);
+            }
+            if (com.alibaba.excel.util.StringUtils.isNotBlank(ttClue.getOwnerId())&& com.alibaba.excel.util.StringUtils.isNotBlank(ttClue.getOwner())){
+                NodeTag nodeTag3 = new NodeTag(ttClue.getOwnerId(),ttClue.getOwner());
+                nodeTags.add(nodeTag3);
+            }
+            if (com.alibaba.excel.util.StringUtils.isNotBlank(ttClue.getOwnerId())&& com.alibaba.excel.util.StringUtils.isNotBlank(ttClue.getOwnerAddress())){
+                NodeTag nodeTag4 = new NodeTag(ttClue.getOwnerId(),ttClue.getOwnerAddress());
+                nodeTags.add(nodeTag4);
+            }
+        }
+        nodeTagMapper.batchInsert(nodeTags);
+    }
+
 
     private void generateClueId(List<TtClue> ttClueList){
         int size = ttClueList.size();

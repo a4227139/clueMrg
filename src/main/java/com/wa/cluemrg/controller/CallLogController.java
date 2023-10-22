@@ -16,8 +16,8 @@ import com.wa.cluemrg.response.ResponseResult;
 import com.wa.cluemrg.service.*;
 import com.wa.cluemrg.vo.JsGridVO;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -45,6 +45,8 @@ public class CallLogController {
     NodeTagService nodeTagService;
     @Autowired
     LinkTagService linkTagService;
+    @Autowired
+    TtClueService ttClueService;
 
     /**
      * 分页获取线索列表
@@ -54,9 +56,9 @@ public class CallLogController {
      */
     @PostMapping("/getCallLogList")
     public JsGridVO getCallLogList(@RequestBody PageBO<CallLogBo> pageBo) {
-        if (StringUtils.isEmpty(pageBo)) {
+        /*if (StringUtils.isEmpty(pageBo)) {
             throw new BusinessException("所传参数错误", "200");
-        }
+        }*/
         pageBo.getData().setPageIndex(pageBo.getPageIndex());
         pageBo.getData().setPageSize(pageBo.getPageSize());
         String sortField = UnderlineToCamelUtils.camelToUnderline(pageBo.getSortField());
@@ -163,13 +165,17 @@ public class CallLogController {
                 shape="circle";
                 category=1;
                 break;
-            case "imsi":
+            case "person":
                 shape="triangle";
                 category=2;
                 break;
             case "clue":
                 shape="diamond";
                 category=3;
+                break;
+            case "case":
+                shape="polygon";
+                category=5;
                 break;
         }
         int x =200,y=300;
@@ -183,7 +189,7 @@ public class CallLogController {
             maxLevel = maxLevel>currentNode.getLevel()?maxLevel:currentNode.getLevel();
             List<Node> tempNodes = new ArrayList<>();
             List<Link> tempLinks = new ArrayList<>();
-            if (currentNode.getSymbol().equals("rect")){
+            if (currentNode.getSymbol().equals("rect")){//phone
                 String phone = currentNode.getName();
                 if (!visitedSet.contains(phone)){
                     visitedSet.add(phone);
@@ -201,6 +207,50 @@ public class CallLogController {
                         tempNodes.add(node);
                         tempLinks.add(new Link(phone+"-"+clue.getClueId(),phone,clue.getClueId()));
                     }
+
+                    String ownerId = clue.getOwnerId();
+                    if (!StringUtils.isBlank(ownerId)&&!visitedSet.contains(ownerId)){
+                        visitedSet.add(ownerId);
+                        Node node = new Node(ownerId,ownerId,ownerId,"triangle",x+600,0,2,currentNode.getLevel()+1);
+                        queue.add(node);
+                        tempNodes.add(node);
+                        tempLinks.add(new Link(phone+"-"+ownerId,phone,ownerId));
+                    }
+
+                    String caseNo = clue.getCaseNo();
+                    if (!visitedSet.contains(caseNo)){
+                        visitedSet.add(caseNo);
+                        Node node = new Node(caseNo,caseNo,caseNo,"polygon",x+600,0,5,currentNode.getLevel()+1);
+                        queue.add(node);
+                        tempNodes.add(node);
+                        tempLinks.add(new Link(phone+"-"+caseNo,phone,caseNo));
+                    }
+                }
+
+                TtClue ttClue = new TtClue();
+                ttClue.setPhone(phone);
+                List<TtClue> ttClueList = ttClueService.selectAll(ttClue);
+                for (TtClue clue : ttClueList){
+                    String ttClueId = clue.getClueId();
+                    if (!visitedSet.contains(ttClueId)){
+                        if (!ttClueId.startsWith("DX")&&!ttClueId.startsWith("LT")&&!ttClueId.startsWith("YD")){
+                            continue;
+                        }
+                        visitedSet.add(ttClueId);
+                        Node node = new Node(ttClueId,ttClueId,ttClueId,"diamond",x+600,0,4,currentNode.getLevel()+1);
+                        queue.add(node);
+                        tempNodes.add(node);
+                        tempLinks.add(new Link(phone+"-"+ttClueId,phone,ttClueId));
+                    }
+
+                    String ownerId = clue.getOwnerId();
+                    if (!StringUtils.isBlank(ownerId)&&!visitedSet.contains(ownerId)){
+                        visitedSet.add(ownerId);
+                        Node node = new Node(ownerId,ownerId,ownerId,"triangle",x+600,0,2,currentNode.getLevel()+1);
+                        queue.add(node);
+                        tempNodes.add(node);
+                        tempLinks.add(new Link(phone+"-"+ownerId,phone,ownerId));
+                    }
                 }
 
                 PhoneImei phoneImei = new PhoneImei();
@@ -214,23 +264,8 @@ public class CallLogController {
                         tempNodes.add(node);
                         tempLinks.add(new Link(phone+"-"+phoneImeiItem.getImei(),phone,phoneImeiItem.getImei()));
                     }
-
                 }
-
-                PhoneImsi phoneImsi = new PhoneImsi();
-                phoneImsi.setPhone(phone);
-                List<PhoneImsi> phoneImsiList = phoneImsiService.selectAll(phoneImsi);
-                for (PhoneImsi phoneImsiItem : phoneImsiList){
-                    if (!visitedSet.contains(phoneImsiItem.getImsi())){
-                        visitedSet.add(phoneImsiItem.getImsi());
-                        Node node = new Node(phoneImsiItem.getImsi(),phoneImsiItem.getImsi(),phoneImsiItem.getImsi(),"circle",x+600,0,2,currentNode.getLevel()+1);
-                        queue.add(node);
-                        tempNodes.add(node);
-                        tempLinks.add(new Link(phone+"-"+phoneImsiItem.getImsi(),phone,phoneImsiItem.getImsi()));
-                    }
-
-                }
-            }else if (currentNode.getSymbol().equals("circle")){
+            }else if (currentNode.getSymbol().equals("circle")){//imei
                 String imei = currentNode.getName();
                 if (!visitedSet.contains(imei)){
                     visitedSet.add(imei);
@@ -247,28 +282,44 @@ public class CallLogController {
                         tempNodes.add(node);
                         tempLinks.add(new Link(imei+"-"+phoneImeiItem.getPhone(),imei,phoneImeiItem.getPhone()));
                     }
-
                 }
-            }else if (currentNode.getSymbol().equals("triangle")){
-                String imsi = currentNode.getName();
-                if (!visitedSet.contains(imsi)){
-                    visitedSet.add(imsi);
-                    nodes.add(new Node(imsi,imsi,imsi,"triangle",x,y,2,currentNode.getLevel()));
-                }
-                PhoneImsi phoneImsi = new PhoneImsi();
-                phoneImsi.setImsi(imsi);
-                List<PhoneImsi> phoneImsiList = phoneImsiService.selectAll(phoneImsi);
-                for (PhoneImsi phoneImsiItem : phoneImsiList){
-                    if (!visitedSet.contains(phoneImsiItem.getPhone())){
-                        visitedSet.add(phoneImsiItem.getPhone());
-                        Node node = new Node(phoneImsiItem.getPhone(),phoneImsiItem.getPhone(),phoneImsiItem.getPhone(),"rect",x,0,0,currentNode.getLevel()+1);
-                        queue.add(node);
-                        tempNodes.add(node);
-                        tempLinks.add(new Link(imsi+"-"+phoneImsiItem.getPhone(),imsi,phoneImsiItem.getPhone()));
+            }else if (currentNode.getSymbol().equals("triangle")){//person
+                String personId = currentNode.getName();
+                if (StringUtils.isNotBlank(personId)){
+                    if (!visitedSet.contains(personId)){
+                        visitedSet.add(personId);
+                        nodes.add(new Node(personId,personId,personId,"triangle",x,y,2,currentNode.getLevel()));
                     }
 
+                    BtClue btClue = new BtClue();
+                    btClue.setOwnerId(personId);
+                    List<BtClue> btClueList = btClueService.selectAll(btClue);
+                    for (BtClue clue : btClueList){
+                        String phone = clue.getPhone();
+                        if (!visitedSet.contains(phone)){
+                            visitedSet.add(phone);
+                            Node node = new Node(phone,phone,phone,"rect",x,0,0,currentNode.getLevel()+1);
+                            queue.add(node);
+                            tempNodes.add(node);
+                            tempLinks.add(new Link(personId+"-"+phone,personId,phone));
+                        }
+                    }
+
+                    TtClue ttClue = new TtClue();
+                    ttClue.setOwnerId(personId);
+                    List<TtClue> ttClueList = ttClueService.selectAll(ttClue);
+                    for (TtClue clue : ttClueList){
+                        String phone = clue.getPhone();
+                        if (!visitedSet.contains(phone)){
+                            visitedSet.add(phone);
+                            Node node = new Node(phone,phone,phone,"rect",x,0,0,currentNode.getLevel()+1);
+                            queue.add(node);
+                            tempNodes.add(node);
+                            tempLinks.add(new Link(personId+"-"+phone,personId,phone));
+                        }
+                    }
                 }
-            }else if (currentNode.getSymbol().equals("diamond")){
+            }else if (currentNode.getSymbol().equals("diamond")){//clue
                 String clueId = currentNode.getName();
                 if (!visitedSet.contains(clueId)){
                     visitedSet.add(clueId);
@@ -280,6 +331,32 @@ public class CallLogController {
                 for (BtClue clue : btClueList){
                     if (!visitedSet.contains(clue.getPhone())){
                         visitedSet.add(clue.getPhone());
+                        Node node = new Node(clue.getPhone(),clue.getPhone(),clue.getPhone(),"rect",x,0,0,currentNode.getLevel()+1);
+                        queue.add(node);
+                        tempNodes.add(node);
+                        tempLinks.add(new Link(clueId+"-"+clue.getPhone(),clueId,clue.getPhone()));
+                    }
+
+                    String caseNo = clue.getCaseNo();
+                    if (!visitedSet.contains(caseNo)){
+                        visitedSet.add(caseNo);
+                        Node node = new Node(caseNo,caseNo,caseNo,"polygon",x+600,0,5,currentNode.getLevel()+1);
+                        queue.add(node);
+                        tempNodes.add(node);
+                        tempLinks.add(new Link(clueId+"-"+caseNo,clueId,caseNo));
+                    }
+                }
+
+                TtClue ttClue = new TtClue();
+                ttClue.setClueId(clueId);
+                List<TtClue> ttClueList = ttClueService.selectAll(ttClue);
+                for (TtClue clue : ttClueList){
+                    String ttClueId = clue.getClueId();
+                    if (!visitedSet.contains(ttClueId)){
+                        if (!ttClueId.startsWith("DX")&&!ttClueId.startsWith("LT")&&!ttClueId.startsWith("YD")){
+                            continue;
+                        }
+                        visitedSet.add(ttClueId);
                         Node node = new Node(clue.getPhone(),clue.getPhone(),clue.getPhone(),"rect",x,0,0,currentNode.getLevel()+1);
                         queue.add(node);
                         tempNodes.add(node);
