@@ -7,6 +7,7 @@ import com.wa.cluemrg.entity.Victim;
 import com.wa.cluemrg.exception.BusinessException;
 import com.wa.cluemrg.response.ResponseResult;
 import com.wa.cluemrg.service.VictimService;
+import com.wa.cluemrg.util.UnderlineToCamelUtils;
 import com.wa.cluemrg.vo.JsGridVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -14,6 +15,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +28,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/victim")
+@Secured("ROLE_LEVEL1")
 public class VictimController {
 
     @Autowired

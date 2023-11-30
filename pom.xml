@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.wa</groupId>
     <artifactId>clue-mrg</artifactId>
-    <version>0.0.13-SNAPSHOT</version>
+    <version>0.0.14-SNAPSHOT</version>
     <name>clue-mrg</name>
     <description>Clue Management System</description>
     <properties>
@@ -188,10 +188,14 @@
             <artifactId>jsqlparser</artifactId>
             <version>4.2</version>
         </dependency>
-        <!--<dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>-->
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

@@ -7,11 +7,11 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wa.cluemrg.bo.PageBO;
 import com.wa.cluemrg.entity.AlarmReceipt;
-import com.wa.cluemrg.entity.Effect;
 import com.wa.cluemrg.exception.BusinessException;
 import com.wa.cluemrg.response.ResponseResult;
 import com.wa.cluemrg.service.AlarmReceiptService;
 import com.wa.cluemrg.util.DateUtil;
+import com.wa.cluemrg.util.UnderlineToCamelUtils;
 import com.wa.cluemrg.vo.JsGridVO;
 import lombok.extern.log4j.Log4j2;
 import org.apache.poi.ss.usermodel.*;
@@ -24,6 +24,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,6 +48,7 @@ import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 @Log4j2
 @RestController
 @RequestMapping("/alarmReceipt")
+@Secured("ROLE_LEVEL1")
 public class AlarmReceiptController {
 
     @Autowired
@@ -109,21 +111,25 @@ public class AlarmReceiptController {
     }
 
     @PostMapping("/insertAlarm")
+    @Secured("ROLE_LEVEL2")
     public int insertAlarm(@RequestBody AlarmReceipt alarmReceipt) {
         return alarmReceiptService.insert(alarmReceipt);
     }
 
     @PutMapping("/updateAlarm")
+    @Secured("ROLE_LEVEL2")
     public int updateAlarm(@RequestBody AlarmReceipt alarmReceipt) {
         return alarmReceiptService.update(alarmReceipt);
     }
 
     @DeleteMapping("/deleteAlarm")
+    @Secured("ROLE_LEVEL2")
     public int updateAlarm(@RequestParam String clueId) {
         return alarmReceiptService.delete(clueId);
     }
 
     @PostMapping("/upload")
+    @Secured("ROLE_LEVEL2")
     public String upload(HttpServletRequest request){
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         MultipartFile file = multipartRequest.getFile("file");

@@ -8,8 +8,10 @@ import com.wa.cluemrg.entity.DkClue;
 import com.wa.cluemrg.exception.BusinessException;
 import com.wa.cluemrg.response.ResponseResult;
 import com.wa.cluemrg.service.QgDkClueService;
+import com.wa.cluemrg.util.UnderlineToCamelUtils;
 import com.wa.cluemrg.vo.JsGridVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/qgDkClue")
+@Secured("ROLE_LEVEL1")
 public class QgDkClueController {
 
     @Autowired
@@ -64,21 +67,25 @@ public class QgDkClueController {
     }
 
     @PostMapping("/insertClue")
+    @Secured("ROLE_LEVEL2")
     public int insertClue(@RequestBody DkClue btClue) {
         return qgDkClueService.insert(btClue);
     }
 
     @PutMapping("/updateClue")
+    @Secured("ROLE_LEVEL2")
     public int updateClue(@RequestBody DkClue btClue) {
         return qgDkClueService.update(btClue);
     }
 
     @DeleteMapping("/deleteClue")
+    @Secured("ROLE_LEVEL2")
     public int updateClue(@RequestParam String clueId) {
         return qgDkClueService.delete(clueId);
     }
 
     @PostMapping("/upload")
+    @Secured("ROLE_LEVEL2")
     public String upload(HttpServletRequest request){
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         MultipartFile file = multipartRequest.getFile("file");

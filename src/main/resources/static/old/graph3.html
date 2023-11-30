@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>关系图</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../css/bootstrap.css" rel="stylesheet">
+
+    <!-- Add custom CSS here -->
+    <link href="../css/sb-admin.css" rel="stylesheet">
+    <link rel="stylesheet" href="../font-awesome/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="../css/jsgrid.min.css"/>
+    <link type="text/css" rel="stylesheet" href="../css/jsgrid-theme.min.css"/>
+    <link type="text/css" rel="stylesheet" href="../css/clue.css"/>
+    <script type="text/javascript" src="../js/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="../js/jsgrid.min.js"></script>
+    <!-- 引入DateTimePicker插件的js和css文件 -->
+    <link href="../css/jquery.datetimepicker.min.css" rel="stylesheet">
+    <script src="../js/jquery.datetimepicker.full.min.js"></script>
+
+</head>
+
+<body style="height: 100%;">
+
+
+        <!--<div class="row" style="overflow:scroll; width:100%;overflow-x: auto; ">-->
+        <div>
+            <span>
+                    <h3 style="display: inline;margin: 10px;">输入搜索条件：</h3><input id="data" class="table-responsive" style="font-size:20px;height: 35px;margin: 10px;">
+                    <select id="type" style="font-size:20px;height: 35px;margin: 10px;">
+                          <option value ="phone">手机</option>
+                          <option value ="imei">IMEI</option>
+                          <option value="imsi">IMSI</option>
+                          <option value="clue">线索编号</option>
+                    </select>
+                    <label class="upload-btn" style="display: block" id="search-btn">
+                    <span class="btn-text">查询</span>
+
+                    <span class="btn-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M8 17v-5H6l6-7 6 7h-2v5H8zm-2 2h8v2H6v-2z"></path>
+                        </svg>
+                    </span>
+                </label>
+            </span>
+            <!--style="height: 1000px;width:3000px"-->
+            <!--<div id="content" style="height: 1000px;width:1500px"></div>-->
+            </div>
+        <div id="container" style="height: 100%"></div>
+
+
+
+<!-- JavaScript -->
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../js/echarts.min.js"></script>
+<script type="text/javascript" src="../js/constant.js"></script>
+<script type="text/javascript">
+
+    var dom = document.getElementById('container');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var app = {};
+    var categories=[
+        {
+            id:'0',
+            name: '手机号',
+            itemStyle:{normal:{color:'#c23531'}},
+            symbolSize:[5,5]
+        },
+        {
+            id:'1',
+            name: 'IMEI',
+            itemStyle:{normal:{color:'#61a0a8'}},
+            symbolSize:[5,5]
+        },
+        {
+            id:'2',
+            name:'IMSI',
+            itemStyle:{normal:{color:'#749f83'}},
+            symbolSize:[5,5]
+        },
+        {
+            id:'3',
+            name:'部推线索',
+            itemStyle:{normal:{color:'#d48265'}},
+            symbolSize:[5,5]
+        }
+    ];
+    var winWidth=document.documentElement.clientWidth;
+    var winHeight=document.documentElement.clientHeight;
+    document.getElementById("container").style.width=winWidth+"px";
+    document.getElementById("container").style.height=winHeight+"px";
+    console.log(winWidth+":"+winHeight)
+
+    var option;
+    //var ROOT_PATH = 'http://127.0.0.1:8080'
+
+    $('#search-btn').click(function() {
+        var data= $("#data").val();
+        var type = $("#type").val();
+        $.get(ROOT_PATH + '/callLog/getGraph?data='+data+"&type="+type+"&winWidth="+winWidth+"&winHeight="+winHeight, function (data) {
+        //$.get(ROOT_PATH + '/callLog/getGraph?data=19142776810&type=phone', function (data) {
+            var min=10000,max=-10000;
+            data.nodes.forEach(function (node, index, array) {
+                // item数组中的当前项, index当前项的索引, array原始数组；
+                min=node.y<min?node.y:min;
+                max=node.y>max?node.y:max;
+            });
+            var contentHeight=max;
+            console.log(contentHeight);
+            /*document.getElementById("content").style.height=contentHeight+"px";
+            document.getElementById("container").style.height=contentHeight+"px";*/
+            option = {
+                legend: [{    //图例组件
+                    data: categories.map(function (a) {
+                        return a.name;
+                    }),
+                    top:0,
+                    left:(winWidth-1200)/2,         //这里是图例组件定位使用的，自定义
+                    itemGap:26,
+                    textStyle:{
+                        padding:[0,12]
+                    },
+                    backgroundColor:'#f5f5f5'
+                }],
+                title: {
+                    text: '关系图'
+                },
+                tooltip: {
+                    enterable: true, // 设置可移入气泡
+                    show: true,
+                    orient: "vertical",
+                    left: "right",
+                    top: "center",
+                    feature: {
+                        saveAsImage: { show: true },  // 保存图表
+                    }/*,
+                    show:true,
+
+                    feature:{
+                        saveAsImage:{
+                            show: true,
+                            title:"保存图片",
+                            excludeComponents: ["toolbox"],
+                            pixelRatio: 1
+                        }
+                    }*/
+                },
+                animationDurationUpdate: 1500,
+                animationEasingUpdate: 'quinticInOut',
+                series: [
+                    {
+                        type: 'graph',
+                        layout: 'none',
+                        symbolSize: 5,
+                        roam: true,
+                        //focusNodeAdjacency: true,
+                        //datazoom:true,
+                        label: {
+                            show: true,
+                            position: "bottom",
+                            distance: 5,
+                            fontSize: 12,
+                            align: "center",
+                        },
+                        //edgeSymbol: ['circle', 'arrow'],
+                        //edgeSymbolSize: [4, 10],
+                        edgeLabel: {
+                            //fontSize: 20
+                        },
+                        data: data.nodes,
+                        links: data.links,
+                        categories: categories,
+                        draggable: true,   //注意这里设置为false，不然拖拽鼠标和节点有偏移
+                        lineStyle: {
+                            opacity: 0.9,
+                            width: 2,
+                            curveness: 0
+                        }
+                    }
+                ]
+            };
+            if (option && typeof option === 'object') {
+                console.log("myChart.setOption(option)")
+                myChart.setOption(option);
+            }
+        });
+    });
+    window.addEventListener('resize', myChart.resize);
+
+    $("#data").keydown(function (event) {
+        if (event.keyCode == 13) {
+            $('#search-btn').click();
+        }
+        //Export();
+    });
+
+    function Export() {
+        var canvas = document.getElementsByTagName("canvas")
+        if (canvas && canvas.length > 0) {
+            // 创建标签
+            var oA = document.createElement("a")
+            // 设置下载名称
+            oA.download = "Echarts图表" + ".png"
+            // 设置地址以及文件类型
+            oA.href = canvas[0].toDataURL("image/png")
+            document.body.appendChild(oA)
+            // 触发下载事件
+            oA.click()
+            // 移除元素
+            oA.remove()
+        }
+    }
+</script>
+
+</body>
+</html>

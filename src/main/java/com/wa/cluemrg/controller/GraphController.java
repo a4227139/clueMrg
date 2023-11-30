@@ -4,6 +4,7 @@ import com.wa.cluemrg.entity.Link;
 import com.wa.cluemrg.entity.Node;
 import com.wa.cluemrg.entity.PhoneImei;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/graph")
+@Secured("ROLE_LEVEL1")
 public class GraphController {
 
     /*@Autowired

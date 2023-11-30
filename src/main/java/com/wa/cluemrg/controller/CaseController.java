@@ -18,6 +18,7 @@ import com.wa.cluemrg.service.EffectService;
 import com.wa.cluemrg.service.VictimService;
 import com.wa.cluemrg.util.DateUtil;
 import com.wa.cluemrg.util.JurisdictionUtil;
+import com.wa.cluemrg.util.UnderlineToCamelUtils;
 import com.wa.cluemrg.vo.JsGridVO;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -36,6 +37,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.system.ApplicationHome;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -62,6 +64,7 @@ import java.util.stream.Collectors;
 @Log4j2
 @RestController
 @RequestMapping("/case")
+@Secured("ROLE_LEVEL1")
 public class CaseController {
 
     @Autowired

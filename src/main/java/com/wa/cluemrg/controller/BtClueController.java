@@ -14,13 +14,13 @@ import com.wa.cluemrg.bo.CallLogBo;
 import com.wa.cluemrg.bo.CallLogExportBo;
 import com.wa.cluemrg.bo.PageBO;
 import com.wa.cluemrg.entity.BtClue;
-import com.wa.cluemrg.entity.CallLog;
 import com.wa.cluemrg.entity.PhoneImei;
 import com.wa.cluemrg.exception.BusinessException;
 import com.wa.cluemrg.response.ResponseResult;
 import com.wa.cluemrg.service.BtClueService;
 import com.wa.cluemrg.service.CallLogService;
 import com.wa.cluemrg.service.PhoneImeiService;
+import com.wa.cluemrg.util.UnderlineToCamelUtils;
 import com.wa.cluemrg.vo.JsGridVO;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
@@ -32,6 +32,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,6 +54,7 @@ import java.util.zip.ZipOutputStream;
 @Log4j2
 @RestController
 @RequestMapping("/btClue")
+@Secured("ROLE_LEVEL1")
 public class BtClueController {
 
     @Autowired
@@ -120,21 +122,25 @@ public class BtClueController {
     }
 
     @PostMapping("/insertClue")
+    @Secured("ROLE_LEVEL2")
     public int insertClue(@RequestBody BtClue btClue) {
         return btClueService.insert(btClue);
     }
 
     @PutMapping("/updateClue")
+    @Secured("ROLE_LEVEL2")
     public int updateClue(@RequestBody BtClue btClue) {
         return btClueService.update(btClue);
     }
 
     @DeleteMapping("/deleteClue")
+    @Secured("ROLE_LEVEL2")
     public int updateClue(@RequestParam String clueId) {
         return btClueService.delete(clueId);
     }
 
     @PostMapping("/upload")
+    @Secured("ROLE_LEVEL2")
     public String upload(HttpServletRequest request){
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         MultipartFile file = multipartRequest.getFile("file");

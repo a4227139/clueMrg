@@ -7,14 +7,17 @@ import com.wa.cluemrg.entity.BSLocation;
 import com.wa.cluemrg.entity.NodeTag;
 import com.wa.cluemrg.response.ResponseResult;
 import com.wa.cluemrg.service.NodeTagService;
+import com.wa.cluemrg.util.UnderlineToCamelUtils;
 import com.wa.cluemrg.vo.JsGridVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/nodeTag")
+@Secured("ROLE_LEVEL1")
 public class NodeTagController {
 
     @Autowired
@@ -38,17 +41,20 @@ public class NodeTagController {
     }
 
     @PostMapping("/insert")
+    @Secured("ROLE_LEVEL2")
     public int insert(@RequestBody NodeTag nodeTag) {
         return nodeTagService.insert(nodeTag);
     }
 
     @PutMapping("/update")
+    @Secured("ROLE_LEVEL2")
     public int update(@RequestBody NodeTag nodeTag) {
         return nodeTagService.update(nodeTag);
     }
 
     @DeleteMapping("/delete")
-    public int update(@RequestParam int id) {
+    @Secured("ROLE_LEVEL2")
+    public int delete(@RequestParam int id) {
         return nodeTagService.delete(id);
     }
 }

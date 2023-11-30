@@ -7,14 +7,17 @@ import com.wa.cluemrg.entity.BSLocation;
 import com.wa.cluemrg.entity.PhoneImei;
 import com.wa.cluemrg.response.ResponseResult;
 import com.wa.cluemrg.service.PhoneImeiService;
+import com.wa.cluemrg.util.UnderlineToCamelUtils;
 import com.wa.cluemrg.vo.JsGridVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/phoneImei")
+@Secured("ROLE_LEVEL1")
 public class PhoneImeiController {
 
     @Autowired
@@ -38,17 +41,20 @@ public class PhoneImeiController {
     }
 
     @PostMapping("/insert")
+    @Secured("ROLE_LEVEL2")
     public int insert(@RequestBody PhoneImei phoneImei) {
         return phoneImeiService.insert(phoneImei);
     }
 
     @PutMapping("/update")
+    @Secured("ROLE_LEVEL2")
     public int update(@RequestBody PhoneImei phoneImei) {
         return phoneImeiService.update(phoneImei);
     }
 
     @DeleteMapping("/delete")
-    public int update(@RequestParam int id) {
+    @Secured("ROLE_LEVEL2")
+    public int delete(@RequestParam int id) {
         return phoneImeiService.delete(id);
     }
 }

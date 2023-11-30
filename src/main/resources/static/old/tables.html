@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Tables - SB Admin</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../css/bootstrap.css" rel="stylesheet">
+
+    <!-- Add custom CSS here -->
+    <link href="../css/sb-admin.css" rel="stylesheet">
+    <link rel="stylesheet" href="../font-awesome/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css"/>
+    <link type="text/css" rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css"/>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+    <style>
+        .jsgrid-cell {
+            white-space: nowrap; /* 不换行 */
+            overflow: hidden; /* 溢出隐藏 */
+            text-overflow: ellipsis; /* 超出省略号 */
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">SB Admin</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav side-nav">
+                <li><a href="index.html"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                <li><a href="charts.html"><i class="fa fa-bar-chart-o"></i> Charts</a></li>
+                <li class="active"><a href="tables.html"><i class="fa fa-table"></i> Tables</a></li>
+                <li><a href="forms.html"><i class="fa fa-edit"></i> Forms</a></li>
+                <li><a href="typography.html"><i class="fa fa-font"></i> Typography</a></li>
+                <li><a href="bootstrap-elements.html"><i class="fa fa-desktop"></i> Bootstrap Elements</a></li>
+                <li><a href="bootstrap-grid.html"><i class="fa fa-wrench"></i> Bootstrap Grid</a></li>
+                <li><a href="blank-page.html"><i class="fa fa-file"></i> Blank Page</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i>
+                        Dropdown <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Dropdown Item</a></li>
+                        <li><a href="#">Another Item</a></li>
+                        <li><a href="#">Third Item</a></li>
+                        <li><a href="#">Last Item</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right navbar-user">
+                <li class="dropdown messages-dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> Messages
+                        <span class="badge">7</span> <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-header">7 New Messages</li>
+                        <li class="message-preview">
+                            <a href="#">
+                                <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                                <span class="name">John Smith:</span>
+                                <span class="message">Hey there, I wanted to ask you something...</span>
+                                <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="message-preview">
+                            <a href="#">
+                                <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                                <span class="name">John Smith:</span>
+                                <span class="message">Hey there, I wanted to ask you something...</span>
+                                <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="message-preview">
+                            <a href="#">
+                                <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                                <span class="name">John Smith:</span>
+                                <span class="message">Hey there, I wanted to ask you something...</span>
+                                <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="#">View Inbox <span class="badge">7</span></a></li>
+                    </ul>
+                </li>
+                <li class="dropdown alerts-dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> Alerts <span
+                            class="badge">3</span> <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Default <span class="label label-default">Default</span></a></li>
+                        <li><a href="#">Primary <span class="label label-primary">Primary</span></a></li>
+                        <li><a href="#">Success <span class="label label-success">Success</span></a></li>
+                        <li><a href="#">Info <span class="label label-info">Info</span></a></li>
+                        <li><a href="#">Warning <span class="label label-warning">Warning</span></a></li>
+                        <li><a href="#">Danger <span class="label label-danger">Danger</span></a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">View All</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown user-dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b
+                            class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
+                        <li><a href="#"><i class="fa fa-envelope"></i> Inbox <span class="badge">7</span></a></li>
+                        <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#"><i class="fa fa-power-off"></i> Log Out</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </nav>
+
+    <div id="page-wrapper">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>公安部打击治理电信网络新型违法犯罪专项行动办公室涉案线索 <small>更新至 <span id="latestDay"><span></small></h1>
+                <ol class="breadcrumb">
+                    <li><a href="index.html"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                    <li class="active"><i class="fa fa-table"></i> Tables</li>
+                </ol>
+                <div class="alert alert-info alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    拖动横向滚动条查看更多字段，还可进行增删改查操作。
+                </div>
+            </div>
+        </div><!-- /.row -->
+        <!--<div class="row" style="overflow:scroll; width:100%;overflow-x: auto; ">-->
+            <div>
+                <div class="table-responsive">
+                    <div id="jsGrid" ></div>
+                </div>
+            </div>
+        <!--</div>-->
+
+    </div><!-- /.row -->
+
+</div><!-- /#page-wrapper -->
+
+</div><!-- /#wrapper -->
+
+<!-- JavaScript -->
+<!-- <script src="js/jquery-1.10.2.js"></script>-->
+<script src="../js/bootstrap.js"></script>
+
+<!-- Page Specific Plugins -->
+<script src="../js/tablesorter/jquery.tablesorter.js"></script>
+<script src="../js/tablesorter/tables.js"></script>
+<script>
+    $.ajax({
+        type: "GET",
+        url: "http://127.0.0.1:8080/btClue/getLatestDay",
+        success: function (response) {
+            console.log(response);
+            $("#latestDay").text(response);
+        }
+    });
+    $("#jsGrid").jsGrid({
+        width: "100%",
+        height: "auto",
+        dragging: true,
+        editing: true,
+        filtering: true,
+        inserting: true,
+        sorting: true,
+        paging: true,
+        pageLoading: true,
+        pageIndex: 1,
+        autoload: true,
+        scrolling: true,
+        pageSize: 10,
+        pageButtonCount: 5,
+        autowidth: true,
+        deleteConfirm: "确定删除?",
+        controller: {
+            loadData: function (filter) {
+
+                /*console.log("loadData:"+JSON.stringify(filter));
+                var dataResult ={}
+                dataResult.data=response.data;
+                dataResult.itemsCount=response.itemsCount;
+                return dataResult;*/
+                console.log("loadData:" + JSON.stringify(filter))
+                var d = $.Deferred();
+                var param = {};
+                param.data = filter;
+                param.pageIndex = filter.pageIndex;
+                param.pageSize = filter.pageSize;
+                console.log(JSON.stringify(param));
+                $.ajax({
+                    url: "http://127.0.0.1:8080/btClue/getClueList",
+                    type: 'POST',
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(param)
+                }).done(function (response) {
+                    d.resolve(response);
+                });
+                return d.promise();
+            },
+            insertItem: function (item) {
+                return $.ajax({
+                    type: "POST",
+                    url: "http://127.0.0.1:8080/btClue/insertClue",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(item),
+                    success: function (response) {
+                        console.log("Insert successfully");
+                        $("#jsGrid").jsGrid("loadData");
+                    },
+                    error: function () {
+                        alert("Insert failed");
+                    }
+                });
+            },
+            updateItem: function (item) {
+                return $.ajax({
+                    type: "PUT",
+                    url: "http://127.0.0.1:8080/btClue/updateClue",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(item),
+                    success: function (response) {
+                        console.log("Update successfully");
+                        $("#jsGrid").jsGrid("loadData");
+                    },
+                    error: function () {
+                        alert("Update failed");
+                    }
+                });
+            },
+            deleteItem: function (item) {
+                var currentPage = $("#jsGrid").jsGrid("option", "pageIndex");  // 获取当前页码
+                return $.ajax({
+                    type: "DELETE",
+                    url: "http://127.0.0.1:8080/btClue/deleteClue?clueId=" + item.clueId,
+                    success: function (response) {
+                        console.log("Delete successfully");
+                        $("#jsGrid").jsGrid("loadData", {pageIndex: currentPage});
+                    },
+                    error: function () {
+                        alert("Delete failed");
+                    }
+                });
+            }
+        },
+        fields: [
+            {name: "clueId", type: "text", title: "线索编号",width: 150, validate: "required"},
+            {name: "roaming", type: "text", title: "漫游地"},
+            {name: "operator", type: "text", title: "运营商"},
+            {name: "phone", type: "text", title: "涉案电话",width: 150, validate: "required"},
+            {name: "caseUnit", type: "text", title: "立案单位",width: 200},
+            {name: "caseNo", type: "text", title: "案件编号",width: 200},
+            {name: "caseCategory", type: "text", title: "案件类别",width: 200},
+            {
+                name: "money", type: "number", title: "涉案金额",
+                itemTemplate: function (value) {
+                    if (value) {
+                        return value + "元";
+                    } else {
+                        return "0元"
+                    }
+                }
+            },
+            {name: "time", type: "text", title: "发案时间"},
+            {
+                name: "caseBrief", type: "textarea", title: "简要案情", width: 150,
+                itemTemplate: function (value) {
+                    if (value && value.length > 20) {
+                        return "<span title='" + value + "'>" + value.substr(0, 20) + "...</span>";
+                    } else {
+                        return value;
+                    }
+                }
+            },
+            {name: "victimPhone", type: "text", title: "受害人电话"},
+            {name: "state", type: "text", title: "状态"},
+            {name: "issueTime", type: "text", title: "下发时间"},
+            {name: "liaisonOfficer", type: "text", title: "责任人"},
+            {name: "jurisdiction", type: "text", title: "作案地点"},
+            {name: "material", type: "text", title: "战果材料"},
+            {name: "attribution", type: "text", title: "号码归属地"},
+            {name: "situation", type: "text", title: "打击情况"},
+            {name: "suspect", type: "text", title: "嫌疑人"},
+            {name: "suspectNum", type: "text", title: "嫌疑人人数"},
+            {name: "jzPerson", type: "text", title: "JZ查询人"},
+            {name: "jzInquiryTime", type: "text", title: "JZ查询时间"},
+            {name: "fzPerson", type: "text", title: "下发人"},
+            {name: "remark", type: "text", title: "备注"},
+            {type: "control",width: 100}
+        ]
+    })
+
+</script>
+
+</body>
+</html>

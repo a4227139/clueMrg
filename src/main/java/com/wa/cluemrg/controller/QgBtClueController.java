@@ -8,25 +8,22 @@ import com.wa.cluemrg.entity.BtClue;
 import com.wa.cluemrg.exception.BusinessException;
 import com.wa.cluemrg.response.ResponseResult;
 import com.wa.cluemrg.service.QgBtClueService;
+import com.wa.cluemrg.util.UnderlineToCamelUtils;
 import com.wa.cluemrg.vo.JsGridVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.List;
 
 
 @RestController
 @RequestMapping("/qgBtClue")
+@Secured("ROLE_LEVEL1")
 public class QgBtClueController {
 
     @Autowired
@@ -70,21 +67,25 @@ public class QgBtClueController {
     }
 
     @PostMapping("/insertClue")
+    @Secured("ROLE_LEVEL2")
     public int insertClue(@RequestBody BtClue btClue) {
         return qgBtClueService.insert(btClue);
     }
 
     @PutMapping("/updateClue")
+    @Secured("ROLE_LEVEL2")
     public int updateClue(@RequestBody BtClue btClue) {
         return qgBtClueService.update(btClue);
     }
 
     @DeleteMapping("/deleteClue")
+    @Secured("ROLE_LEVEL2")
     public int updateClue(@RequestParam String clueId) {
         return qgBtClueService.delete(clueId);
     }
 
     @PostMapping("/upload")
+    @Secured("ROLE_LEVEL2")
     public String upload(HttpServletRequest request){
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         MultipartFile file = multipartRequest.getFile("file");

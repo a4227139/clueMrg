@@ -2,24 +2,20 @@ package com.wa.cluemrg.controller;
 
 
 import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.util.MapUtils;
 import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
-import com.alibaba.fastjson.JSON;
 import com.deepoove.poi.XWPFTemplate;
-import com.deepoove.poi.util.PoitlIOUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wa.cluemrg.bo.*;
 import com.wa.cluemrg.entity.TtClue;
-import com.wa.cluemrg.entity.PhoneImei;
 import com.wa.cluemrg.exception.BusinessException;
 import com.wa.cluemrg.response.ResponseResult;
 import com.wa.cluemrg.service.TtClueService;
 import com.wa.cluemrg.service.CallLogService;
 import com.wa.cluemrg.service.PhoneImeiService;
+import com.wa.cluemrg.util.UnderlineToCamelUtils;
 import com.wa.cluemrg.vo.JsGridVO;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.system.ApplicationHome;
 import org.springframework.core.io.ClassPathResource;
@@ -28,7 +24,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.CollectionUtils;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,6 +43,7 @@ import java.util.zip.ZipOutputStream;
 @Log4j2
 @RestController
 @RequestMapping("/ttClue")
+@Secured("ROLE_LEVEL1")
 public class TtClueController {
 
     @Autowired
@@ -113,21 +110,25 @@ public class TtClueController {
     }
 
     @PostMapping("/insertClue")
+    @Secured("ROLE_LEVEL2")
     public int insertClue(@RequestBody TtClue ttClue) {
         return ttClueService.insert(ttClue);
     }
 
     @PutMapping("/updateClue")
+    @Secured("ROLE_LEVEL2")
     public int updateClue(@RequestBody TtClue ttClue) {
         return ttClueService.update(ttClue);
     }
 
     @DeleteMapping("/deleteClue")
+    @Secured("ROLE_LEVEL2")
     public int updateClue(@RequestParam String clueId) {
         return ttClueService.delete(clueId);
     }
 
     @PostMapping("/upload")
+    @Secured("ROLE_LEVEL2")
     public String upload(HttpServletRequest request){
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         MultipartFile file = multipartRequest.getFile("file");

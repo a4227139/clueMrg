@@ -7,10 +7,11 @@ import com.wa.cluemrg.entity.BSLocation;
 import com.wa.cluemrg.entity.Attribution;
 import com.wa.cluemrg.response.ResponseResult;
 import com.wa.cluemrg.service.AttributionService;
+import com.wa.cluemrg.util.UnderlineToCamelUtils;
 import com.wa.cluemrg.vo.JsGridVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/attribution")
+@Secured("ROLE_LEVEL1")
 public class AttributionController {
 
     @Autowired
@@ -74,17 +76,20 @@ public class AttributionController {
     }
 
     @PostMapping("/insert")
+    @Secured("ROLE_LEVEL2")
     public int insert(@RequestBody Attribution attribution) {
         return attributionService.insert(attribution);
     }
 
     @PutMapping("/update")
+    @Secured("ROLE_LEVEL2")
     public int update(@RequestBody Attribution attribution) {
         return attributionService.update(attribution);
     }
 
     @DeleteMapping("/delete")
-    public int update(@RequestParam int id) {
+    @Secured("ROLE_LEVEL2")
+    public int delete(@RequestParam int id) {
         return attributionService.delete(id);
     }
 }

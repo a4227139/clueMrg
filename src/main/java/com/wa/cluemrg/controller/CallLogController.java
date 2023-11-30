@@ -1,23 +1,22 @@
 package com.wa.cluemrg.controller;
 
-
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.util.MapUtils;
 import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
 import com.alibaba.fastjson.JSON;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wa.cluemrg.bo.CallLogBo;
 import com.wa.cluemrg.bo.CallLogExportBo;
 import com.wa.cluemrg.bo.PageBO;
 import com.wa.cluemrg.entity.*;
-import com.wa.cluemrg.exception.BusinessException;
 import com.wa.cluemrg.response.ResponseResult;
 import com.wa.cluemrg.service.*;
+import com.wa.cluemrg.util.UnderlineToCamelUtils;
 import com.wa.cluemrg.vo.JsGridVO;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -31,6 +30,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/callLog")
+@Secured("ROLE_LEVEL1")
 public class CallLogController {
 
     @Autowired
@@ -91,21 +91,25 @@ public class CallLogController {
         return vo;
     }
 
+    @Secured("ROLE_LEVEL2")
     @PostMapping("/insert")
     public int insert(@RequestBody CallLog callLog) {
         return callLogService.insert(callLog);
     }
 
+    @Secured("ROLE_LEVEL2")
     @PutMapping("/update")
     public int update(@RequestBody CallLog callLog) {
         return callLogService.update(callLog);
     }
 
+    @Secured("ROLE_LEVEL2")
     @DeleteMapping("/delete")
-    public int update(@RequestParam String id) {
+    public int delete(@RequestParam String id) {
         return callLogService.delete(id);
     }
 
+    @Secured("ROLE_LEVEL2")
     @PostMapping("/upload")
     public String upload(HttpServletRequest request){
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;

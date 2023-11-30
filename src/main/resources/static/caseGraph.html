@@ -13,7 +13,7 @@
 
     <!-- Add custom CSS here -->
     <link href="css/sb-admin.css" rel="stylesheet">
-    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
     <link type="text/css" rel="stylesheet" href="css/jsgrid.min.css"/>
     <link type="text/css" rel="stylesheet" href="css/jsgrid-theme.min.css"/>
     <link type="text/css" rel="stylesheet" href="css/clue.css"/>
@@ -52,38 +52,41 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> 线索 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="btClue.html"><i class="fa fa-table"></i> 部推线索（柳州）</a></li>
-                        <li><a href="ttClue.html"><i class="fa fa-table"></i> 厅推线索（柳州）</a></li>
-                        <li><a href="qgBtClue.html"><i class="fa fa-bar-chart-o"></i> 部推线索（全国）</a></li>
-                        <li><a href="qgDkClue.html"><i class="fa fa-bar-chart-o"></i> 断卡线索（全国）</a></li>
+                        <li><a href="/clue/btClue.html"><i class="fa fa-table"></i> 部推线索（柳州）</a></li>
+                        <li><a href="/clue/ttClue.html"><i class="fa fa-table"></i> 厅推线索（柳州）</a></li>
+                        <li><a href="/clue/qgBtClue.html"><i class="fa fa-bar-chart-o"></i> 部推线索（全国）</a></li>
+                        <li><a href="/clue/qgDkClue.html"><i class="fa fa-bar-chart-o"></i> 断卡线索（全国）</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> 日研判相关 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="alarmReceipt.html"><i class="fa fa-bar-chart-o"></i> 电诈接处警信息</a></li>
-                        <li><a href="victim.html"><i class="fa fa-bar-chart-o"></i> 受害人信息</a></li>
-                        <li><a href="effect.html"><i class="fa fa-bar-chart-o"></i> 战果信息</a></li>
-                        <li><a href="case.html"><i class="fa fa-camera-retro"></i> 案件列表</a></li>
+                        <li><a href="/analyze/alarmReceipt.html"><i class="fa fa-bar-chart-o"></i> 电诈接处警信息</a></li>
+                        <li><a href="/analyze/victim.html"><i class="fa fa-bar-chart-o"></i> 受害人信息</a></li>
+                        <li><a href="/analyze/effect.html"><i class="fa fa-bar-chart-o"></i> 战果信息</a></li>
+                        <li><a href="/analyze/case.html"><i class="fa fa-camera-retro"></i> 案件列表</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> 手机号 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="callLog.html"><i class="fa fa-bar-chart-o"></i> 通话记录</a></li>
-                        <li><a href="attribution.html"><i class="fa fa-bar-chart-o"></i> 号码归属地查询</a></li>
-                        <li><a href="phoneImei.html"><i class="fa fa-edit"></i> 号码-机身列表</a></li>
-                        <li><a href="bsLocation.html"><i class="fa fa-edit"></i> 基站列表</a></li>
+                        <li><a href="/phone/callLog.html"><i class="fa fa-bar-chart-o"></i> 通话记录</a></li>
+                        <li><a href="/phone/attribution.html"><i class="fa fa-bar-chart-o"></i> 号码归属地查询</a></li>
+                        <li><a href="/phone/phoneImei.html"><i class="fa fa-edit"></i> 号码-机身列表</a></li>
+                        <li><a href="/phone/bsLocation.html"><i class="fa fa-edit"></i> 基站列表</a></li>
                     </ul>
                 </li>
-                <li><a href="graph2.html"><i class="fa fa-camera-retro"></i> 关系图</a></li>
-                <li class="active"><a href="caseGraph.html"><i class="fa fa-camera-retro"></i> 涉诈案件全景图</a></li>
+                <li><a href="/relationGraph.html"><i class="fa fa-camera-retro"></i> 关系图</a></li>
+                <li class="active"><a href="/caseGraph.html"><i class="fa fa-camera-retro"></i> 涉诈案件全景图</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right navbar-user">
                 <li class="dropdown user-dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Admin <b
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i><span id="username"> Admin </span><b
                             class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/logout"><i class="fa fa-power-off"></i> Log Out</a></li>
+                    </ul>
                 </li>
             </ul>
         </div><!-- /.navbar-collapse -->
@@ -134,6 +137,19 @@
 
 
     <script type="text/javascript">
+        $(document).ready(function() {
+            $.ajax({
+                url: ROOT_PATH +'/security/getCurrentUsername', // 后台控制器的URL
+                type: 'GET',
+                success: function(username) {
+                    $('#username').text(" "+username+" "); // 在页面上显示用户名
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                    // 处理错误情况
+                }
+            });
+        });
         // 监听下拉菜单按钮的点击事件
         $('.dropdown-toggle').on('click', function() {
             // 切换下拉菜单的显示状态

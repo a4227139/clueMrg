@@ -8,8 +8,10 @@ import com.wa.cluemrg.entity.BSLocation;
 import com.wa.cluemrg.exception.BusinessException;
 import com.wa.cluemrg.response.ResponseResult;
 import com.wa.cluemrg.service.BSLocationService;
+import com.wa.cluemrg.util.UnderlineToCamelUtils;
 import com.wa.cluemrg.vo.JsGridVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/bsLocation")
+@Secured("ROLE_LEVEL1")
 public class BSLocationController {
 
     @Autowired
@@ -50,17 +53,20 @@ public class BSLocationController {
     }
 
     @PostMapping("/insert")
+    @Secured("ROLE_LEVEL2")
     public int insert(@RequestBody BSLocation bsLocation) {
         return bsLocationService.insert(bsLocation);
     }
 
     @PutMapping("/update")
+    @Secured("ROLE_LEVEL2")
     public int update(@RequestBody BSLocation bsLocation) {
         return bsLocationService.update(bsLocation);
     }
 
     @DeleteMapping("/delete")
-    public int update(@RequestParam String id) {
+    @Secured("ROLE_LEVEL2")
+    public int delete(@RequestParam String id) {
         return bsLocationService.delete(id);
     }
 

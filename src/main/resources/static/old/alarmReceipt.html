@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>柳州市电诈接处警警情信息列表</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../css/bootstrap.css" rel="stylesheet">
+
+    <!-- Add custom CSS here -->
+    <link href="../css/sb-admin.css" rel="stylesheet">
+    <link rel="stylesheet" href="../font-awesome/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="../css/jsgrid.min.css"/>
+    <link type="text/css" rel="stylesheet" href="../css/jsgrid-theme.min.css"/>
+    <link type="text/css" rel="stylesheet" href="../css/clue.css"/>
+    <script type="text/javascript" src="../js/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="../js/jsgrid.min.js"></script>
+    <script type="text/javascript" src="../js/constant.js"></script>
+    <!-- 引入DateTimePicker插件的js和css文件 -->
+    <link href="../css/jquery.datetimepicker.min.css" rel="stylesheet">
+    <script src="../js/jquery.datetimepicker.full.min.js"></script>
+    <style>
+        .jsgrid-cell {
+            white-space: nowrap; /* 不换行 */
+            overflow: hidden; /* 溢出隐藏 */
+            text-overflow: ellipsis; /* 超出省略号 */
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="">电诈线索研判系统</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav side-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> 线索 <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="btClue.html"><i class="fa fa-table"></i> 部推线索（柳州）</a></li>
+                        <li><a href="ttClue.html"><i class="fa fa-table"></i> 厅推线索（柳州）</a></li>
+                        <li><a href="qgBtClue.html"><i class="fa fa-bar-chart-o"></i> 部推线索（全国）</a></li>
+                        <li><a href="qgDkClue.html"><i class="fa fa-bar-chart-o"></i> 断卡线索（全国）</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> 日研判相关 <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li class="active"><a href="alarmReceipt.html"><i class="fa fa-bar-chart-o"></i> 电诈接处警信息</a></li>
+                        <li><a href="victim.html"><i class="fa fa-bar-chart-o"></i> 受害人信息</a></li>
+                        <li><a href="effect.html"><i class="fa fa-bar-chart-o"></i> 战果信息</a></li>
+                        <li><a href="case.html"><i class="fa fa-camera-retro"></i> 案件列表</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> 手机号 <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="callLog.html"><i class="fa fa-bar-chart-o"></i> 通话记录</a></li>
+                        <li><a href="attribution.html"><i class="fa fa-bar-chart-o"></i> 号码归属地查询</a></li>
+                        <li><a href="phoneImei.html"><i class="fa fa-edit"></i> 号码-机身列表</a></li>
+                        <li><a href="bsLocation.html"><i class="fa fa-edit"></i> 基站列表</a></li>
+                    </ul>
+                </li>
+                <li><a href="../relationGraph.html"><i class="fa fa-camera-retro"></i> 关系图</a></li>
+                <li><a href="../caseGraph.html"><i class="fa fa-camera-retro"></i> 涉诈案件全景图</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right navbar-user">
+                <li class="dropdown user-dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Admin <b
+                            class="caret"></b></a>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </nav>
+
+    <div id="page-wrapper">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>柳州市电诈接处警警情信息列表 <small>更新至 <span id="latestDay"></span></small></h1>
+                <!--<ol class="breadcrumb">
+                    <li><a href="index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+                    <li class="active"><i class="fa fa-table"></i> 部推线索</li>
+                </ol>-->
+                <div class="alert alert-info alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    拖动横向滚动条查看更多字段，还可进行增删改查操作。
+                </div>
+                <span>
+                    <label>时间：</label>
+                    <input class="form-control" style="display:inline;width:230px;font-size:20px;height: 35px;margin: 10px;" type="text" id="datetimepicker1">
+                    <label>到</label>
+                    <input class="form-control" style="display:inline;width:230px;font-size:20px;height: 35px;margin: 10px;" type="text" id="datetimepicker2">
+                    <label class="upload-btn" style="display: block" id="search-btn">
+                    <span class="btn-text">查询</span>
+                    <span class="btn-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M8 17v-5H6l6-7 6 7h-2v5H8zm-2 2h8v2H6v-2z"></path>
+                        </svg>
+                    </span>
+                    </label>
+                </span>
+                <label class="upload-btn" style="display: block" id="upload-btn">
+                    <input type="file" id="file-input" style="display: none">
+                    <span class="btn-text">上传警情</span>
+                    <span class="btn-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M8 17v-5H6l6-7 6 7h-2v5H8zm-2 2h8v2H6v-2z"></path>
+                        </svg>
+                    </span>
+                </label>
+                </label>
+                <label class="upload-btn" style="display: block" id="download-btn">
+                    <span class="btn-text">下载模板</span>
+                    <span class="btn-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M8 17v-5H6l6-7 6 7h-2v5H8zm-2 2h8v2H6v-2z"></path>
+                        </svg>
+                    </span>
+                </label>
+                <label class="upload-btn" style="display: block" id="export-btn">
+                    <span class="btn-text">导出警情</span>
+                    <span class="btn-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M8 17v-5H6l6-7 6 7h-2v5H8zm-2 2h8v2H6v-2z"></path>
+                        </svg>
+                    </span>
+                </label>
+            </div>
+        </div><!-- /.row -->
+        <!--<div class="row" style="overflow:scroll; width:100%;overflow-x: auto; ">-->
+        <div>
+            <div class="table-responsive">
+                <div id="jsGrid" ></div>
+            </div>
+        </div>
+        <!--</div>-->
+
+    </div><!-- /.row -->
+
+</div><!-- /#page-wrapper -->
+
+</div><!-- /#wrapper -->
+
+<!-- JavaScript -->
+<!-- <script src="js/jquery-1.10.2.js"></script>-->
+<script src="../js/bootstrap.js"></script>
+
+<!-- Page Specific Plugins -->
+<script src="../js/tablesorter/jquery.tablesorter.js"></script>
+<script src="../js/tablesorter/tables.js"></script>
+<script>
+    // 监听下拉菜单按钮的点击事件
+    $('.dropdown-toggle').on('click', function() {
+        // 切换下拉菜单的显示状态
+        $(this).siblings('.dropdown-menu').toggle();
+    });
+    $('#download-btn').click(function() {
+        var link = document.querySelector('#a_download_template');
+        // 模拟点击下载链接
+        link.click();
+    });
+
+    $('#upload-btn').click(function() {
+        $("#file-input").val("");
+        $('#file-input').click();
+    });
+
+    $('#search-btn').click(function() {
+        var grid = $("#jsGrid").data("JSGrid");
+        $("#jsGrid").jsGrid("option", "pageIndex", 1);
+        grid.loadData();
+        console.log($("#jsGrid").jsGrid("option", "pageIndex"))
+    });
+
+    $('#export-btn').click(function() {
+        var dateStart=$('#datetimepicker1').val();
+        var dateEnd=$('#datetimepicker2').val();
+        var link = document.querySelector('#a_export_excel');
+        var originHref=link.href;
+        link.href = link.href+"?dateStart="+dateStart+"&dateEnd="+dateEnd  ;
+        console.log(link.href)
+        // 模拟点击下载链接
+        link.click();
+        link.href=originHref;
+    });
+
+    $('#datetimepicker1').datetimepicker({
+        format: 'Y-m-d', // 时间格式，可根据需要进行调整
+        timepicker: false, // 是否显示时间选择器
+        datepicker: true, // 是否显示日期选择器
+        yearStart: 1900, // 年份的起始值
+        yearEnd: 2100, // 年份的结束值
+        todayButton: true, // 是否显示“今天”按钮
+        lang: 'zh', // 显示语言，中文为'zh'
+        step: 1 // 时间间隔，单位为分钟
+    });
+
+    $('#datetimepicker2').datetimepicker({
+        format: 'Y-m-d', // 时间格式，可根据需要进行调整
+        timepicker: false, // 是否显示时间选择器
+        datepicker: true, // 是否显示日期选择器
+        yearStart: 1900, // 年份的起始值
+        yearEnd: 2100, // 年份的结束值
+        todayButton: true, // 是否显示“今天”按钮
+        lang: 'zh', // 显示语言，中文为'zh'
+        step: 1 // 时间间隔，单位为分钟
+    });
+
+    $("#file-input").change(function() {
+        const file = $(this).prop("files")[0];
+        const formData = new FormData();
+        formData.append("file", file);
+
+        $.ajax({
+            url: ROOT_PATH +'/alarmReceipt/upload',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            cache: false,
+            success: function(response) {
+                // 上传成功，根据后台返回信息输出结果
+                alert(JSON.stringify(response));
+                console.log('上传成功:'+JSON.stringify(response));
+                $("#jsGrid").jsGrid("option", "pageIndex", 1);
+                $("#jsGrid").jsGrid("loadData");
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // 上传失败，输出错误信息
+                alert('上传失败：' + textStatus);
+            }
+        });
+    });
+
+    $.ajax({
+        type: "GET",
+        url: ROOT_PATH +"/alarmReceipt/getLatestDay",
+        success: function (response) {
+            console.log(response);
+            $("#latestDay").text(response);
+        }
+    });
+
+    $("#jsGrid").jsGrid({
+        width: "100%",
+        height: "auto",
+        dragging: true,
+        editing: true,
+        filtering: true,
+        inserting: true,
+        sorting: true,
+        paging: true,
+        pageLoading: true,
+        pageIndex: 1,
+        autoload: true,
+        scrolling: true,
+        pageSize: 10,
+        pageButtonCount: 5,
+        autowidth: true,
+        deleteConfirm: "确定删除?",
+        onDataLoaded:function(){
+            var url = ROOT_PATH +"/alarmReceipt/downloadTemplate";
+            var link = document.querySelector('#a_download_template');
+            if (!link){
+                // 创建一个隐藏的 <a> 元素
+                link = document.createElement("a");
+            }
+            link.id="a_download_template";
+            link.style.display = "none";
+            link.href = url;
+            document.body.appendChild(link);
+
+            var url_excel = ROOT_PATH +"/alarmReceipt/exportExcel";
+            var link_excel = document.querySelector('#a_export_excel');
+            if (!link_excel){
+                // 创建一个隐藏的 <a> 元素
+                link_excel = document.createElement("a");
+            }
+            link_excel.id="a_export_excel";
+            link_excel.style.display = "none";
+            link_excel.href = url_excel;
+            //link.download = filename;
+            // 将 <a> 元素添加到页面中
+            document.body.appendChild(link_excel);
+        },
+        controller: {
+            loadData: function (filter) {
+
+                /*console.log("loadData:"+JSON.stringify(filter));
+                var dataResult ={}
+                dataResult.data=response.data;
+                dataResult.itemsCount=response.itemsCount;
+                return dataResult;*/
+                console.log("loadData:" + JSON.stringify(filter))
+                var d = $.Deferred();
+                var param = {};
+                filter.alarmTimeStart=$('#datetimepicker1').val();
+                filter.alarmTimeEnd=$('#datetimepicker2').val();
+                param.data = filter;
+                param.pageIndex = filter.pageIndex;
+                param.pageSize = filter.pageSize;
+                param.sortField = filter.sortField;
+                param.sortOrder = filter.sortOrder;
+                console.log(JSON.stringify(param));
+                $.ajax({
+                    url: ROOT_PATH +"/alarmReceipt/getAlarmList",
+                    type: 'POST',
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(param)
+                }).done(function (response) {
+                    d.resolve(response);
+                });
+                return d.promise();
+            },
+            insertItem: function (item) {
+                return $.ajax({
+                    type: "POST",
+                    url: ROOT_PATH +"/alarmReceipt/insertAlarm",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(item),
+                    success: function (response) {
+                        console.log("Insert successfully");
+                        $("#jsGrid").jsGrid("loadData");
+                    },
+                    error: function () {
+                        alert("Insert failed");
+                    }
+                });
+            },
+            updateItem: function (item) {
+                return $.ajax({
+                    type: "PUT",
+                    url: ROOT_PATH +"/alarmReceipt/updateAlarm",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(item),
+                    success: function (response) {
+                        console.log("Update successfully");
+                        $("#jsGrid").jsGrid("loadData");
+                    },
+                    error: function () {
+                        alert("Update failed");
+                    }
+                });
+            },
+            deleteItem: function (item) {
+                var currentPage = $("#jsGrid").jsGrid("option", "pageIndex");  // 获取当前页码
+                return $.ajax({
+                    type: "DELETE",
+                    url: ROOT_PATH +"/alarmReceipt/deleteAlarm?seq=" + item.seq,
+                    success: function (response) {
+                        console.log("Delete successfully");
+                        $("#jsGrid").jsGrid("loadData", {pageIndex: currentPage});
+                    },
+                    error: function () {
+                        alert("Delete failed");
+                    }
+                });
+            }
+        },
+        fields: [
+            /*{name: "jqno", type: "text", title: "警情编号",width: 180},*/
+            {name: "department", type: "text", title: "分县局",width: 200},
+            {name: "pcs", type: "text", title: "辖区派出所",width: 200},
+            {name: "alarmTime", type: "text", title: "报警时间",width: 150,
+                itemTemplate: function(value) {
+                return formatDate(new Date(value));
+                }
+             },
+            {name: "content", type: "text", title: "简要案情",width: 300},
+            {name: "type", type: "text", title: "警情类别",width: 180},
+            {
+                name: "lossMoney", type: "number", title: "损失金额(万元)",width: 150,
+                itemTemplate: function (value) {
+                    if (value) {
+                        return value + "万元";
+                    } else {
+                        return "0元"
+                    }
+                }
+            },
+            {name: "stopPayment", type: "text", title: "止付情况",width: 120},
+            {name: "oneLevel", type: "text", title: "一级卡情况",width: 120},
+            {name: "secondLevel", type: "text", title: "二级卡情况",width: 120},
+            {name: "withdraw", type: "text", title: "取款情况",width: 120},
+            {name: "drainage", type: "text", title: "引流窝点",width: 120},
+            {name: "capture", type: "text", title: "抓获嫌疑人情况",width: 120},
+            {name: "recover", type: "text", title: "是/否追赃挽损",width: 120},
+            {name: "jointCase", type: "text", title: "是/否串并案",width: 120},
+            {name: "outside", type: "text", title: "是/否境外",width: 120},
+            {name: "app", type: "text", title: "是/否安装反诈app",width: 120},
+            {name: "advocate", type: "text", title: "是/否宣传",width: 120},
+            {name: "remark", type: "text", title: "备注",width: 120},
+            {name: "lastReviseTime", type: "text", title: "上传时间",width: 120},
+            /*{name: "phone", type: "text", title: "报警电话",width: 120},
+            {name: "victim", type: "text", title: "报警人",width: 100, validate: "required"},
+            {name: "id", type: "text", title: "报警人身份证",width: 180},
+            {name: "jurisdiction", type: "text", title: "辖区分局",width: 200},
+            {name: "community", type: "text", title: "社区",width: 200},
+            {name: "address", type: "text", title: "案发地址",width: 200},
+            {
+                name: "stopPaymentMoney", type: "number", title: "止付金额(万元)",width: 150,
+                itemTemplate: function (value) {
+                    if (value) {
+                        return value + "万元";
+                    } else {
+                        return "0元"
+                    }
+                }
+            },
+            {name: "stopPaymentAccount", type: "text", title: "止付账户(个)"},
+            {name: "state", type: "text", title: "案件状态"},*/
+            {type: "control",width: 100}
+        ]
+    })
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wa.cluemrg.dao.UserMapper">
+
+    <!-- Result Map -->
+    <resultMap id="userResultMap" type="com.wa.cluemrg.entity.User">
+        <id property="id" column="ID" />
+        <result property="username" column="USERNAME" />
+        <result property="password" column="PASSWORD" />
+        <result property="department" column="DEPARTMENT" />
+        <result property="role" column="ROLE" />
+    </resultMap>
+
+    <select id="selectAll" resultMap="userResultMap">
+        SELECT *
+        FROM user
+        <where>
+            <if test="id != null and seq != 0">
+                AND ID = #{id}
+            </if>
+            <if test="username != null and username != ''">
+                AND USERNAME LIKE CONCAT('%', #{username}, '%')
+            </if>
+            <if test="password != null and password != ''">
+                AND PASSWORD LIKE CONCAT('%', #{password}, '%')
+            </if>
+            <if test="department != null and department != ''">
+                AND DEPARTMENT LIKE CONCAT('%', #{department}, '%')
+            </if>
+            <if test="role != null and role != 0">
+                AND ROLE LIKE CONCAT('%', #{role}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="findByUsername" resultMap="userResultMap">
+        SELECT * FROM user where USERNAME = #{username}
+    </select>
+
+
+    <!-- Insert -->
+    <insert id="insert" parameterType="com.wa.cluemrg.entity.User">
+        INSERT INTO `user` (`ID`, `USERNAME`, `PASSWORD`, `DEPARTMENT`, `ROLE`)
+        VALUES (#{id}, #{username}, #{password}, #{department}, #{role})
+    </insert>
+
+    <!-- Update -->
+    <update id="update" parameterType="com.wa.cluemrg.entity.User">
+        UPDATE `user`
+        SET `USERNAME` = #{username}, `PASSWORD` = #{password}, `DEPARTMENT` = #{department}, `ROLE` = #{role}
+        WHERE `ID` = #{id}
+    </update>
+
+    <!-- Delete -->
+    <delete id="delete" parameterType="int">
+        DELETE FROM `user` WHERE `ID` = #{id}
+    </delete>
+
+</mapper>

@@ -31,7 +31,8 @@ public class ChannelFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
         String path = httpRequest.getRequestURI().substring(httpRequest.getContextPath().length());
-        if (path.contains("/static")){
+        if (path.contains("/static")||path.endsWith(".html")||path.contains("/js/")
+                ||path.contains("/css/")||path.contains("/font-awesome/")){
             log.info("Request URI: {}", path);
             filterChain.doFilter(httpRequest, httpResponse);
             return;

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Tables - SB Admin</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../css/bootstrap.css" rel="stylesheet">
+
+    <!-- Add custom CSS here -->
+    <link href="../css/sb-admin.css" rel="stylesheet">
+    <link rel="stylesheet" href="../font-awesome/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css"/>
+    <link type="text/css" rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css"/>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- 引入DateTimePicker插件的js和css文件 -->
+    <link href="https://cdn.bootcdn.net/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+    <style>
+        .jsgrid-cell {
+            white-space: nowrap; /* 不换行 */
+            overflow: hidden; /* 溢出隐藏 */
+            text-overflow: ellipsis; /* 超出省略号 */
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">电诈线索研判</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav side-nav">
+                <li><a href="index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+                <li><a href="btClue.html"><i class="fa fa-table"></i> 部推线索</a></li>
+                <li><a href="callLog.html"><i class="fa fa-bar-chart-o"></i> 话单</a></li>
+                <li class="active"><a href="phoneImsi.html"><i class="fa fa-edit"></i> 基站</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right navbar-user">
+                <li class="dropdown user-dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Admin <b
+                            class="caret"></b></a>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </nav>
+
+    <div id="page-wrapper">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>号码-卡码列表</h1>
+                <ol class="breadcrumb">
+                    <li><a href="index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+                    <li class="active"><i class="fa fa-table"></i> 号码-卡码列表</li>
+                </ol>
+                <div class="alert alert-info alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    拖动横向滚动条查看更多字段，还可进行增删改查操作。
+                </div>
+            </div>
+        </div><!-- /.row -->
+        <!--<div class="row" style="overflow:scroll; width:100%;overflow-x: auto; ">-->
+            <div>
+                <!--<input type="text" class='flatpickr'>-->
+                <div class="table-responsive">
+                    <div id="jsGrid" ></div>
+                </div>
+            </div>
+        <!--</div>-->
+
+    </div><!-- /.row -->
+
+</div><!-- /#page-wrapper -->
+
+</div><!-- /#wrapper -->
+
+<!-- JavaScript -->
+<!-- <script src="js/jquery-1.10.2.js"></script>-->
+<script src="../js/bootstrap.js"></script>
+
+<!-- Page Specific Plugins -->
+<script src="../js/tablesorter/jquery.tablesorter.js"></script>
+<script src="../js/tablesorter/tables.js"></script>
+<script>
+
+    $(".flatpickr").datetimepicker({
+        format: 'Y-m-d H:i:s', // 时间格式，可根据需要进行调整
+        timepicker: true, // 是否显示时间选择器
+        datepicker: true, // 是否显示日期选择器
+        yearStart: 1900, // 年份的起始值
+        yearEnd: 2100, // 年份的结束值
+        todayButton: true, // 是否显示“今天”按钮
+        lang: 'zh', // 显示语言，中文为'zh'
+        step: 1 // 时间间隔，单位为分钟
+    });
+    
+    $("#jsGrid").jsGrid({
+        width: "100%",
+        height: "auto",
+        dragging: true,
+        editing: true,
+        filtering: true,
+        inserting: true,
+        sorting: true,
+        paging: true,
+        pageLoading: true,
+        pageIndex: 1,
+        autoload: true,
+        scrolling: true,
+        pageSize: 10,
+        pageButtonCount: 5,
+        autowidth: true,
+        deleteConfirm: "确定删除?",
+        controller: {
+            loadData: function (filter) {
+                console.log("loadData:" + JSON.stringify(filter))
+                var d = $.Deferred();
+                var param = {};
+                param.data = filter;
+                param.pageIndex = filter.pageIndex;
+                param.pageSize = filter.pageSize;
+                param.sortField = filter.sortField;
+                param.sortOrder = filter.sortOrder;
+                console.log(JSON.stringify(param));
+                $.ajax({
+                    url: "http://127.0.0.1:8080/phoneImsi/getPhoneImsiList",
+                    type: 'POST',
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(param)
+                }).done(function (response) {
+                    console.log(JSON.stringify(response));
+                    d.resolve(response);
+                });
+                return d.promise();
+            },
+            insertItem: function (item) {
+                return $.ajax({
+                    type: "POST",
+                    url: "http://127.0.0.1:8080/phoneImsi/insert",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(item),
+                    success: function (response) {
+                        console.log("Insert successfully");
+                        $("#jsGrid").jsGrid("loadData");
+                    },
+                    error: function () {
+                        alert("Insert failed");
+                    }
+                });
+            },
+            updateItem: function (item) {
+                return $.ajax({
+                    type: "PUT",
+                    url: "http://127.0.0.1:8080/phoneImsi/update",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(item),
+                    success: function (response) {
+                        console.log("Update successfully");
+                        $("#jsGrid").jsGrid("loadData");
+                    },
+                    error: function () {
+                        alert("Update failed");
+                    }
+                });
+            },
+            deleteItem: function (item) {
+                var currentPage = $("#jsGrid").jsGrid("option", "pageIndex");  // 获取当前页码
+                return $.ajax({
+                    type: "DELETE",
+                    url: "http://127.0.0.1:8080/phoneImsi/delete?id=" + item.id,
+                    success: function (response) {
+                        console.log("Delete successfully");
+                        $("#jsGrid").jsGrid("loadData", {pageIndex: currentPage});
+                    },
+                    error: function () {
+                        alert("Delete failed");
+                    }
+                });
+            }
+        },
+        fields: [
+            {name: "id", type: "text", title: "ID",visible: false},
+            {name: "phone", type: "text", title: "号码"},
+            {name: "imsi", type: "text", title: "卡码"},
+            {name: "createTime", type: "text",inputType: "text", title: "创建时间", css: ".flatpickr"/*,
+                itemTemplate: function(value, item) {
+                    return "<input class='flatpickr' type='text'  value='" + value + "'/>";
+                }*/
+            },
+            {type: "control",width: 100}
+        ]
+    })
+
+
+
+</script>
+
+</body>
+</html>

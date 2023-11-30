@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>案件列表</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Add custom CSS here -->
+    <link href="/css/sb-admin.css" rel="stylesheet">
+    <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="/css/jsgrid.min.css"/>
+    <link type="text/css" rel="stylesheet" href="/css/jsgrid-theme.min.css"/>
+    <link type="text/css" rel="stylesheet" href="/css/clue.css"/>
+    <script type="text/javascript" src="/js/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="/js/jsgrid.min.js"></script>
+    <script type="text/javascript" src="/js/constant.js"></script>
+    <!-- 引入DateTimePicker插件的js和css文件 -->
+    <link href="/css/jquery.datetimepicker.min.css" rel="stylesheet">
+    <script src="/js/jquery.datetimepicker.full.min.js"></script>
+</head>
+
+<body>
+
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <!-- Sidebar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="">电诈线索研判系统</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav side-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> 线索 <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/clue/btClue.html"><i class="fa fa-table"></i> 部推线索（柳州）</a></li>
+                        <li><a href="/clue/ttClue.html"><i class="fa fa-table"></i> 厅推线索（柳州）</a></li>
+                        <li><a href="/clue/qgBtClue.html"><i class="fa fa-bar-chart-o"></i> 部推线索（全国）</a></li>
+                        <li><a href="/clue/qgDkClue.html"><i class="fa fa-bar-chart-o"></i> 断卡线索（全国）</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> 日研判相关 <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/analyze/alarmReceipt.html"><i class="fa fa-bar-chart-o"></i> 电诈接处警信息</a></li>
+                        <li><a href="/analyze/victim.html"><i class="fa fa-bar-chart-o"></i> 受害人信息</a></li>
+                        <li><a href="/analyze/effect.html"><i class="fa fa-bar-chart-o"></i> 战果信息</a></li>
+                        <li class="active"><a href="/analyze/case.html"><i class="fa fa-camera-retro"></i> 案件列表</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> 手机号 <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/phone/callLog.html"><i class="fa fa-bar-chart-o"></i> 通话记录</a></li>
+                        <li><a href="/phone/attribution.html"><i class="fa fa-bar-chart-o"></i> 号码归属地查询</a></li>
+                        <li><a href="/phone/phoneImei.html"><i class="fa fa-edit"></i> 号码-机身列表</a></li>
+                        <li><a href="/phone/bsLocation.html"><i class="fa fa-edit"></i> 基站列表</a></li>
+                    </ul>
+                </li>
+                <li><a href="/relationGraph.html"><i class="fa fa-camera-retro"></i> 关系图</a></li>
+                <li><a href="/caseGraph.html"><i class="fa fa-camera-retro"></i> 涉诈案件全景图</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right navbar-user">
+                <li class="dropdown user-dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i><span id="username"> Admin </span><b
+                            class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/logout"><i class="fa fa-power-off"></i> Log Out</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </nav>
+
+    <div id="page-wrapper">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>案件列表</h1>
+                <!--<ol class="breadcrumb">
+                    <li><a href="index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
+                    <li class="active"><i class="fa fa-table"></i> 案件列表</li>
+                </ol>-->
+                <div class="alert alert-info alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    拖动横向滚动条查看更多字段，还可进行增删改查操作。
+                </div>
+                <span>
+                    <label>时间：</label>
+                    <input class="form-control" style="display:inline;width:230px;font-size:20px;height: 35px;margin: 10px;" type="text" id="datetimepicker1">
+                    <label>到</label>
+                    <input class="form-control" style="display:inline;width:230px;font-size:20px;height: 35px;margin: 10px;" type="text" id="datetimepicker2">
+                    <label class="upload-btn" style="display: block" id="search-btn">
+                    <span class="btn-text">查询</span>
+                    <span class="btn-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M8 17v-5H6l6-7 6 7h-2v5H8zm-2 2h8v2H6v-2z"></path>
+                        </svg>
+                    </span>
+                </label>
+                </span>
+                <label class="upload-btn" style="display: block" id="sync-btn">
+                    <span class="btn-text">同步</span>
+                    <span class="btn-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M8 17v-5H6l6-7 6 7h-2v5H8zm-2 2h8v2H6v-2z"></path>
+                        </svg>
+                    </span>
+                </label>
+                <label class="upload-btn" style="display: block" id="export-excel">
+                    <span class="btn-text">导出Excel</span>
+                    <span class="btn-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M8 17v-5H6l6-7 6 7h-2v5H8zm-2 2h8v2H6v-2z"></path>
+                        </svg>
+                    </span>
+                </label>
+                <label class="upload-btn" style="display: block" id="export-word">
+                    <span class="btn-text">导出报告</span>
+                    <span class="btn-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M8 17v-5H6l6-7 6 7h-2v5H8zm-2 2h8v2H6v-2z"></path>
+                        </svg>
+                    </span>
+                </label>
+            </div>
+            <div id="confirmModal" class="modal">
+                <div class="modal-content">
+                    <p id="confirmModalMessage"></p>
+                    <button id="confirmAction" class="confirm-btn">确认</button>
+                    <button id="cancelAction" class="cancel-btn">取消</button>
+                </div>
+            </div>
+        </div><!-- /.row -->
+        <!--<div class="row" style="overflow:scroll; width:100%;overflow-x: auto; ">-->
+            <div>
+                <div class="table-responsive">
+                    <div id="jsGrid" ></div>
+                </div>
+            </div>
+
+        <!--</div>-->
+
+    </div><!-- /.row -->
+
+</div><!-- /#page-wrapper -->
+
+</div><!-- /#wrapper -->
+
+<!-- JavaScript -->
+<!-- <script src="/js/jquery-1.10.2.js"></script>-->
+<script src="/js/bootstrap.js"></script>
+
+<!-- Page Specific Plugins -->
+<script src="/js/tablesorter/jquery.tablesorter.js"></script>
+<script src="/js/tablesorter/tables.js"></script>
+<script>
+    $(document).ready(function() {
+        $.ajax({
+            url: ROOT_PATH +'/security/getCurrentUsername', // 后台控制器的URL
+            type: 'GET',
+            success: function(username) {
+                $('#username').text(" "+username+" "); // 在页面上显示用户名
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+                // 处理错误情况
+            }
+        });
+    });
+    // 监听下拉菜单按钮的点击事件
+    $('.dropdown-toggle').on('click', function() {
+        // 切换下拉菜单的显示状态
+        $(this).siblings('.dropdown-menu').toggle();
+    });
+
+    function objectToUrlParams(obj) {
+        var params = [];
+        for (var key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                var value = obj[key];
+                if (Array.isArray(value)) {
+                    // 如果值是数组，则按照 key[]=value1&key[]=value2 的格式处理
+                    for (var i = 0; i < value.length; i++) {
+                        params.push(encodeURIComponent(key) + "[]=" + encodeURIComponent(value[i]));
+                    }
+                } else {
+                    // 否则按照 key=value 的格式处理
+                    params.push(encodeURIComponent(key) + "=" + encodeURIComponent(value));
+                }
+            }
+        }
+        return params.join("&");
+    }
+
+    function areAllFieldsEmpty(obj) {
+        //除pageIndex和pageSize外
+        delete obj.pageIndex;
+        delete obj.pageSize;
+        for (const key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                if (obj[key] !== null && obj[key] !== undefined && obj[key] !== '') {
+                    return false; // 如果有任何字段不为空，则返回 false
+                }
+            }
+        }
+        return true; // 所有字段都为空
+    }
+
+
+    $('#sync-btn').click(function() {
+        var registerDateStart=$('#datetimepicker1').val();
+        var registerDateEnd=$('#datetimepicker2').val();
+        if (!registerDateStart&&!registerDateEnd){
+            document.getElementById("confirmModalMessage").innerText="是否同步全年的数据？"
+        }else {
+            document.getElementById("confirmModalMessage").innerText="是否同步？"
+        }
+        confirmModal.style.display = "block";
+    });
+
+    // 获取按钮和模态框元素
+    var confirmModal = document.getElementById("confirmModal");
+    var confirmAction = document.getElementById("confirmAction");
+    var cancelAction = document.getElementById("cancelAction");
+
+    // 点击确认按钮
+    confirmAction.onclick = function () {
+
+        confirmModal.style.display = "none"; // 隐藏对话框
+        registerDateStart=$('#datetimepicker1').val();
+        registerDateEnd=$('#datetimepicker2').val();
+        // 同步
+        $.ajax({
+            url: ROOT_PATH +'/case/sync'+"?dateStart="+registerDateStart+"&dateEnd="+registerDateEnd,
+            type: 'GET',
+            success: function(response) {
+                // 上传成功，根据后台返回信息输出结果
+                alert(JSON.stringify(response));
+                console.log('sync:'+JSON.stringify(response))
+                var grid = $("#jsGrid").data("JSGrid");
+                $("#jsGrid").jsGrid("option", "pageIndex", 1);
+                grid.loadData();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // 上传失败，输出错误信息
+                alert('同步失败：' + textStatus);
+            }
+        });
+    }
+
+    // 点击取消按钮或模态框背景
+    cancelAction.onclick = function () {
+        confirmModal.style.display = "none"; // 隐藏对话框
+    }
+
+    // 当用户点击模态框外部，也隐藏模态框
+    window.onclick = function (event) {
+        if (event.target == confirmModal) {
+            confirmModal.style.display = "none";
+        }
+    }
+
+    $('#search-btn').click(function() {
+        var grid = $("#jsGrid").data("JSGrid");
+        $("#jsGrid").jsGrid("option", "pageIndex", 1);
+        grid.loadData();
+        console.log($("#jsGrid").jsGrid("option", "pageIndex"))
+    });
+
+    $('#export-word').click(function() {
+        var registerDateStart=$('#datetimepicker1').val();
+        var registerDateEnd=$('#datetimepicker2').val();
+        var link = document.querySelector('#a_export_word');
+        var originHref=link.href;
+        link.href = link.href+"?dateStart="+registerDateStart+"&dateEnd="+registerDateEnd  ;
+        console.log(link.href)
+        // 模拟点击下载链接
+        link.click();
+        link.href=originHref;
+    });
+
+    $('#export-excel').click(function() {
+        var registerDateStart=$('#datetimepicker1').val();
+        var registerDateEnd=$('#datetimepicker2').val();
+        var link = document.querySelector('#a_export_excel');
+        var originHref=link.href;
+        link.href = link.href+"?dateStart="+registerDateStart+"&dateEnd="+registerDateEnd  ;
+        console.log(link.href)
+        // 模拟点击下载链接
+        link.click();
+        link.href=originHref;
+    });
+
+    $("#file-input").change(function() {
+        const file = $(this).prop("files")[0];
+        const formData = new FormData();
+        formData.append("file", file);
+
+        $.ajax({
+            url: ROOT_PATH +'/case/upload',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            cache: false,
+            success: function(response) {
+                // 上传成功，根据后台返回信息输出结果
+                alert(JSON.stringify(response));
+                console.log('上传成功:'+JSON.stringify(response))
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // 上传失败，输出错误信息
+                alert('上传失败：' + textStatus);
+            }
+        });
+    });
+
+    $('#datetimepicker1').datetimepicker({
+        format: 'Y-m-d', // 时间格式，可根据需要进行调整
+        timepicker: false, // 是否显示时间选择器
+        datepicker: true, // 是否显示日期选择器
+        yearStart: 1900, // 年份的起始值
+        yearEnd: 2100, // 年份的结束值
+        todayButton: true, // 是否显示“今天”按钮
+        lang: 'zh', // 显示语言，中文为'zh'
+        step: 1 // 时间间隔，单位为分钟
+    });
+
+    $('#datetimepicker2').datetimepicker({
+        format: 'Y-m-d', // 时间格式，可根据需要进行调整
+        timepicker: false, // 是否显示时间选择器
+        datepicker: true, // 是否显示日期选择器
+        yearStart: 1900, // 年份的起始值
+        yearEnd: 2100, // 年份的结束值
+        todayButton: true, // 是否显示“今天”按钮
+        lang: 'zh', // 显示语言，中文为'zh'
+        step: 1 // 时间间隔，单位为分钟
+    });
+
+    var paramForExport;
+    $("#jsGrid").jsGrid({
+        width: "100%",
+        height: "auto",
+        dragging: true,
+        //editing: true,
+        filtering: true,
+        //inserting: true,
+        sorting: true,
+        paging: true,
+        pageLoading: true,
+        pageIndex: 1,
+        autoload: true,
+        scrolling: true,
+        pageSize: 10,
+        pageButtonCount: 5,
+        autowidth: true,
+        deleteConfirm: "确定删除?",
+        onDataLoaded:function(){
+            // 获取所有符合条件的 td 元素
+            /*var tdList = document.querySelectorAll('.jsgrid-cell.jsgrid-align-center');
+            // 遍历 tdList 列表，为每个元素添加序号
+            tdList.forEach(function(td, index) {
+                //前二不用
+                if (index>1){
+                    td.textContent = index-1 ;
+                }
+            });*/
+            var paramString = objectToUrlParams(paramForExport.data);
+            var url_word = ROOT_PATH +"/case/exportWord";
+            var link_word = document.querySelector('#a_export_word');
+            if (!link_word){
+                // 创建一个隐藏的 <a> 元素
+                link_word = document.createElement("a");
+            }
+            link_word.id="a_export_word";
+            link_word.style.display = "none";
+            link_word.href = url_word;
+            //link.download = filename;
+            // 将 <a> 元素添加到页面中
+            document.body.appendChild(link_word);
+
+            var url_excel = ROOT_PATH +"/case/exportExcel";
+            var link_excel = document.querySelector('#a_export_excel');
+            if (!link_excel){
+                // 创建一个隐藏的 <a> 元素
+                link_excel = document.createElement("a");
+            }
+            link_excel.id="a_export_excel";
+            link_excel.style.display = "none";
+            link_excel.href = url_excel;
+            //link.download = filename;
+            // 将 <a> 元素添加到页面中
+            document.body.appendChild(link_excel);
+        },
+        controller: {
+            loadData: function (filter) {
+                console.log("loadData:" + JSON.stringify(filter))
+                var d = $.Deferred();
+                var param = {};
+                filter.registerDateStart=$('#datetimepicker1').val();
+                filter.registerDateEnd=$('#datetimepicker2').val();
+                param.data = filter;
+                param.pageIndex = filter.pageIndex;
+                param.pageSize = filter.pageSize;
+                param.sortField = filter.sortField;
+                param.sortOrder = filter.sortOrder;
+                console.log(JSON.stringify(param));
+                paramForExport = param;
+                $.ajax({
+                    url: ROOT_PATH +"/case/getCaseList",
+                    type: 'POST',
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(param)
+                }).done(function (response) {
+                    d.resolve(response);
+                });
+                return d.promise();
+            },
+            insertItem: function (item) {
+                return $.ajax({
+                    type: "POST",
+                    url: ROOT_PATH +"/case/insert",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(item),
+                    success: function (response) {
+                        console.log("Insert successfully");
+                        $("#jsGrid").jsGrid("loadData");
+                    },
+                    error: function () {
+                        alert("Insert failed");
+                    }
+                });
+            },
+            updateItem: function (item) {
+                return $.ajax({
+                    type: "PUT",
+                    url: ROOT_PATH +"/case/update",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(item),
+                    success: function (response) {
+                        console.log("Update successfully");
+                        $("#jsGrid").jsGrid("loadData");
+                    },
+                    error: function () {
+                        alert("Update failed");
+                    }
+                });
+            },
+            deleteItem: function (item) {
+                var currentPage = $("#jsGrid").jsGrid("option", "pageIndex");  // 获取当前页码
+                return $.ajax({
+                    type: "DELETE",
+                    url: ROOT_PATH +"/case/delete?id=" + item.id,
+                    success: function (response) {
+                        console.log("Delete successfully");
+                        $("#jsGrid").jsGrid("loadData", {pageIndex: currentPage});
+                    },
+                    error: function () {
+                        alert("Delete failed");
+                    }
+                });
+            }
+        },
+        fields: [
+            /*{
+                title: "序号",
+                itemTemplate: function(value, item) {
+                    return 1;
+                },
+                align: "center",
+                width: 50
+            },*/
+            {name: "seq", type: "text", title: "序号"},
+            {name: "caseNo", type: "text", title: "案件编号",width: 200},
+            {name: "caseName", type: "text", title: "案件名称",width: 250},
+            {name: "caseUnit", type: "text", title: "立案单位",width: 350},
+            {name: "registerDate", type: "text", title: "立案时间"},
+            {name: "jurisdiction", type: "text", title: "辖区",width: 100},
+            {name: "organizer", type: "text", title: "主办单位",width: 350},
+            {name: "solveDate", type: "text", title: "破案时间"},
+            {name: "type", type: "text", title: "案别"},
+            {name: "projectId", type: "text", title: "专案标识",width: 100},
+            {name: "organiser", type: "text", title: "主办人",width: 100},
+            {name: "coOrganiser", type: "text", title: "协办人",width: 250}
+            /*{type: "control",width: 100}*/
+        ]
+    })
+
+
+</script>
+
+</body>
+</html>
