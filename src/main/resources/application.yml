@@ -30,3 +30,6 @@ base:
   jzsolveurl: http://127.0.0.1:8080/showReport3.html?
   staturl: http://127.0.0.1:8080/showReport3.html?
   staturl2: http://127.0.0.1:8080/showReport3.html?
+
+mybatis:
+  mapper-locations: classpath:/mybatis/mapper/*.xml

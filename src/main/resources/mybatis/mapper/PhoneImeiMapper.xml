@@ -11,7 +11,7 @@
     </resultMap>
 
     <!-- 插入记录 -->
-    <insert id="insert" parameterType="PhoneImei">
+    <insert id="insert" parameterType="com.wa.cluemrg.entity.PhoneImei">
         INSERT INTO phone_imei (phone, imei, create_time)
         VALUES (#{phone}, #{imei}, #{createTime})
     </insert>
@@ -22,7 +22,7 @@
     </delete>
 
     <!-- 修改记录 -->
-    <update id="update" parameterType="PhoneImei">
+    <update id="update" parameterType="com.wa.cluemrg.entity.PhoneImei">
         UPDATE phone_imei
         SET phone = #{phone},
             imei = #{imei},
@@ -43,7 +43,7 @@
         </where>
     </select>
 
-    <insert id="batchInsert" parameterType="PhoneImei">
+    <insert id="batchInsert" parameterType="com.wa.cluemrg.entity.PhoneImei">
         INSERT IGNORE INTO phone_imei (phone, imei, create_time)
         VALUES
         <foreach collection="list" item="item" separator=",">

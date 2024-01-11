@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wa.cluemrg.dao.LinkTagMapper">
+<mapper namespace="com.wa.cluemrg.dao.LinkTagMapper" >
 
     <resultMap id="linkTagMap" type="com.wa.cluemrg.entity.LinkTag">
         <id column="id" property="id"/>
@@ -12,7 +12,7 @@
     </resultMap>
 
     <!-- 插入记录 -->
-    <insert id="insert" parameterType="LinkTag">
+    <insert id="insert" parameterType="com.wa.cluemrg.entity.LinkTag">
         INSERT INTO link_tag (source,target, tag, create_time)
         VALUES (#{source}, #{target},#{tag}, #{createTime})
     </insert>
@@ -23,7 +23,7 @@
     </delete>
 
     <!-- 修改记录 -->
-    <update id="update" parameterType="LinkTag">
+    <update id="update" parameterType="com.wa.cluemrg.entity.LinkTag">
         UPDATE link_tag
         SET source = #{source},
             target =#{target},

@@ -11,7 +11,7 @@
     </resultMap>
 
     <!-- 插入记录 -->
-    <insert id="insert" parameterType="NodeTag">
+    <insert id="insert" parameterType="com.wa.cluemrg.entity.NodeTag">
         INSERT INTO node_tag (node, tag, create_time)
         VALUES (#{node}, #{tag}, #{createTime})
     </insert>
@@ -22,7 +22,7 @@
     </delete>
 
     <!-- 修改记录 -->
-    <update id="update" parameterType="NodeTag">
+    <update id="update" parameterType="com.wa.cluemrg.entity.NodeTag">
         UPDATE node_tag
         SET node = #{node},
             tag = #{tag},
@@ -53,7 +53,7 @@
         GROUP BY node
     </select>
 
-    <insert id="batchInsert" parameterType="NodeTag">
+    <insert id="batchInsert" parameterType="com.wa.cluemrg.entity.NodeTag">
         INSERT IGNORE INTO node_tag (node, tag, create_time)
         VALUES
         <foreach collection="list" item="item" separator=",">

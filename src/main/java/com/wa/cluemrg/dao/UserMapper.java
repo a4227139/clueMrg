@@ -9,7 +9,7 @@ import java.util.List;
  * MessageUserDAO继承基类
  */
 @Repository
-public interface UserMapper extends MyBatisBaseDao<User, String> {
+public interface UserMapper {
 
     int insert(User user);
 
