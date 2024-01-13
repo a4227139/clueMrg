@@ -149,7 +149,7 @@ public class CaseController {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
             if (StringUtils.isEmpty(dateStart)){
-                dateStart="2023-01-01";
+                dateStart="2024-01-01";
             }
             if (StringUtils.isEmpty(dateEnd)) {
                 dateEnd = dateFormat.format(new Date());
@@ -176,8 +176,10 @@ public class CaseController {
     }
 
     private Workbook generateExcelWorkbook(String dateStart,String dateEnd) throws ParseException {
+        //dateStart="2024-01-01";
+        //dateEnd="2024-01-11";
         //导出线索表
-        String caseExcelFileName="2023年全市电诈案件情况统计表"+"（"+dateStart+"到"+dateEnd+"）.xlsx";
+        String caseExcelFileName="2024年全市电诈案件情况统计表"+"（"+dateStart+"到"+dateEnd+"）.xlsx";
         String fullCaseExcelFileName = ROOT_APPLICATION_PATH+"/case/"+formatYMD.format(new Date())+ "/" + caseExcelFileName;
         //创建文件夹
         File directory = new File(ROOT_APPLICATION_PATH+"/case/"+formatYMD.format(new Date())+ "/" );
@@ -374,7 +376,7 @@ public class CaseController {
                                         @RequestParam(value = "jurisdiction",required = false) String jurisdiction) throws ParseException {
         Case param = new Case();
         if (StringUtils.isEmpty(dateStart)){
-            dateStart="2023-01-01";
+            dateStart="2024-01-01";
         }
         param.setRegisterDateStart(dateFormat.parse(dateStart));
         if (StringUtils.isEmpty(dateEnd)) {
@@ -389,14 +391,14 @@ public class CaseController {
         List<Case> listSolve = caseService.selectAllSolve(paramSolve);
 
         //历史案件不准确
-        /*Case paramHistory = new Case();
+        Case paramHistory = new Case();
         String lastYearDateStart=(Integer.parseInt(dateStart.substring(0,4))-1)+dateStart.substring(4);
         String lastYearDateEnd=(Integer.parseInt(dateEnd.substring(0,4))-1)+dateEnd.substring(4);
         paramHistory.setRegisterDateStart(dateFormat.parse(lastYearDateStart));
         paramHistory.setRegisterDateEnd(dateFormat.parse(lastYearDateEnd));
-        List<Case> listHistory = caseService.selectAllHistory(paramHistory);*/
+        List<Case> listHistory = caseService.selectAllHistory(paramHistory);
 
-        List<CaseIndex> caseIndexList = dealCaseIndex(list,listSolve,null,dateStart,dateEnd);
+        List<CaseIndex> caseIndexList = dealCaseIndex(list,listSolve,listHistory,dateStart,dateEnd);
         return caseIndexList;
     }
 
@@ -834,7 +836,7 @@ public class CaseController {
             cityCaseIndex.setSolveCount(cityCaseIndex.getSolveCount() + 1);
         }
         //历史案件不准
-        /*for (Case caseObj:historyCaseList) {
+        for (Case caseObj:historyCaseList) {
             String jurisdiction = caseObj.getJurisdiction();
             CaseIndex caseIndex = caseIndexMap.get(jurisdictionMap.get(jurisdiction));
             //立案数
@@ -843,7 +845,7 @@ public class CaseController {
             //损失数
             caseIndex.setLossMoneyHistory(caseIndex.getLossMoneyHistory()+caseObj.getMoney());
             cityCaseIndex.setLossMoneyHistory(cityCaseIndex.getLossMoneyHistory()+caseObj.getMoney());
-        }*/
+        }
 
 
         List<CaseIndex> caseIndexList = new ArrayList<>();
@@ -869,14 +871,15 @@ public class CaseController {
             formattedResult2 = decimalFormat2.format(lossMoney/100000000);
             caseIndex.setLossMoneyFormat(formattedResult);
             caseIndex.setLossMoneyFormat2(formattedResult2);
-            /*float lossMoneyHistory = caseIndex.getLossMoneyHistory();
-            caseIndex.setLossMoneyHistoryFormat(decimalFormat3.format(lossMoneyHistory/10000));
-            caseIndex.setLossMoneyHistoryFormat2(decimalFormat2.format(lossMoneyHistory/100000000));*/
             //历史
-            caseIndex.setCountHistory(getCountHistory(jurisdiction,dateEnd));
-            float lossMoneyHistory = getLossMoneyHistory(jurisdiction,dateEnd);
+            float lossMoneyHistory = caseIndex.getLossMoneyHistory();
             caseIndex.setLossMoneyHistory(lossMoneyHistory);
-            caseIndex.setLossMoneyHistoryFormat(decimalFormat.format(lossMoneyHistory));
+            //caseIndex.setLossMoneyHistoryFormat(decimalFormat.format(lossMoneyHistory));
+            caseIndex.setLossMoneyHistoryFormat(decimalFormat3.format(lossMoneyHistory/10000));
+            caseIndex.setLossMoneyHistoryFormat2(decimalFormat2.format(lossMoneyHistory/100000000));
+            //caseIndex.setCountHistory(getCountHistory(jurisdiction,dateEnd));
+            //float lossMoneyHistory = getLossMoneyHistory(jurisdiction,dateEnd);
+
             formattedResult2 = decimalFormat2.format(lossMoneyHistory/10000);
             caseIndex.setLossMoneyHistoryFormat2(formattedResult2);
             //万人发案数
