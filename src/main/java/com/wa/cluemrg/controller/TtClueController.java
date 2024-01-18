@@ -13,6 +13,7 @@ import com.wa.cluemrg.response.ResponseResult;
 import com.wa.cluemrg.service.TtClueService;
 import com.wa.cluemrg.service.CallLogService;
 import com.wa.cluemrg.service.PhoneImeiService;
+import com.wa.cluemrg.util.JurisdictionUtil;
 import com.wa.cluemrg.util.UnderlineToCamelUtils;
 import com.wa.cluemrg.vo.JsGridVO;
 import lombok.extern.log4j.Log4j2;
@@ -250,46 +251,7 @@ public class TtClueController {
     SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
     private TtClueBo turnToTtClueBo(String phones){
         TtClueBo ttClueBo = new TtClueBo();
-
-        String jurisdiction = currentJurisdiction;
-        String subOffice=jurisdiction;
-        switch (jurisdiction) {
-            case "城中":
-                subOffice="柳州市公安局城中分局";
-                break;
-            case "鱼峰":
-                subOffice="柳州市公安局鱼峰分局";
-                break;
-            case "柳北":
-                subOffice="柳州市公安局柳北分局";
-                break;
-            case "柳南":
-                subOffice="柳州市公安局柳南分局";
-                break;
-            case "柳江":
-                subOffice="柳州市公安局柳江分局";
-                break;
-            case "柳东":
-                subOffice="柳州市公安局柳东分局";
-                break;
-            case "柳城":
-                subOffice="柳城县公安局";
-                break;
-            case "鹿寨":
-                subOffice="鹿寨县公安局";
-                break;
-            case "融安":
-                subOffice="融安县公安局";
-                break;
-            case "融水":
-                subOffice="融水苗族自治县公安局";
-                break;
-            case "三江":
-                subOffice="三江侗族自治县公安局";
-                break;
-            default:
-                break;
-        }
+        String subOffice= JurisdictionUtil.getJurisdictionFullName(currentJurisdiction);
         ttClueBo.setSubOffice(subOffice);
         ttClueBo.setPhone(currentPhones);
         ttClueBo.setDateFormatToday(format.format(new Date()));

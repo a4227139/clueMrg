@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wa.cluemrg.dao.GangMapper">
+
+    <resultMap id="gangMap" type="com.wa.cluemrg.entity.Gang">
+        <id column="ID" property="id"/>
+        <result column="NAME" property="name"/>
+        <result column="PHONE" property="phone"/>
+        <result column="IMEI" property="imei"/>
+        <result column="PERSON" property="person"/>
+        <result column="CLUE" property="clue"/>
+        <result column="CASE_NO" property="caseNo"/>
+        <result column="JURISDICTION" property="jurisdiction"/>
+        <result column="ISSUE_TIME" property="issueTime"/>
+        <result column="LAST_REVISE_TIME" property="lastReviseTime"/>
+    </resultMap>
+
+    <resultMap id="gangBoMap" type="com.wa.cluemrg.bo.GangBo">
+        <id column="ID" property="id"/>
+        <result column="NAME" property="name"/>
+        <result column="PHONE" property="phone"/>
+        <result column="IMEI" property="imei"/>
+        <result column="PERSON" property="person"/>
+        <result column="CLUE" property="clue"/>
+        <result column="CASE_NO" property="caseNo"/>
+        <result column="JURISDICTION" property="jurisdiction"/>
+        <result column="ISSUE_TIME" property="issueTime"/>
+        <result column="LAST_REVISE_TIME" property="lastReviseTime"/>
+    </resultMap>
+
+    <!-- 插入记录 -->
+    <insert id="insert" parameterType="com.wa.cluemrg.entity.Gang">
+        INSERT INTO gang (name, phone, imei,person,clue,case_no,jurisdiction,ISSUE_TIME,LAST_REVISE_TIME)
+        VALUES (#{name}, #{phone}, #{imei},#{person}, #{clue}, #{caseNo}, #{jurisdiction}, #{issueTime}, #{lastReviseTime})
+    </insert>
+
+    <!-- 删除记录 -->
+    <delete id="delete" parameterType="int">
+        DELETE FROM gang WHERE id = #{id}
+    </delete>
+
+    <!-- 修改记录 -->
+    <update id="update" parameterType="com.wa.cluemrg.entity.Gang">
+        UPDATE gang
+        SET name = #{name},
+            phone = #{phone},
+            imei = #{imei},
+            person = #{person},
+            clue = #{clue},
+            case_no = #{caseNo},
+            jurisdiction = #{jurisdiction},
+            ISSUE_TIME = #{issueTime},
+            LAST_REVISE_TIME = #{lastReviseTime}
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectByPhone" resultType="com.wa.cluemrg.entity.Gang">
+        select *
+        from gang
+        <where>
+            <if test="phone != null and phone != ''">
+                AND phone LIKE CONCAT('%', #{phone}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAll" resultMap="gangMap">
+        select * from gang
+        <include refid="whereCondition" />
+    </select>
+
+    <select id="exportAll" resultMap="gangBoMap">
+        select * from gang
+        <include refid="whereCondition" />
+    </select>
+
+    <sql id="whereCondition">
+        <where>
+            <if test="name != null and name != ''">
+                AND name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <if test="phone != null and phone != ''">
+                AND phone LIKE CONCAT('%', #{phone}, '%')
+            </if>
+            <if test="imei != null and imei != ''">
+                AND imei LIKE CONCAT('%', #{imei}, '%')
+            </if>
+            <if test="person != null and person != ''">
+                AND person LIKE CONCAT('%', #{person}, '%')
+            </if>
+            <if test="clue != null and clue != ''">
+                AND clue LIKE CONCAT('%', #{clue}, '%')
+            </if>
+            <if test="caseNo != null and caseNo != ''">
+                AND case_no LIKE CONCAT('%', #{caseNo}, '%')
+            </if>
+            <if test="jurisdiction != null and jurisdiction != ''">
+                AND jurisdiction LIKE CONCAT('%', #{jurisdiction}, '%')
+            </if>
+        </where>
+    </sql>
+
+    <select id="selectAllPhone" resultType="string">
+        SELECT DISTINCT phone from bt_clue union SELECT DISTINCT phone from tt_clue
+    </select>
+
+    <select id="get" parameterType="int" resultType="com.wa.cluemrg.entity.Gang">
+        select * from gang where id=#{id}
+    </select>
+
+    <insert id="batchInsert" parameterType="com.wa.cluemrg.entity.Gang">
+        INSERT IGNORE INTO gang (id,name, phone, imei,person,clue,case_no,jurisdiction,ISSUE_TIME,LAST_REVISE_TIME)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.id},#{item.name}, #{item.phone}, #{item.imei},#{item.person}, #{item.clue}, #{item.caseNo}, #{item.jurisdiction}, #{item.issueTime}, #{item.lastReviseTime})
+        </foreach>
+    </insert>
+
+    <delete id="deleteAll" >
+        delete from gang
+    </delete>
+
+</mapper>

@@ -9,6 +9,7 @@ import com.wa.cluemrg.entity.BtClue;
 import com.wa.cluemrg.entity.NodeTag;
 import com.wa.cluemrg.entity.PhoneImei;
 import com.wa.cluemrg.entity.PhoneImsi;
+import com.wa.cluemrg.service.ScheduledTaskService;
 import lombok.extern.log4j.Log4j2;
 
 import java.time.LocalDateTime;
@@ -48,7 +49,17 @@ public class BtClueListener extends CustomizeListener<BtClue> {
         message.set(result);
         log.info("dealBtClue: "+result);
         addTag();
+        addTask();
         return result;
+    }
+
+    private void addTask(){
+        Set<String> phoneSet = new HashSet<>();
+        for (BtClue btClue:list){
+            phoneSet.add(btClue.getPhone());
+        }
+        //添加到定时任务
+        ScheduledTaskService.waitToAdd(phoneSet);
     }
 
     private void addTag(){

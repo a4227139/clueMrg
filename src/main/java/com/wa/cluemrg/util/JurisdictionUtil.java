@@ -211,4 +211,33 @@ public class JurisdictionUtil {
         }
         return map.get(name);
     }
+
+    public static String getJurisdictionFullName(String name){
+        name = name.replaceAll("\\s+","");
+        if (name.contains("城中")){
+            return "柳州市公安局城中分局";
+        }else if (name.contains("鱼峰")){
+            return "柳州市公安局鱼峰分局";
+        }else if (name.contains("柳北")){
+            return "柳州市公安局柳北分局";
+        }else if (name.contains("柳南")){
+            return "柳州市公安局柳南分局";
+        }else if (name.contains("柳江")){
+            return "柳州市公安局柳江分局";
+        }else if (name.contains("柳东")){
+            return "柳州市公安局柳东分局";
+        }else if (name.contains("柳城")){
+            return "柳城县公安局";
+        }else if (name.contains("鹿寨")){
+            return "鹿寨县公安局";
+        }else if (name.contains("融安")){
+            return "融安县公安局";
+        }else if (name.contains("融水")){
+            return "融水苗族自治县公安局";
+        }else if (name.contains("三江")){
+            return "三江侗族自治县公安局";
+        }else{
+            return name;
+        }
+    }
 }

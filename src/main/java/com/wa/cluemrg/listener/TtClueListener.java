@@ -3,20 +3,16 @@ package com.wa.cluemrg.listener;
 import com.wa.cluemrg.dao.NodeTagMapper;
 import com.wa.cluemrg.dao.PhoneImeiMapper;
 import com.wa.cluemrg.dao.TtClueMapper;
+import com.wa.cluemrg.entity.*;
 import com.wa.cluemrg.entity.TtClue;
-import com.wa.cluemrg.entity.NodeTag;
-import com.wa.cluemrg.entity.PhoneImei;
-import com.wa.cluemrg.entity.TtClue;
+import com.wa.cluemrg.service.ScheduledTaskService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -54,7 +50,17 @@ public class TtClueListener extends CustomizeListener<TtClue> {
         message.set(result);
         log.info("dealTtClue: "+result);
         addTag();
+        addTask();
         return result;
+    }
+
+    private void addTask(){
+        Set<String> phoneSet = new HashSet<>();
+        for (TtClue ttClue:list){
+            phoneSet.add(ttClue.getPhone());
+        }
+        //添加到定时任务
+        ScheduledTaskService.waitToAdd(phoneSet);
     }
 
     public void dealImei(List<TtClue> ttClueList){

@@ -52,6 +52,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="/clue/btClue.html"><i class="fa fa-table"></i> 部推线索（柳州）</a></li>
                         <li><a href="/clue/ttClue.html"><i class="fa fa-table"></i> 厅推线索（柳州）</a></li>
+                        <li><a href="/clue/gang.html"><i class="fa fa-table"></i> GOIP团伙（柳州）</a></li>
                         <li><a href="/clue/qgBtClue.html"><i class="fa fa-bar-chart-o"></i> 部推线索（全国）</a></li>
                         <li><a href="/clue/qgDkClue.html"><i class="fa fa-bar-chart-o"></i> 断卡线索（全国）</a></li>
                     </ul>
@@ -200,8 +201,8 @@
         $('#search-btn').click(function() {
             var data= $("#data").val();
             var type = $("#type").val();
-            $.get(ROOT_PATH + '/callLog/getGraph?data='+data+"&type="+type+"&winWidth="+winWidth+"&winHeight="+winHeight, function (data) {
-                //$.get(ROOT_PATH + '/callLog/getGraph?data=19142776810&type=phone', function (data) {
+            $.get(ROOT_PATH + '/gang/getGraph?data='+data+"&type="+type+"&winWidth="+winWidth+"&winHeight="+winHeight, function (data) {
+                //$.get(ROOT_PATH + '/gang/getGraph?data=19142776810&type=phone', function (data) {
                 var min=10000,max=-10000;
                 data.nodes.forEach(function (node, index, array) {
                     // item数组中的当前项, index当前项的索引, array原始数组；

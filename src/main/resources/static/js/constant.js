@@ -36,3 +36,16 @@ function objectToUrlParams(obj) {
     }
     return params.join("&");
 }
+
+function splitStringToArray(inputString) {
+    if (!inputString) {
+        return []; // 返回空数组，如果输入字符串为空
+    }
+
+    // 定义可能的分隔符，以逗号、空格、分号和中文逗号为例
+    const possibleSeparators = [',', ' ', ';', '，'];
+
+    // 在正则表达式中使用可能的分隔符进行匹配
+    const regex = new RegExp(`[${possibleSeparators.map(separator => separator.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('')}]`, 'g');
+    return inputString.split(regex);
+}

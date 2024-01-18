@@ -7,6 +7,7 @@ import com.wa.cluemrg.dao.PhoneImsiMapper;
 import com.wa.cluemrg.entity.CallLog;
 import com.wa.cluemrg.entity.PhoneImei;
 import com.wa.cluemrg.entity.PhoneImsi;
+import com.wa.cluemrg.service.ScheduledTaskService;
 import com.wa.cluemrg.util.IMEICalculator;
 import lombok.extern.log4j.Log4j2;
 
@@ -49,7 +50,9 @@ public class CallLogListener extends CustomizeListener<CallLog> {
     public String dataDeal() {
         Set<String> phoneImeiSet = new HashSet<>();
         Set<String> phoneImsiSet = new HashSet<>();
+        Set<String> phoneSet = new HashSet<>();
         for (CallLog callLog:list){
+            phoneSet.add(callLog.getPhone());
             //基站处理
             if (!StringUtils.isEmpty(callLog.getLac())){
 
@@ -115,6 +118,8 @@ public class CallLogListener extends CustomizeListener<CallLog> {
         if(phoneImsiSet.size()>0){
             log.info("dealPhoneImsi: "+dealPhoneImsi(phoneImsiSet));
         }
+        //添加到定时任务
+        ScheduledTaskService.waitToAdd(phoneSet);
         return result;
         /*list.forEach(item->{
             System.out.println(JSON.toJSONString(item));
