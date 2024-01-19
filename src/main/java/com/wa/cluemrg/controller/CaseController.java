@@ -94,6 +94,7 @@ public class CaseController {
 
     String ROOT_APPLICATION_PATH;
     String CLASS_PATH;
+    String pathSeparator = File.pathSeparator;
     @PostConstruct
     public void init() throws IOException {
         //ROOT_APPLICATION_PATH=resourceLoader.getResource("").getFile().getAbsolutePath();
@@ -180,9 +181,9 @@ public class CaseController {
         //dateEnd="2024-01-11";
         //导出线索表
         String caseExcelFileName="2024年全市电诈案件情况统计表"+"（"+dateStart+"到"+dateEnd+"）.xlsx";
-        String fullCaseExcelFileName = ROOT_APPLICATION_PATH+"/case/"+formatYMD.format(new Date())+ "/" + caseExcelFileName;
+        String fullCaseExcelFileName = ROOT_APPLICATION_PATH+pathSeparator+"case"+pathSeparator+formatYMD.format(new Date())+ pathSeparator + caseExcelFileName;
         //创建文件夹
-        File directory = new File(ROOT_APPLICATION_PATH+"/case/"+formatYMD.format(new Date())+ "/" );
+        File directory = new File(ROOT_APPLICATION_PATH+pathSeparator+"case"+pathSeparator+formatYMD.format(new Date())+ pathSeparator );
         if (!directory.exists()) {
             directory.mkdirs(); // Creates the directory and any necessary parent directories
         }

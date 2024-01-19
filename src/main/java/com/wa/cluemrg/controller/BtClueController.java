@@ -73,6 +73,7 @@ public class BtClueController {
 
     String ROOT_APPLICATION_PATH;
     String CLASS_PATH;
+    String pathSeparator = File.pathSeparator;
     @PostConstruct
     public void init() throws IOException {
         //ROOT_APPLICATION_PATH=resourceLoader.getResource("").getFile().getAbsolutePath();
@@ -249,9 +250,9 @@ public class BtClueController {
         }
         //导出线索表
         String btFileName=clueId+".xlsx";
-        String btExcelFileName = ROOT_APPLICATION_PATH+"/btclue/" +clueId+ "/"+ btFileName;
+        String btExcelFileName = ROOT_APPLICATION_PATH+pathSeparator+"btclue"+pathSeparator +clueId+ pathSeparator+ btFileName;
         //创建文件夹
-        File directory = new File(ROOT_APPLICATION_PATH+"/btclue/" +clueId+ "/");
+        File directory = new File(ROOT_APPLICATION_PATH+pathSeparator+"btclue"+pathSeparator +clueId+ pathSeparator);
         if (!directory.exists()) {
             directory.mkdirs(); // Creates the directory and any necessary parent directories
         }
@@ -261,7 +262,7 @@ public class BtClueController {
         addToZip(zipOut, btExcelFileName, btFileName);
         //导出话单
         String callLogFileName=btClue.getPhone()+".xlsx";
-        String callLogExcelFileName = ROOT_APPLICATION_PATH+"/btclue/" +clueId+ "/"+ callLogFileName;
+        String callLogExcelFileName = ROOT_APPLICATION_PATH+pathSeparator+"btclue"+pathSeparator +clueId+ pathSeparator+ callLogFileName;
         CallLogBo callLog = new CallLogBo();
         callLog.setPhone(btClue.getPhone());
         PageHelper.startPage(1,10000);
@@ -281,7 +282,7 @@ public class BtClueController {
         BtClueBo btClueBo = turnToBtClueBo(btClue);
         XWPFTemplate template = XWPFTemplate.compile(this.getClass().getClassLoader().getResourceAsStream("templates/templateBT.docx")).render(btClueBo);
 
-        String wordFileName = ROOT_APPLICATION_PATH+"/btclue/"+clueId+"/"+ fileName;
+        String wordFileName = ROOT_APPLICATION_PATH+pathSeparator+"btclue"+pathSeparator+clueId+pathSeparator+ fileName;
         template.writeToFile(wordFileName);
 
         addToZip(zipOut, wordFileName, fileName);

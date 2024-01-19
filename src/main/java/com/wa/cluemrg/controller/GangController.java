@@ -65,6 +65,7 @@ public class GangController {
 
     String ROOT_APPLICATION_PATH;
     String CLASS_PATH;
+    String pathSeparator = File.pathSeparator;
     @PostConstruct
     public void init() throws IOException {
         //ROOT_APPLICATION_PATH=resourceLoader.getResource("").getFile().getAbsolutePath();
@@ -206,7 +207,7 @@ public class GangController {
         //导出线索表
         String fileName = "GOIP团伙.xlsx";
         //创建文件夹
-        String directory = ROOT_APPLICATION_PATH+"/gang/"+formatYMD.format(new Date())+ "/" +currentJurisdiction+ "/";
+        String directory = ROOT_APPLICATION_PATH+pathSeparator+"gang"+pathSeparator+formatYMD.format(new Date())+ pathSeparator +currentJurisdiction+ pathSeparator;
         File file = new File(directory);
         file.mkdirs();
         String excelFileName = directory+ fileName;
@@ -225,7 +226,7 @@ public class GangController {
         Configure config = Configure.builder().useSpringEL().build();
         XWPFTemplate template = XWPFTemplate.compile(this.getClass().getClassLoader().getResourceAsStream("templates/templateGang.docx"),config).render(gangBo);
         // 创建文件夹
-        String directory = ROOT_APPLICATION_PATH+"/gang/"+formatYMD.format(new Date())+ "/" +currentJurisdiction+ "/";
+        String directory = ROOT_APPLICATION_PATH+pathSeparator+"gang"+pathSeparator+formatYMD.format(new Date())+ pathSeparator +currentJurisdiction+ pathSeparator;
         File file = new File(directory);
         file.mkdirs();
         String wordFileName = directory+ fileName;

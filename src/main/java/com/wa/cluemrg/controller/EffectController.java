@@ -60,6 +60,7 @@ public class EffectController {
 
     String ROOT_APPLICATION_PATH;
     String CLASS_PATH;
+    String pathSeparator = File.pathSeparator;
     @PostConstruct
     public void init() throws IOException {
         //ROOT_APPLICATION_PATH=resourceLoader.getResource("").getFile().getAbsolutePath();
@@ -172,9 +173,9 @@ public class EffectController {
     private Workbook generateExcelWorkbook(LocalDate date) throws ParseException {
         //导出线索表
         String caseExcelFileName="72时打击情况统计表（"+date+"）.xlsx";
-        String fullCaseExcelFileName = ROOT_APPLICATION_PATH+"/case/"+formatYMD.format(new Date())+ "/" + caseExcelFileName;
+        String fullCaseExcelFileName = ROOT_APPLICATION_PATH+pathSeparator+"effect"+pathSeparator+formatYMD.format(new Date())+ pathSeparator + caseExcelFileName;
         //创建文件夹
-        File directory = new File(ROOT_APPLICATION_PATH+"/case/"+formatYMD.format(new Date())+ "/" );
+        File directory = new File(ROOT_APPLICATION_PATH+pathSeparator+"effect"+pathSeparator+formatYMD.format(new Date())+ pathSeparator );
         if (!directory.exists()) {
             directory.mkdirs(); // Creates the directory and any necessary parent directories
         }
