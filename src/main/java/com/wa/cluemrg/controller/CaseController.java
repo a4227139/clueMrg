@@ -260,7 +260,7 @@ public class CaseController {
             String fileName = URLEncoder.encode(dateEnd+"柳州市公安局每日电诈警情研判报告", "UTF-8").replaceAll("\\+", "%20");
             response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".docx");
             if (StringUtils.isEmpty(dateStart)){
-                dateStart="2023-01-01";
+                dateStart="2024-01-01";
             }
             if (StringUtils.isEmpty(dateEnd)) {
                 dateEnd = dateFormat.format(new Date());
@@ -1048,7 +1048,7 @@ public class CaseController {
         if (!StringUtils.isEmpty(dateStart)){
             param.setRegisterDateStart(dateFormat.parse(dateStart));
         }else {
-            param.setRegisterDateStart(dateFormat.parse("2023-01-01"));
+            param.setRegisterDateStart(dateFormat.parse("2024-01-01"));
         }
         if (!StringUtils.isEmpty(dateEnd)){
             param.setRegisterDateEnd(dateFormat.parse(dateEnd));
@@ -1079,7 +1079,7 @@ public class CaseController {
         if (!StringUtils.isEmpty(dateStart)){
             paramSolve.setSolveDateStart(dateFormat.parse(dateStart));
         }else {
-            paramSolve.setSolveDateStart(dateFormat.parse("2023-01-01"));
+            paramSolve.setSolveDateStart(dateFormat.parse("2024-01-01"));
         }
         if (!StringUtils.isEmpty(dateEnd)){
             paramSolve.setSolveDateEnd(dateFormat.parse(dateEnd));
@@ -1187,7 +1187,7 @@ public class CaseController {
         }
         //默认全年
         if (StringUtils.isEmpty(dateStart)){
-            dateStart="2023-01-01";
+            dateStart="2024-01-01";
         }
         Date start = dateFormat.parse(dateStart);
         Date end = dateFormat.parse(dateEnd);
@@ -1208,7 +1208,7 @@ public class CaseController {
         }
         //默认全年
         if (StringUtils.isEmpty(dateStart)){
-            dateStart="2023-01-01";
+            dateStart="2024-01-01";
         }
         Date start = dateFormat.parse(dateStart);
         Date end = dateFormat.parse(dateEnd);
@@ -1245,7 +1245,7 @@ public class CaseController {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
             if (StringUtils.isEmpty(dateStart)){
-                dateStart="2023-01-01";
+                dateStart="2024-01-01";
             }
             if (StringUtils.isEmpty(dateEnd)){
                 dateEnd=dateFormat.format(new Date());
