@@ -27,7 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //.antMatchers(level1List).hasRole("level1") // 需要权限的路径
                 //.anyRequest().hasAnyRole("LEVEL1")
                 //.anyRequest().anonymous()
-                .antMatchers("/user/login","/css/**", "/js/**").permitAll() // 允许无需权限访问的静态资源
+                .antMatchers("/user/login","/css/**", "/js/**", "/old/**").permitAll() // 允许无需权限访问的静态资源
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

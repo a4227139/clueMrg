@@ -1314,23 +1314,24 @@ public class CaseController {
         for (Element row : rows) {
             Elements cells = row.select("td");
 
-            if (cells.size() == 12) { // 检查是否有合适的<td>标签
-                if (StringUtils.isEmpty(cells.get(1).text())||"案件编号".equals(cells.get(1).text())){//首行（标题行）和caseNo是空直接过
+            if (cells.size() == 14) { // 检查是否有合适的<td>标签
+                if (StringUtils.isEmpty(cells.get(3).text())||"案件编号".equals(cells.get(3).text())){//首行（标题行）和caseNo是空直接过
                     continue;
                 }
                 Case caseObj = new Case();
                 caseObj.setSeq(cells.get(0).text());
-                caseObj.setCaseNo(cells.get(1).text());
-                caseObj.setCaseName(cells.get(2).text());
-                caseObj.setCaseUnit(cells.get(3).text());
+                caseObj.setJurisdiction(cells.get(2).text());
+                caseObj.setCaseNo(cells.get(3).text());
+                caseObj.setCaseName(cells.get(4).text());
+                caseObj.setCaseUnit(cells.get(5).text());
 
                 try {
-                    String registerDateString = cells.get(4).text();
+                    String registerDateString = cells.get(6).text();
                     if (!StringUtils.isEmpty(registerDateString)){
                         Date registerDate = dateFormat.parse(registerDateString);
                         caseObj.setRegisterDate(registerDate);
                     }
-                    String solveDateString = cells.get(6).text();
+                    String solveDateString = cells.get(8).text();
                     if (!StringUtils.isEmpty(solveDateString)){
                         Date solveDate = dateFormat.parse(solveDateString);
                         caseObj.setSolveDate(solveDate);
@@ -1339,14 +1340,14 @@ public class CaseController {
                     e.printStackTrace();
                 }
 
-                caseObj.setOrganizer(cells.get(5).text());
-                caseObj.setType(cells.get(7).text());
-                caseObj.setProjectId(cells.get(8).text());
-                caseObj.setOrganiser(cells.get(9).text());
-                caseObj.setCoOrganiser(cells.get(10).text());
+                caseObj.setOrganizer(cells.get(7).text());
+                caseObj.setType(cells.get(9).text());
+                caseObj.setProjectId(cells.get(10).text());
+                caseObj.setOrganiser(cells.get(11).text());
+                caseObj.setCoOrganiser(cells.get(12).text());
                 try {
-                    if (!StringUtils.isEmpty(cells.get(11).text())){
-                        caseObj.setMoney(Float.parseFloat(cells.get(11).text()));
+                    if (!StringUtils.isEmpty(cells.get(13).text())){
+                        caseObj.setMoney(Float.parseFloat(cells.get(13).text()));
                     }else {
                         caseObj.setMoney(0);
                     }
