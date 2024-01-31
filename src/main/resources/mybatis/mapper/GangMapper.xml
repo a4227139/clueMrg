@@ -63,6 +63,7 @@
                 AND phone LIKE CONCAT('%', #{phone}, '%')
             </if>
         </where>
+        limit 1
     </select>
 
     <select id="selectAll" resultMap="gangMap">

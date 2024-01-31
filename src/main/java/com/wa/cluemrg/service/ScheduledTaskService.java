@@ -7,6 +7,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -94,6 +95,9 @@ public class ScheduledTaskService {
             added.addAll(gang.getPhoneList());
             Set<Gang> originalGangSet = new HashSet<>();
             for (String phone:phoneSet){
+                if (StringUtils.isEmpty(phone)){
+                    continue;
+                }
                 Gang originalGang = gangService.selectByPhone(phone);
                 if (originalGang!=null){
                     originalGangSet.add(originalGang);

@@ -63,7 +63,7 @@ public class TtClueController {
 
     String ROOT_APPLICATION_PATH;
     String CLASS_PATH;
-    String pathSeparator = File.pathSeparator;
+    String separator = File.separator;
     @PostConstruct
     public void init() throws IOException {
         //ROOT_APPLICATION_PATH=resourceLoader.getResource("").getFile().getAbsolutePath();
@@ -196,9 +196,9 @@ public class TtClueController {
         }
         //导出线索表
         String ttFileName=currentJurisdiction+"-"+formatYMDHS.format(new Date())+".xlsx";
-        String ttExcelFileName = ROOT_APPLICATION_PATH+pathSeparator+"ttclue"+pathSeparator+formatYMD.format(new Date())+ pathSeparator +currentJurisdiction+ pathSeparator+ ttFileName;
+        String ttExcelFileName = ROOT_APPLICATION_PATH+separator+"ttclue"+separator+formatYMD.format(new Date())+ separator +currentJurisdiction+ separator+ ttFileName;
         //创建文件夹
-        File directory = new File(ROOT_APPLICATION_PATH+pathSeparator+"ttclue"+pathSeparator+formatYMD.format(new Date())+ pathSeparator +currentJurisdiction+pathSeparator);
+        File directory = new File(ROOT_APPLICATION_PATH+separator+"ttclue"+separator+formatYMD.format(new Date())+ separator +currentJurisdiction+separator);
         if (!directory.exists()) {
             directory.mkdirs(); // Creates the directory and any necessary parent directories
         }
@@ -210,7 +210,7 @@ public class TtClueController {
         //导出话单
         for(TtClue ttClue:ttClueList) {
             String callLogFileName = ttClue.getPhone() + ".xlsx";
-            String callLogExcelFileName = ROOT_APPLICATION_PATH+pathSeparator+"ttclue"+pathSeparator+formatYMD.format(new Date())+ pathSeparator +currentJurisdiction+ pathSeparator + callLogFileName;
+            String callLogExcelFileName = ROOT_APPLICATION_PATH+separator+"ttclue"+separator+formatYMD.format(new Date())+ separator +currentJurisdiction+ separator + callLogFileName;
             CallLogBo callLog = new CallLogBo();
             callLog.setPhone(ttClue.getPhone());
             PageHelper.startPage(1, 10000);
@@ -229,7 +229,7 @@ public class TtClueController {
         TtClueBo ttClueBo = turnToTtClueBo(phones);
         XWPFTemplate template = XWPFTemplate.compile(this.getClass().getClassLoader().getResourceAsStream("templates/templateGoip.docx")).render(ttClueBo);
 
-        String wordFileName = ROOT_APPLICATION_PATH+pathSeparator+"ttclue"+pathSeparator+formatYMD.format(new Date())+ pathSeparator +currentJurisdiction+ pathSeparator+ fileName;
+        String wordFileName = ROOT_APPLICATION_PATH+separator+"ttclue"+separator+formatYMD.format(new Date())+ separator +currentJurisdiction+ separator+ fileName;
         template.writeToFile(wordFileName);
 
         addToZip(zipOut, wordFileName, fileName);

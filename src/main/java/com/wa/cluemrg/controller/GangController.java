@@ -8,19 +8,16 @@ import com.deepoove.poi.XWPFTemplate;
 import com.deepoove.poi.config.Configure;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.wa.cluemrg.bo.*;
-import com.wa.cluemrg.entity.*;
+import com.wa.cluemrg.bo.GangBo;
+import com.wa.cluemrg.bo.PageBO;
+import com.wa.cluemrg.entity.Gang;
+import com.wa.cluemrg.entity.Graph;
 import com.wa.cluemrg.response.ResponseResult;
-import com.wa.cluemrg.service.*;
+import com.wa.cluemrg.service.GangService;
 import com.wa.cluemrg.util.JurisdictionUtil;
 import com.wa.cluemrg.util.UnderlineToCamelUtils;
 import com.wa.cluemrg.vo.JsGridVO;
 import lombok.extern.log4j.Log4j2;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.system.ApplicationHome;
@@ -32,19 +29,16 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.URLEncoder;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 
 @Log4j2
 @RestController
@@ -65,7 +59,7 @@ public class GangController {
 
     String ROOT_APPLICATION_PATH;
     String CLASS_PATH;
-    String pathSeparator = File.pathSeparator;
+    String separator = File.separator;
     @PostConstruct
     public void init() throws IOException {
         //ROOT_APPLICATION_PATH=resourceLoader.getResource("").getFile().getAbsolutePath();
@@ -96,13 +90,12 @@ public class GangController {
                 resultSet.addAll(list);
             }
         }else {
-            list = gangService.exportAll(pageBo.getData());
-            resultSet.addAll(list);
+            resultList = gangService.exportAll(pageBo.getData());
         }
 
         resultList.addAll(resultSet);
         PageInfo page = new PageInfo(resultList);
-        JsGridVO<BSLocation> vo = new JsGridVO(page);
+        JsGridVO<GangBo> vo = new JsGridVO(page);
 
         ResponseResult response = new ResponseResult();
         response.setObject(vo);
@@ -207,7 +200,7 @@ public class GangController {
         //导出线索表
         String fileName = "GOIP团伙.xlsx";
         //创建文件夹
-        String directory = ROOT_APPLICATION_PATH+pathSeparator+"gang"+pathSeparator+formatYMD.format(new Date())+ pathSeparator +currentJurisdiction+ pathSeparator;
+        String directory = ROOT_APPLICATION_PATH+separator+"gang"+separator+formatYMD.format(new Date())+ separator +currentJurisdiction+ separator;
         File file = new File(directory);
         file.mkdirs();
         String excelFileName = directory+ fileName;
@@ -226,7 +219,7 @@ public class GangController {
         Configure config = Configure.builder().useSpringEL().build();
         XWPFTemplate template = XWPFTemplate.compile(this.getClass().getClassLoader().getResourceAsStream("templates/templateGang.docx"),config).render(gangBo);
         // 创建文件夹
-        String directory = ROOT_APPLICATION_PATH+pathSeparator+"gang"+pathSeparator+formatYMD.format(new Date())+ pathSeparator +currentJurisdiction+ pathSeparator;
+        String directory = ROOT_APPLICATION_PATH+separator+"gang"+separator+formatYMD.format(new Date())+ separator +currentJurisdiction+ separator;
         File file = new File(directory);
         file.mkdirs();
         String wordFileName = directory+ fileName;

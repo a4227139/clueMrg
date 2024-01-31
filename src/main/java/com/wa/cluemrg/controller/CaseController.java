@@ -94,7 +94,7 @@ public class CaseController {
 
     String ROOT_APPLICATION_PATH;
     String CLASS_PATH;
-    String pathSeparator = File.pathSeparator;
+    String separator = File.separator;
     @PostConstruct
     public void init() throws IOException {
         //ROOT_APPLICATION_PATH=resourceLoader.getResource("").getFile().getAbsolutePath();
@@ -159,13 +159,14 @@ public class CaseController {
             response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             response.setCharacterEncoding("utf-8");
             // 这里URLEncoder.encode可以防止中文乱码
-            String fileName = URLEncoder.encode("2023年全市电诈案件情况统计表", "UTF-8").replaceAll("\\+", "%20");
+            String fileName = URLEncoder.encode("2024年全市电诈案件情况统计表", "UTF-8").replaceAll("\\+", "%20");
             response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xlsx");
             workbook.write(response.getOutputStream());
             response.flushBuffer();
             workbook.close();
         } catch (Exception e) {
             // 重置response
+            log.error("导出全市电诈案件情况统计表失败",e);
             response.reset();
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
@@ -181,9 +182,9 @@ public class CaseController {
         //dateEnd="2024-01-11";
         //导出线索表
         String caseExcelFileName="2024年全市电诈案件情况统计表"+"（"+dateStart+"到"+dateEnd+"）.xlsx";
-        String fullCaseExcelFileName = ROOT_APPLICATION_PATH+pathSeparator+"case"+pathSeparator+formatYMD.format(new Date())+ pathSeparator + caseExcelFileName;
+        String fullCaseExcelFileName = ROOT_APPLICATION_PATH+separator+"case"+separator+formatYMD.format(new Date())+ separator + caseExcelFileName;
         //创建文件夹
-        File directory = new File(ROOT_APPLICATION_PATH+pathSeparator+"case"+pathSeparator+formatYMD.format(new Date())+ pathSeparator );
+        File directory = new File(ROOT_APPLICATION_PATH+separator+"case"+separator+formatYMD.format(new Date())+ separator );
         if (!directory.exists()) {
             directory.mkdirs(); // Creates the directory and any necessary parent directories
         }

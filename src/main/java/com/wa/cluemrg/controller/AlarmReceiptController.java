@@ -55,8 +55,7 @@ public class AlarmReceiptController {
     AlarmReceiptService alarmReceiptService;
     SimpleDateFormat formatYMD = new SimpleDateFormat("yyyyMMdd");
     private final ResourceLoader resourceLoader;
-    String pathSeparator = File.pathSeparator;
-
+    String separator = File.separator;
     @Autowired
     public AlarmReceiptController(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
@@ -196,9 +195,9 @@ public class AlarmReceiptController {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         //导出线索表
         String caseExcelFileName="72时电诈类刑事警情统计表（"+date+"）.xlsx";
-        String fullCaseExcelFileName = ROOT_APPLICATION_PATH+pathSeparator+"alarm"+pathSeparator+formatYMD.format(new Date())+ pathSeparator + caseExcelFileName;
+        String fullCaseExcelFileName = ROOT_APPLICATION_PATH+separator+"alarm"+separator+formatYMD.format(new Date())+ separator + caseExcelFileName;
         //创建文件夹
-        File directory = new File(ROOT_APPLICATION_PATH+pathSeparator+"alarm"+pathSeparator+formatYMD.format(new Date())+ pathSeparator);
+        File directory = new File(ROOT_APPLICATION_PATH+separator+"alarm"+separator+formatYMD.format(new Date())+ separator);
         if (!directory.exists()) {
             directory.mkdirs(); // Creates the directory and any necessary parent directories
         }
