@@ -1,5 +1,7 @@
 package com.wa.cluemrg.util;
 
+import org.springframework.util.StringUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -194,9 +196,33 @@ public class JurisdictionUtil {
             put("天马责任区刑侦大队","鱼峰分局");
             put("箭盘山派出所","鱼峰分局");
             put("荣军派出所","鱼峰分局");
+            put("鹿寨县局公安局黄冕派出所","鹿寨县局");
+            put("三江县局公安局同乐派出所","三江县局");
+            put("融安县局公安局大坡派出所","融安县局");
+            put("广西柳州市公安局出入境管理支队三大队","柳州市局");
+            put("广西柳州市公安局雒容派出所","柳东分局");
+            put("鹿寨县局公安局经济犯罪侦查大队","鹿寨县局");
+            put("融水县局公安局三防派出所","融水县局");
+            put("广西柳州市公安局刑事侦查支队五里卡责任区刑侦大队","柳南分局");
+            put("融水县局公安局滚贝派出所","融水县局");
+            put("柳城县局公安局凤山派出所","柳城县局");
+            put("融水县局公安局和睦派出所","融水县局");
+            put("融水县局公安局大浪派出所","融水县局");
+            put("广西柳州市公安局里雍派出所","鱼峰分局");
+            put("融水县局公安局杆洞派出所","融水县局");
+            put("三江县局公安局良口派出所","三江县局");
+            put("融安县局公安局浮石派出所","融安县局");
+            put("融安县局公安局板榄派出所","融安县局");
+            put("广西柳州市公安局桂中派出所","城中分局");
+            put("广西柳州市公安局白沙派出所","鱼峰分局");
+            put("三江县局公安局斗江派出所","三江县局");
+            put("柳城县局公安局经济犯罪侦查大队","柳城县局");
         }
     };
     public static String getJurisdiction(String name){
+        if (StringUtils.isEmpty(name)){
+            return name;
+        }
         name = name.replaceAll("\\s+","");
         if (name.contains("柳城")){
             return "柳城县局";
@@ -208,6 +234,18 @@ public class JurisdictionUtil {
             return "融水县局";
         }else if (name.contains("三江")){
             return "三江县局";
+        }else if (name.contains("城中")){
+            return "城中分局";
+        }else if (name.contains("鱼峰")){
+            return "鱼峰分局";
+        }else if (name.contains("柳南")){
+            return "柳南分局";
+        }else if (name.contains("柳北")){
+            return "柳北分局";
+        }else if (name.contains("柳江")){
+            return "柳江分局";
+        }else if (name.contains("柳东")){
+            return "柳东分局";
         }
         return map.get(name);
     }

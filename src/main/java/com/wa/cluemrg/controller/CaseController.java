@@ -1291,7 +1291,10 @@ public class CaseController {
             log.info("同步并解析"+list.size()+"个案件");
             for (Case case1:list){
                 //log.info("----------------------------case----------------------------");
-                case1.setJurisdiction(JurisdictionUtil.getJurisdiction(case1.getCaseUnit()));
+                case1.setJurisdiction(JurisdictionUtil.getJurisdiction(case1.getJurisdiction()));
+                if (StringUtils.isEmpty(case1.getJurisdiction())){
+                    case1.setJurisdiction(JurisdictionUtil.getJurisdiction(case1.getCaseUnit()));
+                }
                 if (StringUtils.isEmpty(case1.getJurisdiction())){
                     case1.setJurisdiction(JurisdictionUtil.getJurisdiction(case1.getOrganizer()));
                 }
