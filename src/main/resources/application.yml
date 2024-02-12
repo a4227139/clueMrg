@@ -28,8 +28,9 @@ base:
   port: 8080
   jzurl: http://127.0.0.1:8080/old/showReport2.html?
   jzsolveurl: http://127.0.0.1:8080/old/showReport3.html?
-  staturl: http://127.0.0.1:8080/old/showReport3.html?
-  staturl2: http://127.0.0.1:8080/old/showReport3.html?
+  staturl: http://127.0.0.1:8080/old/showReport4.html?
+  staturl2: http://127.0.0.1:8080/old/showReport5.html?
+
 
 mybatis:
   mapper-locations: classpath:/mybatis/mapper/*.xml

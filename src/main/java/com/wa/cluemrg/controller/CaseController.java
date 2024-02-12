@@ -83,6 +83,8 @@ public class CaseController {
     String jzurl;
     @Value("${base.jzsolveurl}")
     String jzsolveurl;
+    @Value("${base.staturl}")
+    String staturl;
 
     private final ResourceLoader resourceLoader;
     SimpleDateFormat formatYMD = new SimpleDateFormat("yyyyMMdd");
@@ -190,6 +192,7 @@ public class CaseController {
         }
         //获取指标
         List<CaseIndex> caseIndexList = getCaseIndex(dateStart,dateEnd,"");
+        List<CaseStatIndex> caseStatIndexList = getCaseStatIndex(dateStart,dateEnd,"");
         InputStream inputStream =  this.getClass().getClassLoader().getResourceAsStream("templates/caseTemplate.xlsx");
         try {
             // 创建临时文件
@@ -226,6 +229,30 @@ public class CaseController {
                 row.getCell(9).setCellValue(caseIndex.getSolveCount());
                 //row.getCell(10).setCellValue(caseIndex.getSolveRateFormat());
             }
+
+
+            Sheet sheetStat = workbook.getSheetAt(2);
+            row = sheetStat.getRow(0); // Assuming you want to modify the second row
+            cell = row.getCell(0); // Assuming you want to modify the second cell in that row
+            // Modify the cell value
+            cell.setCellValue(caseExcelFileName.replace(".xlsx",""));
+            //填充指标
+            for (int i=0;i<caseStatIndexList.size();i++){
+                CaseStatIndex caseStatIndex = caseStatIndexList.get(i);
+                row = sheetStat.getRow(i+3);
+                row.getCell(1).setCellValue(caseStatIndex.getCount());
+                row.getCell(3).setCellValue(caseStatIndex.getCountHistory());
+                row.getCell(5).setCellValue(caseStatIndex.getSolveRateRatio()+"%");
+                row.getCell(6).setCellValue(caseStatIndex.getLossMoneyFormat());
+                row.getCell(7).setCellValue(caseStatIndex.getLossMoneyRatio()+"%");
+                List<CaseStatSubIndex> caseStatSubIndexList = caseStatIndex.getCaseStatSubList();
+                for (CaseStatSubIndex caseStatSubIndex:caseStatSubIndexList){
+                    int level = caseStatSubIndex.getLevel();
+                    row.getCell(8+(level-1)*5).setCellValue(caseStatSubIndex.getCount());
+                    row.getCell(9+(level-1)*5).setCellValue(caseStatSubIndex.getSolveCount());
+                    row.getCell(11+(level-1)*5).setCellValue(caseStatSubIndex.getCountHistory());
+                }
+            }
             // 设置计算模式为自动计算
             workbook.setForceFormulaRecalculation(true);
             // Save the modified workbook to a new file
@@ -241,6 +268,10 @@ public class CaseController {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private List<CaseStatIndex> getCaseStatIndex(String dateStart, String dateEnd, String s) {
+        return caseStatIndexList;
     }
 
     private static void copyInputStreamToFile(InputStream inputStream, File file) throws IOException {
@@ -372,6 +403,11 @@ public class CaseController {
         return importantAlarmReceiptIndexList;
     }
 
+    List<Case> list;
+    List<Case> listSolve;
+    List<Case> listHistory;
+    List<CaseStatIndex> caseStatIndexList ;
+
     @GetMapping("/getCaseIndex")
     public List<CaseIndex> getCaseIndex(@RequestParam("dateStart")  String dateStart,
                                         @RequestParam("dateEnd") String dateEnd,
@@ -385,24 +421,87 @@ public class CaseController {
             dateEnd = dateFormat.format(new Date());
         }
         param.setRegisterDateEnd(dateFormat.parse(dateEnd));
-        List<Case> list = caseService.selectAll(param);
+        list = caseService.selectAll(param);
 
         Case paramSolve = new Case();
         paramSolve.setSolveDateStart(dateFormat.parse(dateStart));
         paramSolve.setSolveDateEnd(dateFormat.parse(dateEnd));
-        List<Case> listSolve = caseService.selectAllSolve(paramSolve);
+        listSolve = caseService.selectAllSolve(paramSolve);
 
-        //历史案件不准确
         Case paramHistory = new Case();
         String lastYearDateStart=(Integer.parseInt(dateStart.substring(0,4))-1)+dateStart.substring(4);
         String lastYearDateEnd=(Integer.parseInt(dateEnd.substring(0,4))-1)+dateEnd.substring(4);
         paramHistory.setRegisterDateStart(dateFormat.parse(lastYearDateStart));
         paramHistory.setRegisterDateEnd(dateFormat.parse(lastYearDateEnd));
-        List<Case> listHistory = caseService.selectAllHistory(paramHistory);
+        listHistory = caseService.selectAllHistory(paramHistory);
 
         List<CaseIndex> caseIndexList = dealCaseIndex(list,listSolve,listHistory,dateStart,dateEnd);
+        caseStatIndexList = dealCaseStatIndex(list,listSolve,listHistory,dateStart,dateEnd);
+        /*for (CaseStatIndex caseStatIndex:caseStatIndexList){
+            log.info(caseStatIndex);
+        }*/
         return caseIndexList;
     }
+
+    //存放各分县局10万，50万，100万案件多少
+    Map<String,Integer> caseLevelCountMap = new HashMap<>();
+    Map<String,Integer> caseLevelSolveCountMap = new HashMap<>();
+    Map<String,Integer> caseLevelHistoryCountMap = new HashMap<>();
+    //存放各分县局历史损失数
+    Map<String,Float> caseHistoryLossMoneyMap = new HashMap<>();
+
+    private List<CaseStatIndex> dealCaseStatIndex(List<Case> list, List<Case> listSolve, List<Case> listHistory, String dateStart, String dateEnd) {
+        caseLevelCountMap.clear();
+        caseLevelSolveCountMap.clear();
+        caseLevelHistoryCountMap.clear();
+        caseHistoryLossMoneyMap.clear();
+        put(list,caseLevelCountMap);
+        put(listSolve,caseLevelSolveCountMap);
+        put(listHistory,caseLevelHistoryCountMap);
+        initCaseHistoryLossMoneyMap(listHistory);
+        return syncCaseStatList(dateStart,dateEnd,staturl);
+    }
+
+    private void put(List<Case> list,Map<String, Integer> map) {
+        for (Case caseObj:list){
+            String jurisdiction = caseObj.getJurisdiction();
+            int level = getCaseLevel(caseObj.getMoney());
+            String key = jurisdiction+"-"+level;
+            Integer value = map.get(key);
+            if (value==null){
+                value=1;
+            }else {
+                value=value+1;
+            }
+            map.put(key,value);
+        }
+    }
+
+    private void initCaseHistoryLossMoneyMap(List<Case> listHistory) {
+        for (Case caseObj:listHistory){
+            String jurisdiction = caseObj.getJurisdiction();
+            Float value = caseHistoryLossMoneyMap.get(jurisdiction);
+            if (value==null){
+                value=0f;
+            }else {
+                value=value+caseObj.getMoney();
+            }
+            caseHistoryLossMoneyMap.put(jurisdiction,value);
+        }
+    }
+
+    private int getCaseLevel(float money) {
+        if (money<100000){
+            return 1;
+        }else if(money<500000){
+            return 2;
+        }else if(money<1000000){
+            return 3;
+        }else {
+            return 4;
+        }
+    }
+
 
     @GetMapping("/getVictimIndex")
     public VictimIndex getVictimIndex(@RequestParam("dateStart")  String dateStart,
@@ -833,6 +932,9 @@ public class CaseController {
         for (Case caseObj:solveCaseList) {
             String jurisdiction = caseObj.getJurisdiction();
             CaseIndex caseIndex = caseIndexMap.get(jurisdictionMap.get(jurisdiction));
+            if (caseIndex==null){
+                log.info(jurisdiction);
+            }
             //破案数
             caseIndex.setSolveCount(caseIndex.getSolveCount() + 1);
             cityCaseIndex.setSolveCount(cityCaseIndex.getSolveCount() + 1);
@@ -1309,6 +1411,152 @@ public class CaseController {
         return null;
     }
 
+    public List<CaseStatIndex> syncCaseStatList(String dateStart,String dateEnd,String urlString) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            if (StringUtils.isEmpty(dateStart)){
+                dateStart="2024-01-01";
+            }
+            if (StringUtils.isEmpty(dateEnd)){
+                dateEnd=dateFormat.format(new Date());
+            }
+            // 创建一个URL对象，表示要访问的URL
+            //URL url = new URL("http://"+host+":"+port+"/case-simple.html?KSLASJ="+dateStart+"&JSLASJ="+dateEnd+"&LADW=4502");
+            URL url = new URL(staturl+"&KSLASJ="+dateStart+"&JSLASJ="+dateEnd+"&LADW=4502");
+            log.info(urlString+"&KSLASJ="+dateStart+"&JSLASJ="+dateEnd+"&LADW=4502");
+            // 打开连接
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            // 设置请求方法为GET
+            connection.setRequestMethod("GET");
+
+            // 获取响应代码
+            int responseCode = connection.getResponseCode();
+            log.info("Response Code: " + responseCode);
+
+            // 读取响应内容
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(),Charset.forName("GBK")));
+            String line;
+            StringBuilder responseBuilder = new StringBuilder();
+
+            while ((line = reader.readLine()) != null) {
+                responseBuilder.append(line);
+            }
+            // 将GBK编码的内容解码为内部字符串（UTF-16）
+            String gbkResponse = responseBuilder.toString();
+
+            // 将解码后的内容编码为UTF-8编码的字节数组
+            byte[] utf8Bytes = gbkResponse.getBytes(StandardCharsets.UTF_8);
+
+            // 创建UTF-8编码的字符串
+            String utf8Response = new String(utf8Bytes, StandardCharsets.UTF_8);
+
+            reader.close();
+
+            // 打印响应内容
+            log.info("Response Content: ");
+            log.info(utf8Response);
+            List<CaseStatIndex> list = parseHtmlToCaseStatIndex(utf8Response);
+            log.info("同步并解析"+list.size()+"个统计");
+            //最后一个是合计，不参与循环
+            CaseStatIndex totalCaseStatIndex = list.remove(list.size()-1);
+            for (CaseStatIndex caseStatIndex:list){
+                String jurisdiction = caseStatIndex.getJurisdiction();
+                caseStatIndex.setLossMoneyRatio(decimalFormat.format((caseStatIndex.getLossMoney()-caseHistoryLossMoneyMap.get(jurisdiction))/caseHistoryLossMoneyMap.get(jurisdiction)));
+                List<CaseStatSubIndex> caseStatSubIndexList = caseStatIndex.getCaseStatSubList();
+                for (int level=1;level<=4;level++){
+                    CaseStatSubIndex caseStatSubIndex = caseStatSubIndexList.get(level-1);
+                    String key = jurisdiction+"-"+level;
+                    caseStatSubIndex.setSolveCount(caseLevelSolveCountMap.get(key)==null?0:caseLevelSolveCountMap.get(key));
+                    caseStatSubIndex.setCountHistory(caseLevelHistoryCountMap.get(key)==null?0:caseLevelHistoryCountMap.get(key));
+                    CaseStatSubIndex totalCaseStatSubIndex = totalCaseStatIndex.getCaseStatSubList().get(level-1);
+                    totalCaseStatSubIndex.setSolveCount(totalCaseStatSubIndex.getSolveCount()+caseStatSubIndex.getSolveCount());
+                    totalCaseStatSubIndex.setCountHistory(totalCaseStatSubIndex.getCountHistory()+caseStatSubIndex.getCountHistory());
+                }
+            }
+
+            float total=0;
+            for (Float f:caseHistoryLossMoneyMap.values()){
+                total+=f;
+            }
+            totalCaseStatIndex.setLossMoneyRatio(decimalFormat.format((totalCaseStatIndex.getLossMoney()-total)/total));
+            list.add(totalCaseStatIndex);
+            // 关闭连接
+            connection.disconnect();
+            return list;
+        } catch (Exception e) {
+            log.error("获取case列表错误",e);
+        }
+        return null;
+    }
+    DecimalFormat decimalFormat = new DecimalFormat("#.##");
+    private List<CaseStatIndex> parseHtmlToCaseStatIndex(String html) {
+        try {
+
+            // 使用jsoup解析HTML文件
+            Document doc = Jsoup.parse(html);
+
+            // 获取ID为"report1"的表格
+            Element reportTable = doc.getElementById("report1");
+
+            List<CaseStatIndex> caseStatIndexList = new ArrayList<>();
+
+            if (reportTable != null) {
+                // 获取表格中所有的行
+                Elements rows = reportTable.select("tr");
+
+                // 遍历每一行
+                for (Element row : rows) {
+
+                    // 获取行中所有的td元素
+                    Elements tdElements = row.select("td");
+                    //只取统计数据的值
+                    if (tdElements.get(0).text().contains("局")||tdElements.get(0).text().contains("市")||tdElements.get(0).text().contains("合计")){
+                        if (tdElements.get(0).text().contains("市本级")||tdElements.get(0).text().contains("森林")){
+                            continue;
+                        }
+                        // 输出td元素的显示值
+                        for (Element td : tdElements) {
+                            String tdValue = td.text();
+                            System.out.print(tdValue + "\t"); // 使用制表符分隔每个td元素
+                        }
+                        CaseStatIndex caseStatIndex = new CaseStatIndex();
+                        caseStatIndex.setJurisdiction(JurisdictionUtil.getJurisdiction(tdElements.get(0).text()));
+                        caseStatIndex.setCount(convertStringToInt(tdElements.get(1).text()));
+                        caseStatIndex.setCountHistory(convertStringToInt(tdElements.get(2).text()));
+                        caseStatIndex.setSolveCount(convertStringToInt(tdElements.get(24).text()));
+                        caseStatIndex.setSolveRateRatio(convertStringToFloat(tdElements.get(26).text()));
+                        caseStatIndex.setLossMoney(convertStringToFloat(tdElements.get(29).text()));
+                        caseStatIndex.setLossMoneyFormat(decimalFormat.format(caseStatIndex.getLossMoney()/10000));
+
+                        for (int i=1;i<=4;i++){
+                            CaseStatSubIndex caseStatSubIndex = new CaseStatSubIndex();
+                            caseStatSubIndex.setLevel(i);
+                            if (i==1){
+                                caseStatSubIndex.setCount(convertStringToInt(tdElements.get(30).text())+convertStringToInt(tdElements.get(31).text()));
+                            }else if (i==4){
+                                caseStatSubIndex.setCount(convertStringToInt(tdElements.get(34).text())+convertStringToInt(tdElements.get(35).text()));
+                            }else {
+                                caseStatSubIndex.setCount(convertStringToInt(tdElements.get(i+30).text()));
+                            }
+                            caseStatIndex.getCaseStatSubList().add(caseStatSubIndex);
+                        }
+                        caseStatIndexList.add(caseStatIndex);
+                    }
+                }
+            } else {
+                System.out.println("Table with ID 'report1' not found.");
+            }
+            for (CaseStatIndex caseStatIndex:caseStatIndexList){
+               log.info(caseStatIndex);
+            }
+            return caseStatIndexList;
+        } catch (Exception e) {
+            log.error("解析案件统计出错",e);
+            return null;
+        }
+    }
+
     public List<Case> parseHtmlToCases(String html) {
         List<Case> cases = new ArrayList<>();
 
@@ -1364,6 +1612,55 @@ public class CaseController {
 
         return cases;
     }
+
+    private int convertStringToInt(String num) {
+        // 检查输入字符串是否为空
+        if (num == null || num.replaceAll("\\s+%","").isEmpty()) {
+            System.out.println("输入为空");
+            return 0;
+        }
+        num=num.replaceAll("[\\s+%]","");
+        // 检查字符串是否符合数字格式
+        if (isDecimalNumeric(num)) {
+            // 将字符串转换为整数
+            try {
+                return Integer.parseInt(num);
+            } catch (NumberFormatException e) {
+                System.out.println("字符串转换为整数时出错：" + e.getMessage());
+                return 0;
+            }
+        } else {
+            System.out.println("输入不是有效的数字格式");
+            return 0;
+        }
+    }
+
+    private float convertStringToFloat(String num) {
+        // 检查输入字符串是否为空
+        if (num == null || num.replaceAll("\\s+%","").isEmpty()) {
+            System.out.println("输入为空");
+            return 0;
+        }
+        num=num.replaceAll("[\\s+%]","");
+        // 检查字符串是否符合数字格式
+        if (isDecimalNumeric(num)) {
+            // 将字符串转换为整数
+            try {
+                return Float.parseFloat(num);
+            } catch (NumberFormatException e) {
+                System.out.println("字符串转换为整数时出错：" + e.getMessage());
+                return 0;
+            }
+        } else {
+            System.out.println("输入不是有效的数字格式");
+            return 0;
+        }
+    }
+
+    private boolean isDecimalNumeric(String str) {
+        // 使用正则表达式检查字符串是否符合带小数点的数字格式
+        return str.matches("-?\\d+(\\.\\d+)?");
+    }
 }
 
 class StringFieldComparator implements Comparator<SimpleIndex> {
@@ -1373,3 +1670,5 @@ class StringFieldComparator implements Comparator<SimpleIndex> {
         return obj1.getDate().compareTo(obj2.getDate());
     }
 }
+
+

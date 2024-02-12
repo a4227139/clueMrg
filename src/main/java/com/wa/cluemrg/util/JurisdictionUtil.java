@@ -247,7 +247,7 @@ public class JurisdictionUtil {
         }else if (name.contains("柳东")){
             return "柳东分局";
         }
-        return map.get(name);
+        return map.get(name)==null?name:map.get(name);
     }
 
     public static String getJurisdictionFullName(String name){
