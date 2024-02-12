@@ -390,7 +390,7 @@
                 }
             });
 
-            $.get(ROOT_PATH + "/case/getCaseLineIndex?dateStart="+dateStart+"&dateEnd="+dateEnd, function (data) {
+            $.get(ROOT_PATH + "/graph/getCaseLineIndex?dateStart="+dateStart+"&dateEnd="+dateEnd, function (data) {
                 var caseIndexList=data.caseIndexList;
                 var caseSolveIndexList=data.caseSolveIndexList;
                 var alarmReceiptIndexList=data.alarmReceiptIndexList;
@@ -495,7 +495,7 @@
                 }
             });
 
-            $.get(ROOT_PATH + "/case/getAlarmReceiptTypeIndex?dateStart="+dateStart+"&dateEnd="+dateEnd, function (data) {
+            $.get(ROOT_PATH + "/graph/getAlarmReceiptTypeIndex?dateStart="+dateStart+"&dateEnd="+dateEnd, function (data) {
                 option4 = {
                     title: {
                         text: '发案类型',
@@ -536,7 +536,7 @@
                 }
             });
 
-            $.get(ROOT_PATH + "/case/getAlarmReceiptCommunityIndex?dateStart="+dateStart+"&dateEnd="+dateEnd, function (data) {
+            $.get(ROOT_PATH + "/graph/getAlarmReceiptCommunityIndex?dateStart="+dateStart+"&dateEnd="+dateEnd, function (data) {
                 option5 = {
                     title: {
                         text: '发案社区（前十）',

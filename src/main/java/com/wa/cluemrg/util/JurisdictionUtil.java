@@ -219,6 +219,41 @@ public class JurisdictionUtil {
             put("柳城县局公安局经济犯罪侦查大队","柳城县局");
         }
     };
+
+    public static Map<String,Integer> jurisdictionSeqMap = new HashMap<String,Integer>() {
+        {
+            put("市本级",0 );
+            put("城中分局",1 );
+            put("鱼峰分局",2 );
+            put("柳南分局",3 );
+            put("柳北分局",4 );
+            put("柳江分局",5 );
+            put("柳东分局",6 );
+            put("柳城县局",7 );
+            put("鹿寨县局",8 );
+            put("融安县局",9 );
+            put("融水县局",10);
+            put("三江县局",11);
+        }
+    };
+
+    public static Map<String,Integer> jurisdictionPopulationMap = new HashMap<String,Integer>() {
+        {
+            put("市本级",4157934);
+            put("城中分局",243628);
+            put("鱼峰分局",414952);
+            put("柳南分局",617925);
+            put("柳北分局",484765);
+            put("柳江分局",503772);
+            put("柳东分局",254009);
+            put("柳城县局",314242);
+            put("鹿寨县局",337298);
+            put("融安县局",253360);
+            put("融水县局",412445);
+            put("三江县局",321538);
+        }
+    };
+
     public static String getJurisdiction(String name){
         if (StringUtils.isEmpty(name)){
             return name;
