@@ -132,12 +132,14 @@ public class GraphController {
         Collections.sort(list, new StringFieldComparator());
         return list;
     }
-}
 
-class StringFieldComparator implements Comparator<SimpleIndex> {
-    @Override
-    public int compare(SimpleIndex obj1, SimpleIndex obj2) {
-        // 按照 name 字段的字母顺序进行比较
-        return obj1.getDate().compareTo(obj2.getDate());
+    class StringFieldComparator implements Comparator<SimpleIndex> {
+        @Override
+        public int compare(SimpleIndex obj1, SimpleIndex obj2) {
+            // 按照 name 字段的字母顺序进行比较
+            return obj1.getDate().compareTo(obj2.getDate());
+        }
     }
 }
+
+

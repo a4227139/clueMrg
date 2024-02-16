@@ -54,7 +54,7 @@ public class CallLogListener extends CustomizeListener<CallLog> {
         for (CallLog callLog:list){
             phoneSet.add(callLog.getPhone());
             //基站处理
-            if (!StringUtils.isEmpty(callLog.getLac())){
+            /*if (!StringUtils.isEmpty(callLog.getLac())){
 
                 if (StringUtils.isEmpty(callLog.getCi())&&!pattern.matcher(callLog.getLac()).find()&&
                 (callLog.getLac().matches("^\\d+$")&&Integer.parseInt(callLog.getLac())<65535)){
@@ -77,7 +77,7 @@ public class CallLogListener extends CustomizeListener<CallLog> {
                         // do noting
                     }
                 }
-            }else if (!StringUtils.isEmpty(callLog.getCi())&&callLog.getCi().contains("|")){
+            }else */if (!StringUtils.isEmpty(callLog.getCi())&&callLog.getCi().contains("|")){
                 String temp = callLog.getCi().replace("|"," ");
                 String lac = temp.split("\\s")[0];
                 String ci = temp.split("\\s")[1];

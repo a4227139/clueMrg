@@ -16,11 +16,14 @@ import com.wa.cluemrg.vo.JsGridVO;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.system.ApplicationHome;
+import org.springframework.core.io.Resource;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -47,6 +50,20 @@ public class CallLogController {
     LinkTagService linkTagService;
     @Autowired
     TtClueService ttClueService;
+    @Autowired
+    BSLocationService bsLocationService;
+
+    Map<String,String> bsLocationMap = new HashMap<>(50000);
+    @PostConstruct
+    public void init() throws IOException {
+        BSLocation param = new BSLocation();
+        List<BSLocation> list = bsLocationService.selectAll(param);
+        for (BSLocation bsLocation:list){
+            String lac = StringUtils.isEmpty(bsLocation.getLac())?"":bsLocation.getLac();
+            String ci = StringUtils.isEmpty(bsLocation.getCi())?"":bsLocation.getCi();
+            bsLocationMap.put(lac+"-"+ci,bsLocation.getLocation());
+        }
+    }
 
     /**
      * 分页获取线索列表
@@ -77,7 +94,7 @@ public class CallLogController {
         //String sortOrder = pageBo.getSortOrder();
         //PageHelper.orderBy(sortField+" "+sortOrder);
 
-        List<CallLogBo> list = callLogService.selectAll(pageBo.getData());
+        List<CallLogBo> list = fillCallLog(callLogService.selectAll(pageBo.getData()));
 
         PageInfo page = new PageInfo(list);
         int total = callLogService.selectCount(pageBo.getData());
@@ -128,7 +145,7 @@ public class CallLogController {
             // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
             String fileName = URLEncoder.encode(callLogBo.getPhone()+"话单", "UTF-8").replaceAll("\\+", "%20");
             response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xlsx");
-            List<CallLogBo> list = callLogService.exportAll(callLogBo);
+            List<CallLogBo> list = fillCallLog(callLogService.exportAll(callLogBo));
             /*for (CallLogBo callLog:list){
                 callLog.setId(null);
             }*/
@@ -147,6 +164,15 @@ public class CallLogController {
             map.put("message", "下载文件失败" + e.getMessage());
             response.getWriter().println(JSON.toJSONString(map));
         }
+    }
+
+    private List<CallLogBo> fillCallLog(List<CallLogBo> list){
+        for (CallLogBo callLogBo:list){
+            String lac = StringUtils.isEmpty(callLogBo.getLac())?"":callLogBo.getLac();
+            String ci = StringUtils.isEmpty(callLogBo.getCi())?"":callLogBo.getCi();
+            callLogBo.setLocation(bsLocationMap.get(lac+"-"+ci));
+        }
+        return list;
     }
 
     @Data

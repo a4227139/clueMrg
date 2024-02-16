@@ -84,15 +84,22 @@
         <include refid="whereCondition" />
     </select>
 
-    <select id="selectAll"  resultMap="callLogResultMap" parameterType="com.wa.cluemrg.bo.CallLogBo">
+    <!--<select id="selectAll"  resultMap="callLogResultMap" parameterType="com.wa.cluemrg.bo.CallLogBo">
         SELECT c.*,b.location,b.longitude,b.latitude FROM call_log c left join bs_location b on c.ci=b.ci AND c.lac=b.lac
+        <include refid="whereCondition" />
+        order by ${sortField} ${sortOrder}
+        LIMIT #{pageSize} OFFSET #{offset};
+    </select>-->
+
+    <select id="selectAll"  resultMap="callLogResultMap" parameterType="com.wa.cluemrg.bo.CallLogBo">
+        SELECT c.* FROM call_log c
         <include refid="whereCondition" />
         order by ${sortField} ${sortOrder}
         LIMIT #{pageSize} OFFSET #{offset};
     </select>
 
     <select id="exportAll"  resultMap="callLogResultMap" parameterType="com.wa.cluemrg.bo.CallLogBo">
-        SELECT c.*,b.location,b.longitude,b.latitude FROM call_log c left join bs_location b on c.ci=b.ci
+        SELECT c.* FROM call_log c
             where (communication_type like '%主叫%' or communication_type like '%被叫%'
                     or communication_type like '%主短%' or communication_type like '%被短%'
                        or communication_type like '%CDMA%')
