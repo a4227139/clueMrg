@@ -14,7 +14,7 @@ public class CallLog {
     private Integer id;
     @ExcelProperty(value={"用户号码","主叫号码","己方号码","业务号码"})
     private String phone;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     @DateTimeFormat("yyyy-MM-dd HH:mm:ss")
     @ExcelProperty(value = {"起始时间","开始时间","通话起始时间","截获时间*","通话开始时间"})
     private Date startTime;

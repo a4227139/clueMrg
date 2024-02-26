@@ -29,7 +29,7 @@ public class GangBo {
     String caseNo;
     @ExcelProperty(value={"分县局"})
     String jurisdiction;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     @ExcelProperty(value={"下发时间"})
     LocalDateTime issueTime;
     @ExcelIgnore

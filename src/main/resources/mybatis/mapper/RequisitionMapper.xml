@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wa.cluemrg.dao.RequisitionMapper">
+
+    <!-- ResultMap -->
+    <resultMap id="RequisitionResultMap" type="com.wa.cluemrg.entity.Requisition">
+        <id property="id" column="ID"/>
+        <result property="cityCode" column="CITY_CODE"/>
+        <result property="bankName" column="BANK_NAME"/>
+        <result property="lockState" column="LOCK_STATE"/>
+        <result property="cardNum" column="CARD_NUM"/>
+        <result property="transactionAmount" column="TRANSACTION_AMOUNT"/>
+        <result property="cityCodeLy" column="CITY_CODE_LY"/>
+        <result property="secrit" column="SECRIT"/>
+        <result property="lastContactTime" column="LAST_CONTACT_TIME"/>
+        <result property="ecreateTime" column="ECREATE_TIME"/>
+        <result property="state" column="STATE"/>
+        <result property="jiechuState" column="JIECHU_STATE"/>
+        <result property="doQzh" column="DO_QZH"/>
+        <result property="bankCode" column="BANK_CODE"/>
+        <result property="firstZfTime" column="FIRST_ZF_TIME"/>
+        <result property="applicantIp" column="APPLICANT_IP"/>
+        <result property="nextZfTime" column="NEXT_ZF_TIME"/>
+        <result property="zfTime" column="ZF_TIME"/>
+        <result property="applicant" column="APPLICANT"/>
+        <result property="insertTime" column="INSERT_TIME"/>
+        <result property="jobId" column="JOB_ID"/>
+        <result property="lastZfTime" column="LAST_ZF_TIME"/>
+        <result property="spr" column="SPR"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="phone" column="PHONE"/>
+        <result property="wantToQzhZf" column="WANT_TO_QZH_ZF"/>
+        <result property="name" column="NAME"/>
+        <result property="approvalCityCode" column="APPROVAL_CITY_CODE"/>
+        <result property="idnum" column="IDNUM"/>
+    </resultMap>
+
+    <!-- Select All with Fuzzy Search -->
+    <select id="selectAll" resultMap="RequisitionResultMap" parameterType="com.wa.cluemrg.entity.Requisition">
+        SELECT *
+        FROM REQUISITION
+        <where>
+            <if test="id != null">
+                AND ID = #{id}
+            </if>
+            <if test="cityCode != null and cityCode != ''">
+                AND CITY_CODE LIKE CONCAT('%', #{cityCode}, '%')
+            </if>
+            <if test="bankName != null and bankName != ''">
+                AND BANK_NAME LIKE CONCAT('%', #{bankName}, '%')
+            </if>
+            <if test="lockState != null">
+                AND LOCK_STATE = #{lockState}
+            </if>
+            <if test="cardNum != null and cardNum != ''">
+                AND CARD_NUM LIKE CONCAT('%', #{cardNum}, '%')
+            </if>
+            <if test="transactionAmount != null">
+                AND TRANSACTION_AMOUNT = #{transactionAmount}
+            </if>
+            <if test="cityCodeLy != null and cityCodeLy != ''">
+                AND CITY_CODE_LY LIKE CONCAT('%', #{cityCodeLy}, '%')
+            </if>
+            <if test="secrit != null and secrit != ''">
+                AND SECRIT LIKE CONCAT('%', #{secrit}, '%')
+            </if>
+            <if test="lastContactTime != null">
+                AND LAST_CONTACT_TIME = #{lastContactTime}
+            </if>
+            <if test="ecreateTime != null">
+                AND ECREATE_TIME = #{ecreateTime}
+            </if>
+            <if test="state != null">
+                AND STATE = #{state}
+            </if>
+            <if test="jiechuState != null and jiechuState != ''">
+                AND JIECHU_STATE LIKE CONCAT('%', #{jiechuState}, '%')
+            </if>
+            <if test="doQzh != null">
+                AND DO_QZH = #{doQzh}
+            </if>
+            <if test="bankCode != null and bankCode != ''">
+                AND BANK_CODE LIKE CONCAT('%', #{bankCode}, '%')
+            </if>
+            <if test="firstZfTime != null">
+                AND FIRST_ZF_TIME = #{firstZfTime}
+            </if>
+            <if test="applicantIp != null and applicantIp != ''">
+                AND APPLICANT_IP LIKE CONCAT('%', #{applicantIp}, '%')
+            </if>
+            <if test="nextZfTime != null">
+                AND NEXT_ZF_TIME = #{nextZfTime}
+            </if>
+            <if test="zfTime != null">
+                AND ZF_TIME = #{zfTime}
+            </if>
+            <if test="applicant != null and applicant != ''">
+                AND APPLICANT LIKE CONCAT('%', #{applicant}, '%')
+            </if>
+            <if test="insertTime != null">
+                AND INSERT_TIME = #{insertTime}
+            </if>
+            <if test="jobId != null and jobId != ''">
+                AND JOB_ID LIKE CONCAT('%', #{jobId}, '%')
+            </if>
+            <if test="lastZfTime != null">
+                AND LAST_ZF_TIME = #{lastZfTime}
+            </if>
+            <if test="spr != null and spr != ''">
+                AND SPR LIKE CONCAT('%', #{spr}, '%')
+            </if>
+            <if test="createTime != null">
+                AND CREATE_TIME = #{createTime}
+            </if>
+            <if test="phone != null and phone != ''">
+                AND PHONE LIKE CONCAT('%', #{phone}, '%')
+            </if>
+            <if test="wantToQzhZf != null">
+                AND WANT_TO_QZH_ZF = #{wantToQzhZf}
+            </if>
+            <if test="name != null and name != ''">
+                AND NAME LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <if test="approvalCityCode != null and approvalCityCode != ''">
+                AND APPROVAL_CITY_CODE LIKE CONCAT('%', #{approvalCityCode}, '%')
+            </if>
+            <if test="idnum != null and idnum != ''">
+                AND IDNUM LIKE CONCAT('%', #{idnum}, '%')
+            </if>
+        </where>
+    </select>
+
+    <!-- Insert statement -->
+    <insert id="insert" parameterType="com.wa.cluemrg.entity.Requisition">
+        INSERT INTO REQUISITION (
+            id, city_code, bank_name, lock_state, card_num, transaction_amount, city_code_ly,
+            secrit, last_contact_time, ecreate_time, state, jiechu_state, do_qzh, bank_code,
+            first_zf_time, applicant_ip, next_zf_time, zf_time, applicant, insert_time,
+            job_id, last_zf_time, spr, create_time, phone, want_to_qzh_zf, name, approval_city_code, idnum
+        )
+        VALUES (
+                   #{id}, #{cityCode}, #{bankName}, #{lockState}, #{cardNum}, #{transactionAmount}, #{cityCodeLy},
+                   #{secrit}, #{lastContactTime}, #{ecreateTime}, #{state}, #{jiechuState}, #{doQzh}, #{bankCode},
+                   #{firstZfTime}, #{applicantIp}, #{nextZfTime}, #{zfTime}, #{applicant}, #{insertTime},
+                   #{jobId}, #{lastZfTime}, #{spr}, #{createTime}, #{phone}, #{wantToQzhZf}, #{name}, #{approvalCityCode}, #{idnum}
+               )
+    </insert>
+
+    <!-- Update statement -->
+    <update id="update" parameterType="com.wa.cluemrg.entity.Requisition">
+        UPDATE REQUISITION
+        SET
+            city_code = #{cityCode},
+            bank_name = #{bankName},
+            lock_state = #{lockState},
+            card_num = #{cardNum},
+            transaction_amount = #{transactionAmount},
+            city_code_ly = #{cityCodeLy},
+            secrit = #{secrit},
+            last_contact_time = #{lastContactTime},
+            ecreate_time = #{ecreateTime},
+            state = #{state},
+            jiechu_state = #{jiechuState},
+            do_qzh = #{doQzh},
+            bank_code = #{bankCode},
+            first_zf_time = #{firstZfTime},
+            applicant_ip = #{applicantIp},
+            next_zf_time = #{nextZfTime},
+            zf_time = #{zfTime},
+            applicant = #{applicant},
+            insert_time = #{insertTime},
+            job_id = #{jobId},
+            last_zf_time = #{lastZfTime},
+            spr = #{spr},
+            create_time = #{createTime},
+            phone = #{phone},
+            want_to_qzh_zf = #{wantToQzhZf},
+            name = #{name},
+            approval_city_code = #{approvalCityCode},
+            idnum = #{idnum}
+        WHERE id = #{id}
+    </update>
+
+    <!-- Delete statement -->
+    <delete id="delete" parameterType="int">
+        DELETE FROM REQUISITION WHERE id = #{id}
+    </delete>
+
+    <!-- Select statement by ID -->
+    <select id="selectById" resultType="com.wa.cluemrg.entity.Requisition">
+        SELECT * FROM REQUISITION WHERE id = #{id}
+    </select>
+
+    <!-- Batch Insert or Update -->
+    <insert id="batchInsertOrUpdate" parameterType="java.util.List">
+        INSERT INTO REQUISITION (
+        ID, CITY_CODE, BANK_NAME, LOCK_STATE, CARD_NUM, TRANSACTION_AMOUNT, CITY_CODE_LY,
+        SECRIT, LAST_CONTACT_TIME, ECREATE_TIME, STATE, JIECHU_STATE, DO_QZH, BANK_CODE,
+        FIRST_ZF_TIME, APPLICANT_IP, NEXT_ZF_TIME, ZF_TIME, APPLICANT, INSERT_TIME,
+        JOB_ID, LAST_ZF_TIME, SPR, CREATE_TIME, PHONE, WANT_TO_QZH_ZF, NAME, APPROVAL_CITY_CODE, IDNUM
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.id}, #{item.cityCode}, #{item.bankName}, #{item.lockState}, #{item.cardNum}, #{item.transactionAmount}, #{item.cityCodeLy},
+            #{item.secrit}, #{item.lastContactTime}, #{item.ecreateTime}, #{item.state}, #{item.jiechuState}, #{item.doQzh}, #{item.bankCode},
+            #{item.firstZfTime}, #{item.applicantIp}, #{item.nextZfTime}, #{item.zfTime}, #{item.applicant}, #{item.insertTime},
+            #{item.jobId}, #{item.lastZfTime}, #{item.spr}, #{item.createTime}, #{item.phone}, #{item.wantToQzhZf}, #{item.name}, #{item.approvalCityCode}, #{item.idnum}
+            )
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        CITY_CODE = VALUES(CITY_CODE),
+        BANK_NAME = VALUES(BANK_NAME),
+        LOCK_STATE = VALUES(LOCK_STATE),
+        CARD_NUM = VALUES(CARD_NUM),
+        TRANSACTION_AMOUNT = VALUES(TRANSACTION_AMOUNT),
+        CITY_CODE_LY = VALUES(CITY_CODE_LY),
+        SECRIT = VALUES(SECRIT),
+        LAST_CONTACT_TIME = VALUES(LAST_CONTACT_TIME),
+        ECREATE_TIME = VALUES(ECREATE_TIME),
+        STATE = VALUES(STATE),
+        JIECHU_STATE = VALUES(JIECHU_STATE),
+        DO_QZH = VALUES(DO_QZH),
+        BANK_CODE = VALUES(BANK_CODE),
+        FIRST_ZF_TIME = VALUES(FIRST_ZF_TIME),
+        APPLICANT_IP = VALUES(APPLICANT_IP),
+        NEXT_ZF_TIME = VALUES(NEXT_ZF_TIME),
+        ZF_TIME = VALUES(ZF_TIME),
+        APPLICANT = VALUES(APPLICANT),
+        INSERT_TIME = VALUES(INSERT_TIME),
+        JOB_ID = VALUES(JOB_ID),
+        LAST_ZF_TIME = VALUES(LAST_ZF_TIME),
+        SPR = VALUES(SPR),
+        CREATE_TIME = VALUES(CREATE_TIME),
+        PHONE = VALUES(PHONE),
+        WANT_TO_QZH_ZF = VALUES(WANT_TO_QZH_ZF),
+        NAME = VALUES(NAME),
+        APPROVAL_CITY_CODE = VALUES(APPROVAL_CITY_CODE),
+        IDNUM = VALUES(IDNUM)
+    </insert>
+
+</mapper>

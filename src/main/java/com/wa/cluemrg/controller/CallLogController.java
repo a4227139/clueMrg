@@ -166,7 +166,7 @@ public class CallLogController {
         }
     }
 
-    private List<CallLogBo> fillCallLog(List<CallLogBo> list){
+    public List<CallLogBo> fillCallLog(List<CallLogBo> list){
         for (CallLogBo callLogBo:list){
             String lac = StringUtils.isEmpty(callLogBo.getLac())?"":callLogBo.getLac();
             String ci = StringUtils.isEmpty(callLogBo.getCi())?"":callLogBo.getCi();

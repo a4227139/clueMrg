@@ -46,7 +46,7 @@ public class Victim {
     private String suggestion;
     @ExcelProperty(value={"备注"})
     private String remark;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     private LocalDateTime time;
     @ExcelProperty(value={"分县局"})
     private String department;

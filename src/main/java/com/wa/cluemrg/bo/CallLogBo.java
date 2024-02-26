@@ -17,11 +17,11 @@ public class CallLogBo {
     @ExcelProperty(value={"用户号码","主叫号码","己方号码","业务号码"})
     private String phone;
     @ExcelProperty(value = {"起始时间","开始时间","通话起始时间","截获时间*","通话开始时间"})
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     private LocalDateTime startTime;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     private LocalDateTime startTimeStart;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     private LocalDateTime startTimeEnd;
     @ExcelProperty(value = {"通信地点","通话地点","本机通话地","己方通话地*","漫游城市"})
     private String communicationLocation;

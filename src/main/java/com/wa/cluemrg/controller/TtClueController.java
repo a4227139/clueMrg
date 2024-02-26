@@ -53,6 +53,9 @@ public class TtClueController {
     PhoneImeiService phoneImeiService;
     @Autowired
     CallLogService callLogService;
+    @Autowired
+    CallLogController callLogController;
+
 
     private final ResourceLoader resourceLoader;
 
@@ -214,7 +217,7 @@ public class TtClueController {
             CallLogBo callLog = new CallLogBo();
             callLog.setPhone(ttClue.getPhone());
             PageHelper.startPage(1, 10000);
-            List<CallLogBo> callLogList = callLogService.exportAll(callLog);
+            List<CallLogBo> callLogList = callLogController.fillCallLog(callLogService.exportAll(callLog));
             EasyExcel.write(callLogExcelFileName, CallLogExportBo.class).registerWriteHandler(new LongestMatchColumnWidthStyleStrategy()).sheet("话单").doWrite(callLogList);
             addToZip(zipOut, callLogExcelFileName, callLogFileName);
             ttClue.setIssueTime(format2.format(new Date()));

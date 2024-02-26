@@ -301,10 +301,10 @@
         var content3="技侦支队研判人："+currentJzPerson;
         var content4 = "新网支队研判人："+currentFzPerson;
         var content=title+"<br>"+content0+"<br>"+content1+"<br>"+content2;
-        if(currentItem.jzPerson) {
+        if(currentJzPerson) {
             content=content+"<br>"+content3;
         }
-        if(currentItem.fzPerson) {
+        if(currentFzPerson) {
             content=content+"<br>"+content4;
         }
         document.getElementById("myPopup").style.display = "block";

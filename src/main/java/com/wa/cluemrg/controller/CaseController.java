@@ -765,7 +765,7 @@ public class CaseController {
                 dateEnd=dateFormat.format(new Date());
             }
             // 创建一个URL对象，表示要访问的URL
-            URL url = new URL(staturl+"&KSLASJ="+dateStart+"&JSLASJ="+dateEnd+"&LADW="+LADW);
+            URL url = new URL(urlString+"&KSLASJ="+dateStart+"&JSLASJ="+dateEnd+"&LADW="+LADW);
             log.info(url);
             // 打开连接
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
