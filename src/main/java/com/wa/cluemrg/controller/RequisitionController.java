@@ -54,7 +54,8 @@ public class RequisitionController {
     }
 
     public static String lastUpdatedTime;
-    public static String authorizationToken;
+    public static String jjzfToken;
+    public static String gjfzToken;
 
     /**
      * 分页获取线索列表
@@ -91,19 +92,19 @@ public class RequisitionController {
     
     @PostMapping("/insertRequisition")
     @Secured("ROLE_LEVEL2")
-    public int insertClue(@RequestBody Requisition requisition) {
+    public int insertRequisition(@RequestBody Requisition requisition) {
         return requisitionService.insert(requisition);
     }
 
     @PutMapping("/updateRequisition")
     @Secured("ROLE_LEVEL2")
-    public int updateClue(@RequestBody Requisition requisition) {
+    public int updateRequisition(@RequestBody Requisition requisition) {
         return requisitionService.update(requisition);
     }
 
     @DeleteMapping("/deleteRequisition")
     @Secured("ROLE_LEVEL2")
-    public int updateClue(@RequestParam int requisitionId) {
+    public int updateRequisition(@RequestParam int requisitionId) {
         return requisitionService.delete(requisitionId);
     }
 
@@ -113,8 +114,8 @@ public class RequisitionController {
     }
 
     @GetMapping("/updateToken")
-    public void updateToken(@RequestParam("token") String token) {
-        authorizationToken=token;
+    public void updateToken(@RequestParam("jjzftoken") String jjzftoken) {
+        jjzfToken=jjzftoken;
     }
 
 }

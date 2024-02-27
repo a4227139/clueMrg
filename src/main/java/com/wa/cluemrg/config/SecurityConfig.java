@@ -27,7 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //.antMatchers(level1List).hasRole("level1") // 需要权限的路径
                 //.anyRequest().hasAnyRole("LEVEL1")
                 //.anyRequest().anonymous()
-                .antMatchers("/user/login","/css/**", "/js/**", "/old/**").permitAll() // 允许无需权限访问的静态资源
+                .antMatchers("/user/login","/allDbQuery/batchInsertOrUpdateAllDbQuery","/css/**", "/js/**", "/old/**").permitAll() // 允许无需权限访问的静态资源
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -38,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .logoutUrl("/logout") // 注销URL
-                .logoutSuccessUrl("/user/login") // 注销成功后重定向的URL
+                .logoutSuccessUrl("/login.html") // 注销成功后重定向的URL
                 .invalidateHttpSession(true) // 使HttpSession失效
                 .deleteCookies("JSESSIONID"); // 删除Cookies（根据需要删除）
         http.csrf().disable();

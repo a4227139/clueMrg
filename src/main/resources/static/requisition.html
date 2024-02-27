@@ -116,8 +116,12 @@
                     <label>到</label>
                     <input class="form-control" style="display:inline;width:230px;font-size:20px;height: 35px;margin: 10px;" type="text" id="datetimepicker2">
                     <br>
-                    <label>令牌（Bearer Token）：</label>
-                    <input id="token" class="form-control" placeholder="类似 407ff196-ab74-4d23-a1c9-d429714824b6" style="display:inline;width:300px;height: 35px;margin: 10px;">
+                    <label>接警止付平台令牌（Bearer Token）：</label>
+                    <input id="jjzftoken" class="form-control" placeholder="类似 407ff196-ab74-4d23-a1c9-d429714824b6" style="display:inline;width:300px;height: 35px;margin: 10px;">
+                    <!--<br>
+                    <label>国反平台令牌（token）：</label>
+                    <input id="gjfztoken" class="form-control" placeholder="类似 2bG8RfD6FQHqMx4pkN31Lsh7iCyBEQo6zqyzxEZspp4keqKfU74aTRB51yNTrAXPfMaBUB2GmfsiyNF6s1JhvuvXTpY843be84C1zsayeRj4nE" style="display:inline;width:380px;height: 35px;margin: 10px;">
+                    -->
                     <label class="upload-btn" style="display: block" id="search-btn">
                     <span class="btn-text">查询</span>
                     <span class="btn-icon">
@@ -206,17 +210,20 @@
     });
 
     $('#sync-btn').click(function() {
-        token = $('#token').val();
-        token = token.trim();
+        jjzftoken = $('#jjzftoken').val();
+        jjzftoken = jjzftoken.trim();
+
+        /*gjfztoken = $('#gjfztoken').val();
+        gjfztoken = gjfztoken.trim();*/
         /*if (!token) {
             alert("必须输入token才能同步");
             return;
         }*/
         $.ajax({
             type: "GET",
-            url: ROOT_PATH +"/requisition/updateToken?token="+token,
+            url: ROOT_PATH +"/requisition/updateToken?jjzftoken="+jjzftoken,
             success: function (response) {
-                console.log("更新Token:"+token)
+                console.log("更新jjzftoken:"+jjzftoken)
             }
         });
     })

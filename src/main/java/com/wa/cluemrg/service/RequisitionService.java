@@ -12,30 +12,30 @@ import java.util.List;
 public class RequisitionService {
 
     @Autowired
-    private RequisitionMapper caseMapper;
+    private RequisitionMapper requisitionMapper;
 
     public Requisition select(int requisitionId) {
-        return caseMapper.selectById(requisitionId);
+        return requisitionMapper.selectById(requisitionId);
     }
 
     public List<Requisition> selectAll(Requisition requisition) {
-        return caseMapper.selectAll(requisition);
+        return requisitionMapper.selectAll(requisition);
     }
 
     public int insert(Requisition requisition) {
-        return caseMapper.insert(requisition);
+        return requisitionMapper.insert(requisition);
     }
 
     public int update(Requisition requisition) {
-        return caseMapper.update(requisition);
+        return requisitionMapper.update(requisition);
     }
 
     public int delete(int requisitionId) {
-        return caseMapper.delete(requisitionId);
+        return requisitionMapper.delete(requisitionId);
     }
 
     public int batchInsertOrUpdate(List<Requisition> list) {
-        return caseMapper.batchInsertOrUpdate(list);
+        return requisitionMapper.batchInsertOrUpdate(list);
     }
 
 }

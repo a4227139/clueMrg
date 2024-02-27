@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wa.cluemrg.dao.AllDbQueryMapper">
+
+    <!-- ResultMap -->
+    <resultMap id="AllDbQueryResultMap" type="com.wa.cluemrg.entity.AllDbQuery">
+        <id property="applicationId" column="APPLICATION_ID"/>
+        <result property="parentApplicationId" column="PARENT_APPLICATION_ID"/>
+        <result property="recorderOrgName" column="RECORDER_ORG_NAME"/>
+        <result property="applicationOrgId" column="APPLICATION_ORG_ID"/>
+        <result property="failureCause" column="FAILURE_CAUSE"/>
+        <result property="txCode" column="TX_CODE"/>
+        <result property="startTime" column="START_TIME"/>
+        <result property="startAccountBalance" column="START_ACCOUNT_BALANCE"/>
+        <result property="cam" column="CAM"/>
+        <result property="result" column="RESULT"/>
+        <result property="orderStr" column="ORDER_STR"/>
+        <result property="checkType" column="CHECK_TYPE"/>
+        <result property="bankId" column="BANK_ID"/>
+        <result property="caseNumber" column="CASE_NUMBER"/>
+        <result property="accountName" column="ACCOUNT_NAME"/>
+        <result property="balance" column="BALANCE"/>
+        <result property="datatype" column="DATATYPE"/>
+        <result property="txCodeName" column="TX_CODE_NAME"/>
+        <result property="recountEnable" column="RECOUNT_ENABLE"/>
+        <result property="caseFrom" column="CASE_FROM"/>
+        <result property="extra" column="EXTRA"/>
+        <result property="token1" column="TOKEN1"/>
+        <result property="queryState" column="QUERSTATE"/>
+        <result property="beginTime" column="BEGIN_TIME"/>
+        <result property="queryType" column="QUERY_TYPE"/>
+        <result property="operatorOrgName" column="OPERATOR_ORG_NAME"/>
+        <result property="accountNumber" column="ACCOUNT_NUMBER"/>
+        <result property="manager" column="MANAGER"/>
+        <result property="feedbackRemark" column="FEEDBACK_REMARK"/>
+        <result property="relistEnable" column="RELIST_ENABLE"/>
+        <result property="createTime" column="CREAT_TIME"/>
+        <result property="endAbalance" column="END_ABALANCE"/>
+        <result property="endTime" column="END_TIME"/>
+        <result property="endAccountBalance" column="END_ACCOUNT_BALANCE"/>
+        <result property="queryOrgId" column="QUERY_ORG_ID"/>
+        <result property="queryId" column="QUERY_ID"/>
+        <result property="queryEndTime" column="QUERY_END_TIME"/>
+        <result property="startBalance" column="START_BALANCE"/>
+        <result property="queryStartTime" column="QUERY_START_TIME"/>
+        <result property="recorderName" column="RECORDER_NAME"/>
+        <result property="bankName" column="BANK_NAME"/>
+        <result property="detailFlag" column="DETAIL_FLAG"/>
+        <result property="operatorName" column="OPERATOR_NAME"/>
+        <result property="dataFrom" column="DATA_FROM"/>
+    </resultMap>
+
+
+    <!-- Select All method with dynamic LIKE queries -->
+    <select id="selectAll" resultMap="AllDbQueryResultMap" parameterType="com.wa.cluemrg.entity.AllDbQuery">
+        SELECT *
+        FROM ALL_DB_QUERY
+        <where>
+            <foreach collection="stringFields" item="field" separator=" OR ">
+                <if test="#{field} != null and #{field} != ''">
+                    AND ${field} LIKE CONCAT('%', #{field}, '%')
+                </if>
+            </foreach>
+        </where>
+    </select>
+
+    <!-- Insert method -->
+    <insert id="insert" parameterType="com.wa.cluemrg.entity.AllDbQuery">
+        INSERT INTO ALL_DB_QUERY (
+            PARENT_APPLICATION_ID, RECORDER_ORG_NAME, APPLICATION_ORG_ID, FAILURE_CAUSE, TX_CODE,
+            START_TIME, START_ACCOUNT_BALANCE, CAM, RESULT, ORDER_STR, CHECK_TYPE, BANK_ID,
+            CASE_NUMBER, ACCOUNT_NAME, BALANCE, DATATYPE, TX_CODE_NAME, RECOUNT_ENABLE,
+            CASE_FROM, EXTRA, TOKEN1, QUERY_STATE, BEGIN_TIME, APPLICATION_ID, QUERY_TYPE,
+            OPERATOR_ORG_NAME, ACCOUNT_NUMBER, MANAGER, FEEDBACK_REMARK, RELIST_ENABLE,
+            CREAT_TIME, END_ABALANCE, END_TIME, END_ACCOUNT_BALANCE, QUERY_ORG_ID, QUERY_ID,
+            QUERY_END_TIME, START_BALANCE, QUERY_START_TIME, RECORDER_NAME, BANK_NAME,
+            DETAIL_FLAG, OPERATOR_NAME, DATA_FROM
+        ) VALUES (
+                     #{parentApplicationId}, #{recorderOrgName}, #{applicationOrgId}, #{failureCause}, #{txCode},
+                     #{startTime}, #{startAccountBalance}, #{cam}, #{result}, #{orderStr}, #{checkType}, #{bankId},
+                     #{caseNumber}, #{accountName}, #{balance}, #{datatype}, #{txCodeName}, #{recountEnable},
+                     #{caseFrom}, #{extra}, #{token1}, #{queryState}, #{beginTime}, #{applicationId}, #{queryType},
+                     #{operatorOrgName}, #{accountNumber}, #{manager}, #{feedbackRemark}, #{relistEnable},
+                     #{createTime}, #{endAbalance}, #{endTime}, #{endAccountBalance}, #{queryOrgId}, #{queryId},
+                     #{queryEndTime}, #{startBalance}, #{queryStartTime}, #{recorderName}, #{bankName},
+                     #{detailFlag}, #{operatorName}, #{dataFrom}
+                 )
+    </insert>
+
+    <!-- Update method -->
+    <update id="update" parameterType="com.wa.cluemrg.entity.AllDbQuery">
+        UPDATE ALL_DB_QUERY
+        SET
+            PARENT_APPLICATION_ID = #{parentApplicationId},
+            RECORDER_ORG_NAME = #{recorderOrgName},
+            APPLICATION_ORG_ID = #{applicationOrgId},
+            FAILURE_CAUSE = #{failureCause},
+            TX_CODE = #{txCode},
+            START_TIME = #{startTime},
+            START_ACCOUNT_BALANCE = #{startAccountBalance},
+            CAM = #{cam},
+            RESULT = #{result},
+            ORDER_STR = #{orderStr},
+            CHECK_TYPE = #{checkType},
+            BANK_ID = #{bankId},
+            CASE_NUMBER = #{caseNumber},
+            ACCOUNT_NAME = #{accountName},
+            BALANCE = #{balance},
+            DATATYPE = #{datatype},
+            TX_CODE_NAME = #{txCodeName},
+            RECOUNT_ENABLE = #{recountEnable},
+            CASE_FROM = #{caseFrom},
+            EXTRA = #{extra},
+            TOKEN1 = #{token1},
+            QUERY_STATE = #{queryState},
+            BEGIN_TIME = #{beginTime},
+            QUERY_TYPE = #{queryType},
+            OPERATOR_ORG_NAME = #{operatorOrgName},
+            ACCOUNT_NUMBER = #{accountNumber},
+            MANAGER = #{manager},
+            FEEDBACK_REMARK = #{feedbackRemark},
+            RELIST_ENABLE = #{relistEnable},
+            CREAT_TIME = #{createTime},
+            END_ABALANCE = #{endAbalance},
+            END_TIME = #{endTime},
+            END_ACCOUNT_BALANCE = #{endAccountBalance},
+            QUERY_ORG_ID = #{queryOrgId},
+            QUERY_ID = #{queryId},
+            QUERY_END_TIME = #{queryEndTime},
+            START_BALANCE = #{startBalance},
+            QUERY_START_TIME = #{queryStartTime},
+            RECORDER_NAME = #{recorderName},
+            BANK_NAME = #{bankName},
+            DETAIL_FLAG = #{detailFlag},
+            OPERATOR_NAME = #{operatorName},
+            DATA_FROM = #{dataFrom}
+        WHERE APPLICATION_ID = #{applicationId}
+    </update>
+
+    <!-- Delete method -->
+    <delete id="delete" parameterType="java.lang.String">
+        DELETE FROM ALL_DB_QUERY WHERE APPLICATION_ID = #{applicationId}
+    </delete>
+
+    <!-- Select statement by ID -->
+    <select id="selectById" resultType="com.wa.cluemrg.entity.AllDbQuery">
+        SELECT * FROM ALL_DB_QUERY WHERE APPLICATION_ID = #{applicationId}
+    </select>
+
+    <!-- Batch Insert or Update method -->
+    <insert id="batchInsertOrUpdate" parameterType="java.util.List">
+        INSERT INTO ALL_DB_QUERY (
+        PARENT_APPLICATION_ID, RECORDER_ORG_NAME, APPLICATION_ORG_ID, FAILURE_CAUSE, TX_CODE,
+        START_TIME, START_ACCOUNT_BALANCE, CAM, RESULT, ORDER_STR, CHECK_TYPE, BANK_ID,
+        CASE_NUMBER, ACCOUNT_NAME, BALANCE, DATATYPE, TX_CODE_NAME, RECOUNT_ENABLE,
+        CASE_FROM, EXTRA, TOKEN1, QUERY_STATE, BEGIN_TIME, APPLICATION_ID, QUERY_TYPE,
+        OPERATOR_ORG_NAME, ACCOUNT_NUMBER, MANAGER, FEEDBACK_REMARK, RELIST_ENABLE,
+        CREAT_TIME, END_ABALANCE, END_TIME, END_ACCOUNT_BALANCE, QUERY_ORG_ID, QUERY_ID,
+        QUERY_END_TIME, START_BALANCE, QUERY_START_TIME, RECORDER_NAME, BANK_NAME,
+        DETAIL_FLAG, OPERATOR_NAME, DATA_FROM
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.parentApplicationId}, #{item.recorderOrgName}, #{item.applicationOrgId}, #{item.failureCause}, #{item.txCode},
+            #{item.startTime}, #{item.startAccountBalance}, #{item.cam}, #{item.result}, #{item.orderStr}, #{item.checkType}, #{item.bankId},
+            #{item.caseNumber}, #{item.accountName}, #{item.balance}, #{item.datatype}, #{item.txCodeName}, #{item.recountEnable},
+            #{item.caseFrom}, #{item.extra}, #{item.token1}, #{item.queryState}, #{item.beginTime}, #{item.applicationId}, #{item.queryType},
+            #{item.operatorOrgName}, #{item.accountNumber}, #{item.manager}, #{item.feedbackRemark}, #{item.relistEnable},
+            #{item.createTime}, #{item.endAbalance}, #{item.endTime}, #{item.endAccountBalance}, #{item.queryOrgId}, #{item.queryId},
+            #{item.queryEndTime}, #{item.startBalance}, #{item.queryStartTime}, #{item.recorderName}, #{item.bankName},
+            #{item.detailFlag}, #{item.operatorName}, #{item.dataFrom}
+            )
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        PARENT_APPLICATION_ID = VALUES(PARENT_APPLICATION_ID),
+        RECORDER_ORG_NAME = VALUES(RECORDER_ORG_NAME),
+        APPLICATION_ORG_ID = VALUES(APPLICATION_ORG_ID),
+        FAILURE_CAUSE = VALUES(FAILURE_CAUSE),
+        TX_CODE = VALUES(TX_CODE),
+        START_TIME = VALUES(START_TIME),
+        START_ACCOUNT_BALANCE = VALUES(START_ACCOUNT_BALANCE),
+        CAM = VALUES(CAM),
+        RESULT = VALUES(RESULT),
+        ORDER_STR = VALUES(ORDER_STR),
+        CHECK_TYPE = VALUES(CHECK_TYPE),
+        BANK_ID = VALUES(BANK_ID),
+        CASE_NUMBER = VALUES(CASE_NUMBER),
+        ACCOUNT_NAME = VALUES(ACCOUNT_NAME),
+        BALANCE = VALUES(BALANCE),
+        DATATYPE = VALUES(DATATYPE),
+        TX_CODE_NAME = VALUES(TX_CODE_NAME),
+        RECOUNT_ENABLE = VALUES(RECOUNT_ENABLE),
+        CASE_FROM = VALUES(CASE_FROM),
+        EXTRA = VALUES(EXTRA),
+        TOKEN1 = VALUES(TOKEN1),
+        QUERY_STATE = VALUES(QUERY_STATE),
+        BEGIN_TIME = VALUES(BEGIN_TIME),
+        APPLICATION_ID = VALUES(APPLICATION_ID),
+        QUERY_TYPE = VALUES(QUERY_TYPE),
+        OPERATOR_ORG_NAME = VALUES(OPERATOR_ORG_NAME),
+        ACCOUNT_NUMBER = VALUES(ACCOUNT_NUMBER),
+        MANAGER = VALUES(MANAGER),
+        FEEDBACK_REMARK = VALUES(FEEDBACK_REMARK),
+        RELIST_ENABLE = VALUES(RELIST_ENABLE),
+        CREAT_TIME = VALUES(CREAT_TIME),
+        END_ABALANCE = VALUES(END_ABALANCE),
+        END_TIME = VALUES(END_TIME),
+        END_ACCOUNT_BALANCE = VALUES(END_ACCOUNT_BALANCE),
+        QUERY_ORG_ID = VALUES(QUERY_ORG_ID),
+        QUERY_ID = VALUES(QUERY_ID),
+        QUERY_END_TIME = VALUES(QUERY_END_TIME),
+        START_BALANCE = VALUES(START_BALANCE),
+        QUERY_START_TIME = VALUES(QUERY_START_TIME),
+        RECORDER_NAME = VALUES(RECORDER_NAME),
+        BANK_NAME = VALUES(BANK_NAME),
+        DETAIL_FLAG = VALUES(DETAIL_FLAG),
+        OPERATOR_NAME = VALUES(OPERATOR_NAME),
+        DATA_FROM = VALUES(DATA_FROM)
+    </insert>
+
+</mapper>
