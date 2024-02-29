@@ -111,10 +111,8 @@
                     拖动横向滚动条查看更多字段，还可进行增删改查操作。
                 </div>
                 <span>
-                    <label>时间：</label>
-                    <input class="form-control" style="display:inline;width:230px;font-size:20px;height: 35px;margin: 10px;" type="text" id="datetimepicker1">
-                    <label>到</label>
-                    <input class="form-control" style="display:inline;width:230px;font-size:20px;height: 35px;margin: 10px;" type="text" id="datetimepicker2">
+                    <label>卡号：</label>
+                    <input id="cardNums" class="form-control" placeholder="号码之间使用空格、逗号等符号分隔" style="display:inline;width:300px;height: 35px;margin: 10px;">
                     <br>
                     <label>接警止付平台令牌（Bearer Token）：</label>
                     <input id="jjzftoken" class="form-control" placeholder="类似 407ff196-ab74-4d23-a1c9-d429714824b6" style="display:inline;width:300px;height: 35px;margin: 10px;">
@@ -139,14 +137,6 @@
                     </span>
                 </label>
                 </span>
-                <label class="upload-btn" style="display: block" id="export-btn">
-                    <span class="btn-text">导出列表</span>
-                    <span class="btn-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24">
-                            <path fill="currentColor" d="M8 17v-5H6l6-7 6 7h-2v5H8zm-2 2h8v2H6v-2z"></path>
-                        </svg>
-                    </span>
-                </label>
             </div>
         </div><!-- /.row -->
         <!--<div class="row" style="overflow:scroll; width:100%;overflow-x: auto; ">-->
@@ -191,22 +181,12 @@
     });
 
     $('#search-btn').click(function() {
+        cardNums=$('#cardNums').val();
+        cardNums=splitStringToArray(cardNums);
         var grid = $("#jsGrid").data("JSGrid");
         $("#jsGrid").jsGrid("option", "pageIndex", 1);
         grid.loadData();
         console.log($("#jsGrid").jsGrid("option", "pageIndex"))
-    });
-
-    $('#export-btn').click(function() {
-        var dateStart=$('#datetimepicker1').val();
-        var dateEnd=$('#datetimepicker2').val();
-        var link = document.querySelector('#a_export_excel');
-        var originHref=link.href;
-        link.href = link.href+"?dateStart="+dateStart+"&dateEnd="+dateEnd  ;
-        console.log(link.href)
-        // 模拟点击下载链接
-        link.click();
-        link.href=originHref;
     });
 
     $('#sync-btn').click(function() {
@@ -259,13 +239,20 @@
         }
     });
 
+    $("#cardNums").keydown(function (event) {
+        if (event.keyCode == 13) {
+            $('#search-btn').click();
+        }
+    });
+
+    var cardNums=[]
     $("#jsGrid").jsGrid({
         width: "100%",
         height: "auto",
         dragging: true,
         editing: true,
         filtering: true,
-        inserting: true,
+        //inserting: true,
         sorting: true,
         paging: true,
         pageLoading: true,
@@ -295,8 +282,18 @@
                 console.log("loadData:" + JSON.stringify(filter))
                 var d = $.Deferred();
                 var param = {};
-                filter.alarmTimeStart=$('#datetimepicker1').val();
-                filter.alarmTimeEnd=$('#datetimepicker2').val();
+
+                cardNums=$('#cardNums').val();
+                if (cardNums) {
+                    cardNums=splitStringToArray(cardNums);
+                }else if (cardNums==""){
+                    cardNums=[]
+                }else {
+                    cardNums=[];
+                }
+
+                filter.cardNums=cardNums;
+                
                 param.data = filter;
                 param.pageIndex = filter.pageIndex;
                 param.pageSize = filter.pageSize;
@@ -371,6 +368,10 @@
             },
             {name: "bankName", type: "text", title: "开户行",width: 200},
             {name: "cardNum", type: "text", title: "银行卡号",width: 250},
+            {name: "gjfzFailureCause", type: "text", title: "国反反馈汇总1",width: 350},
+            {name: "gjfzFeedbackRemark", type: "text", title: "国反反馈汇总2",width: 350},
+            {name: "gjfzBalance", type: "text", title: "国反反馈余额汇总",width: 200},
+            {name: "gjfzCreatTime", type: "text", title: "国反反馈时间",width: 300},
             {name: "createTime", type: "text", title: "创建时间",width: 150,
                 itemTemplate: function(value) {
                     return formatDate(new Date(value));
@@ -385,8 +386,8 @@
             {name: "name", type: "text", title: "名称",width: 200},
             {name: "insertTime", type: "text", title: "预警下发时间",width: 200},
             {name: "lastZfTime", type: "text", title: "最后止付时间",width: 200},
-            {name: "ecreateTime", type: "text", title: "结束封堵时间",width: 200},
-            {type: "control",width: 100}
+            {name: "ecreateTime", type: "text", title: "结束封堵时间",width: 200}/*,
+            {type: "control",width: 100}*/
         ]
     })
 

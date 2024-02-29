@@ -94,6 +94,7 @@
                 </li>
                 <li><a href="/relationGraph.html"><i class="fa fa-camera-retro"></i> 关系图</a></li>
                 <li><a href="/caseGraph.html"><i class="fa fa-camera-retro"></i> 涉诈案件全景图</a></li>
+                <li><a href="/requisition.html"><i class="fa fa-camera-retro"></i> 止付查询</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right navbar-user">
@@ -309,19 +310,6 @@
         }
         document.getElementById("myPopup").style.display = "block";
         document.querySelector(".popup-content").innerHTML = content;
-    }
-
-    function splitStringToArray(inputString) {
-        if (!inputString) {
-            return []; // 返回空数组，如果输入字符串为空
-        }
-
-        // 定义可能的分隔符，以逗号、空格、分号和中文逗号为例
-        const possibleSeparators = [',', ' ', ';', '，'];
-
-        // 在正则表达式中使用可能的分隔符进行匹配
-        const regex = new RegExp(`[${possibleSeparators.map(separator => separator.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('')}]`, 'g');
-        return inputString.split(regex);
     }
 
     $('#upload-btn').click(function() {

@@ -34,6 +34,10 @@
         <result property="name" column="NAME"/>
         <result property="approvalCityCode" column="APPROVAL_CITY_CODE"/>
         <result property="idnum" column="IDNUM"/>
+        <result property="gjfzFailureCause" column="FAILURE_CAUSE"/>
+        <result property="gjfzFeedbackRemark" column="FEEDBACK_REMARK"/>
+        <result property="gjfzBalance" column="BALANCE"/>
+        <result property="gjfzCreatTime" column="CREAT_TIME"/>
     </resultMap>
 
     <!-- Select All with Fuzzy Search -->
@@ -41,6 +45,12 @@
         SELECT *
         FROM REQUISITION
         <where>
+            <if test="cardNums != null and cardNums.length > 0">
+                AND CARD_NUM IN
+                <foreach collection="cardNums" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
             <if test="id != null">
                 AND ID = #{id}
             </if>
@@ -129,6 +139,40 @@
                 AND IDNUM LIKE CONCAT('%', #{idnum}, '%')
             </if>
         </where>
+    </select>
+
+    <select id="selectAllDbQuery" parameterType="java.util.List" resultMap="RequisitionResultMap">
+        SELECT
+        ACCOUNT_NUMBER AS CARD_NUM,
+        GROUP_CONCAT(
+            FAILURE_CAUSE
+            ORDER BY
+            CREAT_TIME DESC SEPARATOR '; '
+        ) AS FAILURE_CAUSE,
+        GROUP_CONCAT(
+            FEEDBACK_REMARK
+            ORDER BY
+            CREAT_TIME DESC SEPARATOR '; '
+        ) AS FEEDBACK_REMARK,
+        GROUP_CONCAT(
+            BALANCE
+            ORDER BY
+            CREAT_TIME DESC SEPARATOR '; '
+        ) AS BALANCE,
+            GROUP_CONCAT(
+            SUBSTRING(CREAT_TIME,1,19)
+            ORDER BY
+            CREAT_TIME DESC SEPARATOR '; '
+        ) AS CREAT_TIME
+        FROM
+            all_db_query
+        GROUP BY
+            ACCOUNT_NUMBER
+        HAVING
+            ACCOUNT_NUMBER IN
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
     </select>
 
     <!-- Insert statement -->

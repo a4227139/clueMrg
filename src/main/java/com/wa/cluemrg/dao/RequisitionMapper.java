@@ -20,5 +20,7 @@ public interface RequisitionMapper extends MyBatisBaseDao<Requisition, String> {
 
     List<Requisition> selectAll(Requisition requisition);
 
+    List<Requisition> selectAllDbQuery(List<String> list);
+
     int batchInsertOrUpdate(List<Requisition> requisitionList);
 }

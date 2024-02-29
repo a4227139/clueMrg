@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>受害人信息列表</title>
+    <title>国反全库查</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.css" rel="stylesheet">
@@ -23,19 +23,13 @@
     <!-- 引入DateTimePicker插件的js和css文件 -->
     <link href="/css/jquery.datetimepicker.min.css" rel="stylesheet">
     <script src="/js/jquery.datetimepicker.full.min.js"></script>
-    <style>
-        .jsgrid-cell {
-            white-space: nowrap; /* 不换行 */
-            overflow: hidden; /* 溢出隐藏 */
-            text-overflow: ellipsis; /* 超出省略号 */
-        }
-    </style>
 </head>
 
 <body>
 
 <div id="wrapper">
 
+    <!-- Sidebar -->
     <!-- Sidebar -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -66,9 +60,9 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> 日研判相关 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="/analyze/alarmReceipt.html"><i class="fa fa-bar-chart-o"></i> 电诈接处警信息</a></li>
-                        <li class="active"><a href="/analyze/victim.html"><i class="fa fa-bar-chart-o"></i> 受害人信息</a></li>
+                        <li><a href="/analyze/victim.html"><i class="fa fa-bar-chart-o"></i> 受害人信息</a></li>
                         <li><a href="/analyze/effect.html"><i class="fa fa-bar-chart-o"></i> 战果信息</a></li>
-                        <li><a href="/analyze/case.html"><i class="fa fa-camera-retro"></i> 案件列表</a></li>
+                        <li class="active"><a href="/analyze/allDbQuery.html"><i class="fa fa-camera-retro"></i> 案件列表</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -81,8 +75,7 @@
                     </ul>
                 </li>
                 <li><a href="/relationGraph.html"><i class="fa fa-camera-retro"></i> 关系图</a></li>
-                <li><a href="/caseGraph.html"><i class="fa fa-camera-retro"></i> 涉诈案件全景图</a></li>
-                <li><a href="/requisition.html"><i class="fa fa-camera-retro"></i> 止付查询</a></li>
+                <li><a href="/allDbQueryGraph.html"><i class="fa fa-camera-retro"></i> 涉诈案件全景图</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right navbar-user">
@@ -101,10 +94,10 @@
 
         <div class="row">
             <div class="col-lg-12">
-                <h1>受害人信息列表 <!--<small>更新至 <span id="latestDay"></span></small>--></h1>
+                <h1>案件列表</h1>
                 <!--<ol class="breadcrumb">
                     <li><a href="index.html"><i class="fa fa-dashboard"></i> 主页</a></li>
-                    <li class="active"><i class="fa fa-table"></i> 部推线索</li>
+                    <li class="active"><i class="fa fa-table"></i> 案件列表</li>
                 </ol>-->
                 <div class="alert alert-info alert-dismissable">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -122,34 +115,48 @@
                             <path fill="currentColor" d="M8 17v-5H6l6-7 6 7h-2v5H8zm-2 2h8v2H6v-2z"></path>
                         </svg>
                     </span>
-                    </label>
+                </label>
                 </span>
-
-                <label class="upload-btn" style="display: block" id="upload-btn">
-                    <input type="file" id="file-input" style="display: none">
-                    <span class="btn-text">上传受害人情况</span>
+                <label class="upload-btn" style="display: block" id="sync-btn">
+                    <span class="btn-text">同步</span>
                     <span class="btn-icon">
                         <svg width="24" height="24" viewBox="0 0 24 24">
                             <path fill="currentColor" d="M8 17v-5H6l6-7 6 7h-2v5H8zm-2 2h8v2H6v-2z"></path>
                         </svg>
                     </span>
                 </label>
-                    <label class="upload-btn" style="display: block" id="download-btn">
-                    <span class="btn-text">下载模板</span>
+                <label class="upload-btn" style="display: block" id="export-excel">
+                    <span class="btn-text">导出Excel</span>
                     <span class="btn-icon">
                         <svg width="24" height="24" viewBox="0 0 24 24">
                             <path fill="currentColor" d="M8 17v-5H6l6-7 6 7h-2v5H8zm-2 2h8v2H6v-2z"></path>
                         </svg>
                     </span>
                 </label>
+                <label class="upload-btn" style="display: block" id="export-word">
+                    <span class="btn-text">导出报告</span>
+                    <span class="btn-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M8 17v-5H6l6-7 6 7h-2v5H8zm-2 2h8v2H6v-2z"></path>
+                        </svg>
+                    </span>
+                </label>
+            </div>
+            <div id="confirmModal" class="modal">
+                <div class="modal-content">
+                    <p id="confirmModalMessage"></p>
+                    <button id="confirmAction" class="confirm-btn">确认</button>
+                    <button id="cancelAction" class="cancel-btn">取消</button>
+                </div>
             </div>
         </div><!-- /.row -->
         <!--<div class="row" style="overflow:scroll; width:100%;overflow-x: auto; ">-->
-        <div>
-            <div class="table-responsive">
-                <div id="jsGrid" ></div>
+            <div>
+                <div class="table-responsive">
+                    <div id="jsGrid" ></div>
+                </div>
             </div>
-        </div>
+
         <!--</div>-->
 
     </div><!-- /.row -->
@@ -159,7 +166,7 @@
 </div><!-- /#wrapper -->
 
 <!-- JavaScript -->
-<!--<script src="/js/jquery-1.10.2.js"></script>-->
+<!-- <script src="/js/jquery-1.10.2.js"></script>-->
 <script src="/js/bootstrap.js"></script>
 
 <!-- Page Specific Plugins -->
@@ -184,16 +191,93 @@
         // 切换下拉菜单的显示状态
         $(this).siblings('.dropdown-menu').toggle();
     });
-    $('#download-btn').click(function() {
-        var link = document.querySelector('#a_download_template');
-        // 模拟点击下载链接
-        link.click();
+
+    function objectToUrlParams(obj) {
+        var params = [];
+        for (var key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                var value = obj[key];
+                if (Array.isArray(value)) {
+                    // 如果值是数组，则按照 key[]=value1&key[]=value2 的格式处理
+                    for (var i = 0; i < value.length; i++) {
+                        params.push(encodeURIComponent(key) + "[]=" + encodeURIComponent(value[i]));
+                    }
+                } else {
+                    // 否则按照 key=value 的格式处理
+                    params.push(encodeURIComponent(key) + "=" + encodeURIComponent(value));
+                }
+            }
+        }
+        return params.join("&");
+    }
+
+    function areAllFieldsEmpty(obj) {
+        //除pageIndex和pageSize外
+        delete obj.pageIndex;
+        delete obj.pageSize;
+        for (const key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                if (obj[key] !== null && obj[key] !== undefined && obj[key] !== '') {
+                    return false; // 如果有任何字段不为空，则返回 false
+                }
+            }
+        }
+        return true; // 所有字段都为空
+    }
+
+
+    $('#sync-btn').click(function() {
+        var registerDateStart=$('#datetimepicker1').val();
+        var registerDateEnd=$('#datetimepicker2').val();
+        if (!registerDateStart&&!registerDateEnd){
+            document.getElementById("confirmModalMessage").innerText="是否同步全年的数据？"
+        }else {
+            document.getElementById("confirmModalMessage").innerText="是否同步？"
+        }
+        confirmModal.style.display = "block";
     });
 
-    $('#upload-btn').click(function() {
-        $("#file-input").val("");
-        $('#file-input').click();
-    });
+    // 获取按钮和模态框元素
+    var confirmModal = document.getElementById("confirmModal");
+    var confirmAction = document.getElementById("confirmAction");
+    var cancelAction = document.getElementById("cancelAction");
+
+    // 点击确认按钮
+    confirmAction.onclick = function () {
+
+        confirmModal.style.display = "none"; // 隐藏对话框
+        registerDateStart=$('#datetimepicker1').val();
+        registerDateEnd=$('#datetimepicker2').val();
+        // 同步
+        $.ajax({
+            url: ROOT_PATH +'/allDbQuery/sync'+"?dateStart="+registerDateStart+"&dateEnd="+registerDateEnd,
+            type: 'GET',
+            success: function(response) {
+                // 上传成功，根据后台返回信息输出结果
+                alert(JSON.stringify(response));
+                console.log('sync:'+JSON.stringify(response))
+                var grid = $("#jsGrid").data("JSGrid");
+                $("#jsGrid").jsGrid("option", "pageIndex", 1);
+                grid.loadData();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // 上传失败，输出错误信息
+                alert('同步失败：' + textStatus);
+            }
+        });
+    }
+
+    // 点击取消按钮或模态框背景
+    cancelAction.onclick = function () {
+        confirmModal.style.display = "none"; // 隐藏对话框
+    }
+
+    // 当用户点击模态框外部，也隐藏模态框
+    window.onclick = function (event) {
+        if (event.target == confirmModal) {
+            confirmModal.style.display = "none";
+        }
+    }
 
     $('#search-btn').click(function() {
         var grid = $("#jsGrid").data("JSGrid");
@@ -202,13 +286,37 @@
         console.log($("#jsGrid").jsGrid("option", "pageIndex"))
     });
 
+    $('#export-word').click(function() {
+        var registerDateStart=$('#datetimepicker1').val();
+        var registerDateEnd=$('#datetimepicker2').val();
+        var link = document.querySelector('#a_export_word');
+        var originHref=link.href;
+        link.href = link.href+"?dateStart="+registerDateStart+"&dateEnd="+registerDateEnd  ;
+        console.log(link.href)
+        // 模拟点击下载链接
+        link.click();
+        link.href=originHref;
+    });
+
+    $('#export-excel').click(function() {
+        var registerDateStart=$('#datetimepicker1').val();
+        var registerDateEnd=$('#datetimepicker2').val();
+        var link = document.querySelector('#a_export_excel');
+        var originHref=link.href;
+        link.href = link.href+"?dateStart="+registerDateStart+"&dateEnd="+registerDateEnd  ;
+        console.log(link.href)
+        // 模拟点击下载链接
+        link.click();
+        link.href=originHref;
+    });
+
     $("#file-input").change(function() {
         const file = $(this).prop("files")[0];
         const formData = new FormData();
         formData.append("file", file);
 
         $.ajax({
-            url: ROOT_PATH +'/victim/upload',
+            url: ROOT_PATH +'/allDbQuery/upload',
             type: 'POST',
             data: formData,
             contentType: false,
@@ -217,24 +325,13 @@
             success: function(response) {
                 // 上传成功，根据后台返回信息输出结果
                 alert(JSON.stringify(response));
-                console.log('上传成功:'+JSON.stringify(response));
-                $("#jsGrid").jsGrid("option", "pageIndex", 1);
-                $("#jsGrid").jsGrid("loadData");
+                console.log('上传成功:'+JSON.stringify(response))
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 // 上传失败，输出错误信息
                 alert('上传失败：' + textStatus);
             }
         });
-    });
-
-    $.ajax({
-        type: "GET",
-        url: ROOT_PATH +"/victim/getLatestDay",
-        success: function (response) {
-            console.log(response);
-            $("#latestDay").text(response);
-        }
     });
 
     $('#datetimepicker1').datetimepicker({
@@ -259,14 +356,14 @@
         step: 1 // 时间间隔，单位为分钟
     });
 
-
+    var paramForExport;
     $("#jsGrid").jsGrid({
         width: "100%",
         height: "auto",
         dragging: true,
-        editing: true,
+        //editing: true,
         filtering: true,
-        inserting: true,
+        //inserting: true,
         sorting: true,
         paging: true,
         pageLoading: true,
@@ -278,38 +375,58 @@
         autowidth: true,
         deleteConfirm: "确定删除?",
         onDataLoaded:function(){
-            var url = ROOT_PATH +"/victim/downloadTemplate";
-            var link = document.querySelector('#a_download_template');
-            if (!link){
+            // 获取所有符合条件的 td 元素
+            /*var tdList = document.querySelectorAll('.jsgrid-cell.jsgrid-align-center');
+            // 遍历 tdList 列表，为每个元素添加序号
+            tdList.forEach(function(td, index) {
+                //前二不用
+                if (index>1){
+                    td.textContent = index-1 ;
+                }
+            });*/
+            var paramString = objectToUrlParams(paramForExport.data);
+            var url_word = ROOT_PATH +"/allDbQuery/exportWord";
+            var link_word = document.querySelector('#a_export_word');
+            if (!link_word){
                 // 创建一个隐藏的 <a> 元素
-                link = document.createElement("a");
+                link_word = document.createElement("a");
             }
-            link.id="a_download_template";
-            link.style.display = "none";
-            link.href = url;
-            document.body.appendChild(link);
+            link_word.id="a_export_word";
+            link_word.style.display = "none";
+            link_word.href = url_word;
+            //link.download = filename;
+            // 将 <a> 元素添加到页面中
+            document.body.appendChild(link_word);
+
+            var url_excel = ROOT_PATH +"/allDbQuery/exportExcel";
+            var link_excel = document.querySelector('#a_export_excel');
+            if (!link_excel){
+                // 创建一个隐藏的 <a> 元素
+                link_excel = document.createElement("a");
+            }
+            link_excel.id="a_export_excel";
+            link_excel.style.display = "none";
+            link_excel.href = url_excel;
+            //link.download = filename;
+            // 将 <a> 元素添加到页面中
+            document.body.appendChild(link_excel);
         },
         controller: {
             loadData: function (filter) {
-
-                /*console.log("loadData:"+JSON.stringify(filter));
-                var dataResult ={}
-                dataResult.data=response.data;
-                dataResult.itemsCount=response.itemsCount;
-                return dataResult;*/
                 console.log("loadData:" + JSON.stringify(filter))
                 var d = $.Deferred();
                 var param = {};
-                filter.timeStart=$('#datetimepicker1').val();
-                filter.timeEnd=$('#datetimepicker2').val();
+                filter.registerDateStart=$('#datetimepicker1').val();
+                filter.registerDateEnd=$('#datetimepicker2').val();
                 param.data = filter;
                 param.pageIndex = filter.pageIndex;
                 param.pageSize = filter.pageSize;
                 param.sortField = filter.sortField;
                 param.sortOrder = filter.sortOrder;
                 console.log(JSON.stringify(param));
+                paramForExport = param;
                 $.ajax({
-                    url: ROOT_PATH +"/victim/getVictimList",
+                    url: ROOT_PATH +"/allDbQuery/getAllDbQueryList",
                     type: 'POST',
                     dataType: "json",
                     contentType: "application/json",
@@ -322,7 +439,7 @@
             insertItem: function (item) {
                 return $.ajax({
                     type: "POST",
-                    url: ROOT_PATH +"/victim/insertVictim",
+                    url: ROOT_PATH +"/allDbQuery/insert",
                     dataType: "json",
                     contentType: "application/json",
                     data: JSON.stringify(item),
@@ -338,7 +455,7 @@
             updateItem: function (item) {
                 return $.ajax({
                     type: "PUT",
-                    url: ROOT_PATH +"/victim/updateVictim",
+                    url: ROOT_PATH +"/allDbQuery/update",
                     dataType: "json",
                     contentType: "application/json",
                     data: JSON.stringify(item),
@@ -355,7 +472,7 @@
                 var currentPage = $("#jsGrid").jsGrid("option", "pageIndex");  // 获取当前页码
                 return $.ajax({
                     type: "DELETE",
-                    url: ROOT_PATH +"/victim/deleteVictim?seq=" + item.seq,
+                    url: ROOT_PATH +"/allDbQuery/delete?id=" + item.id,
                     success: function (response) {
                         console.log("Delete successfully");
                         $("#jsGrid").jsGrid("loadData", {pageIndex: currentPage});
@@ -367,38 +484,36 @@
             }
         },
         fields: [
-            {name: "seq", type: "text", title: "序号",width: 100,visible: false},
-            {name: "incidentDate", type: "text", title: "案发日期",
-                itemTemplate: function(value) {
-                    return formatDate2(new Date(value));
-                }
-            },
-            {name: "name", type: "text", title: "姓名",width: 100},
-            {name: "gender", type: "text", title: "性别",width: 80},
-            {name: "id", type: "text", title: "身份证号",width: 180},
-            {name: "age", type: "text", title: "年龄",width: 80},
-            {name: "householdRegistration", type: "text", title: "户籍",width: 200},
-            {name: "education", type: "text", title: "受教育程度",width: 100},
-            {name: "job", type: "text", title: "职业",width: 100},
-            {name: "employer", type: "text", title: "工作单位",width: 150},
-            {name: "location", type: "text", title: "发案地点",width: 200},
-            {name: "period", type: "text", title: "发案时间段",width: 100},
-            {name: "type", type: "text", title: "案件类型",width: 150},
-            {name: "source", type: "text", title: "诈骗信息来源",width: 150},
-            {name: "appFunction", type: "text", title: "APP安装及预警情况",width: 150},
-            {name: "dissuade", type: "text", title: "预警劝阻情况",width: 150},
-            {name: "publicity", type: "text", title: "反诈宣传情况",width: 200},
-            {name: "suggestion", type: "text", title: "防范措施",width: 300},
-            {name: "remark", type: "text", title: "备注",width: 200},
-            {name: "department", type: "text", title: "分县局",width: 100},
-            {name: "time", type: "text", title: "上传时间",width: 150,readOnly:true,
-                itemTemplate: function(value) {
-                    return formatDate(new Date(value));
-                }
-            },
-            {type: "control",width: 100}
+            /*{
+                title: "序号",
+                itemTemplate: function(value, item) {
+                    return 1;
+                },
+                align: "center",
+                width: 50
+            },*/
+            /*{name: "seq", type: "text", title: "序号",width: 45},*/
+            {name: "casenumber", type: "text", title: "案件编号",width: 200},
+            {name: "applicationid", type: "text", title: "业务编号",width: 300},
+            {name: "txcodename", type: "text", title: "类别",width: 100},
+            {name: "bankname", type: "text", title: "涉案银行",width: 300},
+            {name: "accountnumber", type: "text", title: "涉案账户",width: 300},
+            {name: "accountname", type: "text", title: "涉案账户名",width: 150},
+            {name: "result", type: "text", title: "审核状态"},
+            {name: "result", type: "text", title: "机构反馈"},
+            {name: "feedbackremark", type: "text", title: "反馈结构"},
+            {name: "balance", type: "text", title: "余额",width: 100},
+            /*{name: "organiser", type: "text", title: "级别",width: 100},*/
+            {name: "starttime", type: "text", title: "开始时间",width: 150},
+            {name: "endtime", type: "text", title: "结束时间",width: 150},
+            {name: "operatorname", type: "text", title: "录入人",width: 150},
+            {name: "operatororgName", type: "text", title: "录入单位",width: 250},
+            {name: "createtime", type: "text", title: "录入时间",width: 150}
+
+            /*{type: "control",width: 100}*/
         ]
     })
+
 
 </script>
 

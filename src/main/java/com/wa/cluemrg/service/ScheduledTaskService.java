@@ -28,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -46,7 +47,6 @@ public class ScheduledTaskService {
     AllDbQueryService allDbQueryService;
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    SimpleDateFormat formatYMD = new SimpleDateFormat("yyyy-MM-dd");
 
     static List<String> waitToAdd = new ArrayList<>();
 
@@ -198,9 +198,17 @@ public class ScheduledTaskService {
         }
     }
 
+
     private String sendToJJZF(int current){
         //String url = "http://10.148.105.235/dzfw/yj/list?size=10&current=1&rawData=1&cityCode=";
-        String url = "http://10.148.105.235/dzfw/yj/list?CardNum=&Name=&IDNum=&phone=&sLastContactTime=&eLastContactTime=&sExcEndTime=2024-01-01&eExcEndTime=2024-02-23&sCreateTime=&eCreateTime=&rawData=1&cityCode=450200&size=200&current="+current;
+        // 获取今天的日期
+        LocalDate today = LocalDate.now();
+        // 获取明天的日期
+        LocalDate tomorrow = today.plusDays(1);
+        // 格式化为"yyyyMMdd"
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String eExcEndTime = tomorrow.format(formatter);
+        String url = "http://10.148.105.235/dzfw/yj/list?CardNum=&Name=&IDNum=&phone=&sLastContactTime=2024-01-01&eLastContactTime="+eExcEndTime+"&sExcEndTime=&eExcEndTime=&sCreateTime=&eCreateTime=&rawData=1&cityCode=450200&size=200&current="+current;
         String jjzfToken = "Bearer 407ff196-ab74-4d23-a1c9-d429714824b6";
         String lyxtbhValue = "4500001100000001";
 

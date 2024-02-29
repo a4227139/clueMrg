@@ -12,6 +12,7 @@ public class Requisition {
     private String bankName;
     private Integer lockState;
     private String cardNum;
+    private String[] cardNums;
     private Double transactionAmount;
     private String cityCodeLy;
     private String secrit;
@@ -43,5 +44,9 @@ public class Requisition {
     private String name;
     private String approvalCityCode;
     private String idnum;
+    private String gjfzFeedbackRemark;
+    private String gjfzFailureCause;
+    private String gjfzBalance;
+    private String gjfzCreatTime;
 }
 

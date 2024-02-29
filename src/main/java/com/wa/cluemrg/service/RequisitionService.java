@@ -22,6 +22,10 @@ public class RequisitionService {
         return requisitionMapper.selectAll(requisition);
     }
 
+    public List<Requisition> selectAllDbQuery(List<String> list) {
+        return requisitionMapper.selectAllDbQuery(list);
+    }
+
     public int insert(Requisition requisition) {
         return requisitionMapper.insert(requisition);
     }

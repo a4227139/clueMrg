@@ -57,12 +57,18 @@
         SELECT *
         FROM ALL_DB_QUERY
         <where>
-            <foreach collection="stringFields" item="field" separator=" OR ">
-                <if test="#{field} != null and #{field} != ''">
-                    AND ${field} LIKE CONCAT('%', #{field}, '%')
-                </if>
-            </foreach>
+            <if test="applicationId != null and applicationId != ''">
+                AND APPLICATION_ID LIKE CONCAT('%', #{applicationId}, '%')
+            </if>
+            <if test="recorderOrgName != null and recorderOrgName != ''">
+                AND RECORDER_ORG_NAME LIKE CONCAT('%', #{recorderOrgName}, '%')
+            </if>
+            <if test="failureCause != null and failureCause != ''">
+                AND FAILURE_CAUSE LIKE CONCAT('%', #{failureCause}, '%')
+            </if>
+
         </where>
+
     </select>
 
     <!-- Insert method -->

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
@@ -81,6 +82,25 @@ public class RequisitionController {
         PageHelper.orderBy(sortField+" "+sortOrder);
 
         List<Requisition> list = requisitionService.selectAll(pageBo.getData());
+        List<String> cardNumList = new ArrayList<>();
+        for (Requisition requisition :list){
+            cardNumList.add(requisition.getCardNum());
+        }
+        if (!cardNumList.isEmpty()){
+            List<Requisition> gjfzList = requisitionService.selectAllDbQuery(cardNumList);
+            for (Requisition gjfz:gjfzList){
+                for (Requisition requisition :list){
+                    if (gjfz.getCardNum().equals(requisition.getCardNum())){
+                        requisition.setGjfzFailureCause(gjfz.getGjfzFailureCause());
+                        requisition.setGjfzBalance(gjfz.getGjfzBalance());
+                        requisition.setGjfzCreatTime(gjfz.getGjfzCreatTime());
+                        requisition.setGjfzFeedbackRemark(gjfz.getGjfzFeedbackRemark());
+                        break;
+                    }
+                }
+            }
+        }
+
 
         PageInfo page = new PageInfo(list);
         JsGridVO<Requisition> vo = new JsGridVO(page);
