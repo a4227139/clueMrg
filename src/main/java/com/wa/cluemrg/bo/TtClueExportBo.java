@@ -3,6 +3,8 @@ package com.wa.cluemrg.bo;
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class TtClueExportBo {
     @ExcelProperty(value={"线索编号"})
@@ -24,7 +26,7 @@ public class TtClueExportBo {
     @ExcelProperty(value={"基站纬度"})
     protected String latitude;
     @ExcelProperty(value={"落位时间"})
-    protected String clueTime;
+    protected Date clueTime;
     @ExcelProperty(value={"开户人姓名"})
     protected String owner;
     @ExcelProperty(value={"证件号码"})
