@@ -3,20 +3,13 @@ package com.wa.cluemrg.listener;
 import com.alibaba.excel.util.StringUtils;
 import com.wa.cluemrg.dao.BtClueMapper;
 import com.wa.cluemrg.dao.NodeTagMapper;
-import com.wa.cluemrg.dao.PhoneImeiMapper;
-import com.wa.cluemrg.dao.PhoneImsiMapper;
 import com.wa.cluemrg.entity.BtClue;
 import com.wa.cluemrg.entity.NodeTag;
-import com.wa.cluemrg.entity.PhoneImei;
-import com.wa.cluemrg.entity.PhoneImsi;
 import com.wa.cluemrg.service.ScheduledTaskService;
 import lombok.extern.log4j.Log4j2;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -30,6 +23,7 @@ public class BtClueListener extends CustomizeListener<BtClue> {
 
     ThreadLocal<String> message;
     Pattern pattern = Pattern.compile("[a-fA-F]");
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
     public BtClueListener(Class<?> classType) {
         super(classType);
@@ -44,7 +38,16 @@ public class BtClueListener extends CustomizeListener<BtClue> {
 
     @Override
     public String dataDeal() {
-        int success = btClueMapper.batchInsertOrUpdate(list);
+        //快打没有编号
+        generateClueId(list);
+        //只有漫游柳州的录入
+        List<BtClue> lzList = new ArrayList<>();
+        for (BtClue btClue:list){
+            if (btClue.getRoaming()!=null&&btClue.getRoaming().contains("柳州")){
+                lzList.add(btClue);
+            }
+        }
+        int success = btClueMapper.batchInsertOrUpdate(lzList);
         String result = "导入成功数："+(success<=list.size()?success:list.size())+" 导入失败数："+((list.size()-success)>=0?(list.size()-success):0);
         message.set(result);
         log.info("dealBtClue: "+result);
@@ -93,6 +96,17 @@ public class BtClueListener extends CustomizeListener<BtClue> {
         return String.format("%d分%d秒", minutes, remainingSeconds);
     }
 
-
+    private void generateClueId(List<BtClue> btClueList){
+        for (BtClue btClue:btClueList){
+            if (StringUtils.isEmpty(btClue.getClueId())&&btClue.getRoaming()!=null&&btClue.getRoaming().contains("柳州")){
+                Date clueTime = btClue.getClueTime();
+                if (clueTime==null){
+                    clueTime = new Date();
+                }
+                String clueId = "KD"+simpleDateFormat.format(clueTime);
+                btClue.setClueId(clueId);
+            }
+        }
+    }
 
 }

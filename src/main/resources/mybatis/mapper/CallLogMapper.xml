@@ -99,81 +99,81 @@
     </select>
 
     <select id="exportAll"  resultMap="callLogResultMap" parameterType="com.wa.cluemrg.bo.CallLogBo">
-        SELECT c.* FROM call_log c
-            where (communication_type like '%主叫%' or communication_type like '%被叫%'
-                    or communication_type like '%主短%' or communication_type like '%被短%'
-                       or communication_type like '%CDMA%')
-        <if test="phone != null and phone != ''">
-            AND phone LIKE CONCAT('%', #{phone}, '%')
-        </if>
-        <if test="startTimeStart != null and startTimeEnd != null">
-            AND start_time BETWEEN #{startTimeStart,javaType = java.util.Date, jdbcType = TIMESTAMP} AND #{startTimeEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
-        </if>
-        <if test="startTimeStart != null and startTimeEnd == null">
-            AND start_time &gt;= #{startTimeStart,javaType = java.util.Date, jdbcType = TIMESTAMP}
-        </if>
-        <if test="startTimeStart == null and startTimeEnd != null">
-            AND start_time &lt;= #{startTimeEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
-        </if>
-        <if test="communicationLocation != null and communicationLocation != ''">
-            AND communication_location LIKE CONCAT('%', #{communicationLocation}, '%')
-        </if>
-        <if test="communicationType != null and communicationType != ''">
-            AND communication_type LIKE CONCAT('%', #{communicationType}, '%')
-        </if>
-        <if test="businessType != null and businessType != ''">
-            AND business_type LIKE CONCAT('%', #{businessType}, '%')
-        </if>
-        <if test="oppositePhone != null and oppositePhone != ''">
-            AND opposite_phone LIKE CONCAT('%', #{oppositePhone}, '%')
-        </if>
-        <if test="duration != null and duration != ''">
-            AND duration LIKE CONCAT('%', #{duration}, '%')
-        </if>
-        <if test="lac != null and lac != ''">
-            AND lac LIKE CONCAT('%', #{lac}, '%')
-        </if>
-        <if test="ci != null and ci != ''">
-            AND ci LIKE CONCAT('%', #{ci}, '%')
-        </if>
-        <if test="imei != null and imei != ''">
-            AND imei LIKE CONCAT('%', #{imei}, '%')
-        </if>
-        <if test="imsi != null and imsi != ''">
-            AND imsi LIKE CONCAT('%', #{imsi}, '%')
-        </if>
-        <if test="location != null and location != ''">
-            AND location LIKE CONCAT('%', #{location}, '%')
-        </if>
-        <if test="longitude != null and longitude != ''">
-            AND longitude LIKE CONCAT('%', #{longitude}, '%')
-        </if>
-        <if test="latitude != null and latitude != ''">
-            AND latitude LIKE CONCAT('%', #{latitude}, '%')
-        </if>
-    </select>
+        SELECT c.* FROM call_log c where 1=1
+        <!--where (communication_type like '%主叫%' or communication_type like '%被叫%'
+                or communication_type like '%主短%' or communication_type like '%被短%'
+                   or communication_type like '%CDMA%')-->
+    <if test="phone != null and phone != ''">
+        AND phone LIKE CONCAT('%', #{phone}, '%')
+    </if>
+    <if test="startTimeStart != null and startTimeEnd != null">
+        AND start_time BETWEEN #{startTimeStart,javaType = java.util.Date, jdbcType = TIMESTAMP} AND #{startTimeEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+    </if>
+    <if test="startTimeStart != null and startTimeEnd == null">
+        AND start_time &gt;= #{startTimeStart,javaType = java.util.Date, jdbcType = TIMESTAMP}
+    </if>
+    <if test="startTimeStart == null and startTimeEnd != null">
+        AND start_time &lt;= #{startTimeEnd,javaType = java.util.Date, jdbcType = TIMESTAMP}
+    </if>
+    <if test="communicationLocation != null and communicationLocation != ''">
+        AND communication_location LIKE CONCAT('%', #{communicationLocation}, '%')
+    </if>
+    <if test="communicationType != null and communicationType != ''">
+        AND communication_type LIKE CONCAT('%', #{communicationType}, '%')
+    </if>
+    <if test="businessType != null and businessType != ''">
+        AND business_type LIKE CONCAT('%', #{businessType}, '%')
+    </if>
+    <if test="oppositePhone != null and oppositePhone != ''">
+        AND opposite_phone LIKE CONCAT('%', #{oppositePhone}, '%')
+    </if>
+    <if test="duration != null and duration != ''">
+        AND duration LIKE CONCAT('%', #{duration}, '%')
+    </if>
+    <if test="lac != null and lac != ''">
+        AND lac LIKE CONCAT('%', #{lac}, '%')
+    </if>
+    <if test="ci != null and ci != ''">
+        AND ci LIKE CONCAT('%', #{ci}, '%')
+    </if>
+    <if test="imei != null and imei != ''">
+        AND imei LIKE CONCAT('%', #{imei}, '%')
+    </if>
+    <if test="imsi != null and imsi != ''">
+        AND imsi LIKE CONCAT('%', #{imsi}, '%')
+    </if>
+    <if test="location != null and location != ''">
+        AND location LIKE CONCAT('%', #{location}, '%')
+    </if>
+    <if test="longitude != null and longitude != ''">
+        AND longitude LIKE CONCAT('%', #{longitude}, '%')
+    </if>
+    <if test="latitude != null and latitude != ''">
+        AND latitude LIKE CONCAT('%', #{latitude}, '%')
+    </if>
+</select>
 
 
-    <insert id="insert" parameterType="com.wa.cluemrg.entity.CallLog">
-        INSERT INTO call_log (phone, start_time, communication_location, communication_type, business_type, opposite_phone, duration, lac,ci, imei, imsi,address) VALUES
-        (#{phone}, #{startTime}, #{communicationLocation}, #{communicationType}, #{businessType}, #{oppositePhone}, #{duration}, #{lac},#{ci},  #{imei}, #{imsi},#{address})
-    </insert>
+<insert id="insert" parameterType="com.wa.cluemrg.entity.CallLog">
+    INSERT INTO call_log (phone, start_time, communication_location, communication_type, business_type, opposite_phone, duration, lac,ci, imei, imsi,address) VALUES
+    (#{phone}, #{startTime}, #{communicationLocation}, #{communicationType}, #{businessType}, #{oppositePhone}, #{duration}, #{lac},#{ci},  #{imei}, #{imsi},#{address})
+</insert>
 
-    <update id="update" parameterType="com.wa.cluemrg.entity.CallLog">
-        UPDATE call_log SET phone=#{phone}, start_time=#{startTime}, communication_location=#{communicationLocation}, communication_type=#{communicationType}, business_type=#{businessType}, opposite_phone=#{oppositePhone}, duration=#{duration}, lac=#{lac},ci=#{ci}, imei=#{imei}, imsi=#{imsi}, address=#{address}
-        WHERE id=#{id}
-    </update>
+<update id="update" parameterType="com.wa.cluemrg.entity.CallLog">
+    UPDATE call_log SET phone=#{phone}, start_time=#{startTime}, communication_location=#{communicationLocation}, communication_type=#{communicationType}, business_type=#{businessType}, opposite_phone=#{oppositePhone}, duration=#{duration}, lac=#{lac},ci=#{ci}, imei=#{imei}, imsi=#{imsi}, address=#{address}
+    WHERE id=#{id}
+</update>
 
-    <delete id="delete" >
-        DELETE FROM call_log WHERE id=#{id}
-    </delete>
+<delete id="delete" >
+    DELETE FROM call_log WHERE id=#{id}
+</delete>
 
-    <insert id="batchInsertCallLog">
-        INSERT IGNORE INTO call_log (phone, start_time, communication_location, communication_type, business_type, opposite_phone, duration, lac,ci, imei, imsi,address)
-        VALUES
-        <foreach collection="list" item="item" separator=",">
-            (#{item.phone}, #{item.startTime}, #{item.communicationLocation}, #{item.communicationType}, #{item.businessType}, #{item.oppositePhone}, #{item.duration}, #{item.lac},#{item.ci}, #{item.imei}, #{item.imsi}, #{item.address})
-        </foreach>
-    </insert>
+<insert id="batchInsertCallLog">
+    INSERT IGNORE INTO call_log (phone, start_time, communication_location, communication_type, business_type, opposite_phone, duration, lac,ci, imei, imsi,address)
+    VALUES
+    <foreach collection="list" item="item" separator=",">
+        (#{item.phone}, #{item.startTime}, #{item.communicationLocation}, #{item.communicationType}, #{item.businessType}, #{item.oppositePhone}, #{item.duration}, #{item.lac},#{item.ci}, #{item.imei}, #{item.imsi}, #{item.address})
+    </foreach>
+</insert>
 
 </mapper>

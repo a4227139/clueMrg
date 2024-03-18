@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wa.cluemrg.controller.RequisitionController;
 import com.wa.cluemrg.dao.EffectMapper;
-import com.wa.cluemrg.entity.AllDbQuery;
-import com.wa.cluemrg.entity.Effect;
-import com.wa.cluemrg.entity.Gang;
-import com.wa.cluemrg.entity.Requisition;
+import com.wa.cluemrg.entity.*;
 import com.wa.cluemrg.util.FileUtil;
 import lombok.extern.log4j.Log4j2;
 import org.apache.http.client.methods.HttpGet;
@@ -45,10 +42,15 @@ public class ScheduledTaskService {
     RequisitionService requisitionService;
     @Autowired
     AllDbQueryService allDbQueryService;
+    @Autowired
+    BtClueService btClueService;
+    @Autowired
+    TtClueService ttClueService;
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     static List<String> waitToAdd = new ArrayList<>();
+    static List<String> waitToAddStrong = new ArrayList<>();
 
     @Scheduled(cron = "0 0 * * * *") // Runs every hour
     public void initEffectEveryDay() {
@@ -94,6 +96,7 @@ public class ScheduledTaskService {
         List<String> phoneList = gangService.selectAllPhone();
         for (String phone : phoneList){
             waitToAdd.add(phone);
+            waitToAddStrong.add(phone);
         }
     }
 
@@ -105,6 +108,14 @@ public class ScheduledTaskService {
         waitToAdd.addAll(elements);
     }
 
+    public static void waitToAddStrong(String element){
+        waitToAddStrong.add(element);
+    }
+
+    public static void waitToAddStrong(Collection<String> elements){
+        waitToAddStrong.addAll(elements);
+    }
+
     @Scheduled(cron = "*/10 * * * * *") // 10 seconds
     public void addElementToGang() {
         Set<String> added = new HashSet<>();
@@ -113,7 +124,7 @@ public class ScheduledTaskService {
             if (added.contains(element)){
                 continue;
             }
-            Gang gang = gangService.genarateGang(element);
+            Gang gang = gangService.generateGang(element);
             Set<String> phoneSet = new HashSet<>();
             phoneSet.addAll(gang.getPhoneList());
             added.addAll(gang.getPhoneList());
@@ -157,6 +168,64 @@ public class ScheduledTaskService {
         waitToAdd.clear();
     }
 
+    //根据gang中某线索的打击状态更新其他线索的状态，只通过机身关联，并且是往前找
+    @Scheduled(cron = "*/10 * * * * *") // 10 seconds
+    public void updateClueStateByGang() {
+        Set<String> added = new HashSet<>();
+        for (String element:waitToAddStrong) {
+            if (added.contains(element)) {
+                continue;
+            }
+            //通过机身关联获得团伙
+            Gang gang = gangService.generateGang(element, true);
+            //获得团伙的线索编号
+            List<String> clueList = gang.getClueList();
+            //如果线索不到2条则跳过
+            if (clueList != null && clueList.size() > 1) {
+                Date maxDate = new Date(0);
+                List<BtClue> btClueList = new ArrayList<>();
+                List<TtClue> ttClueList = new ArrayList<>();
+                //按线索编号分别放入部推厅推里
+                for (String clue : clueList) {
+                    BtClue btClue = btClueService.select(clue);
+                    if (btClue != null) {
+                        if ("已打击".equals(btClue.getState())) {
+                            long clueTime = btClue.getClueTime() == null ? 0 : btClue.getClueTime().getTime();
+                            maxDate = maxDate.getTime() > clueTime ? maxDate : btClue.getClueTime();
+                        }
+                        btClueList.add(btClue);
+                    }
+
+                    TtClue ttClue = ttClueService.select(clue);
+                    if (ttClue != null) {
+                        if ("已打击".equals(ttClue.getState())) {
+                            long clueTime = ttClue.getClueTime() == null ? 0 : ttClue.getClueTime().getTime();
+                            maxDate = maxDate.getTime() > clueTime ? maxDate : ttClue.getClueTime();
+                        }
+                        ttClueList.add(ttClue);
+                    }
+                }
+                //更新部推厅推状态
+                for (BtClue btClue : btClueList) {
+                    if (btClue.getClueTime() != null
+                            && btClue.getClueTime().getTime() < maxDate.getTime()
+                            && !"已打击".equals(btClue.getState())) {
+                        btClue.setState("已打击");
+                        btClueService.update(btClue);
+                    }
+                }
+                for (TtClue ttClue : ttClueList) {
+                    if (ttClue.getClueTime() != null
+                            && ttClue.getClueTime().getTime() < maxDate.getTime()
+                            && !"已打击".equals(ttClue.getState())) {
+                        ttClue.setState("已打击");
+                        ttClueService.update(ttClue);
+                    }
+                }
+            }
+        }
+        waitToAddStrong.clear();
+    }
 
     int current = 1;
     int pages = 10;

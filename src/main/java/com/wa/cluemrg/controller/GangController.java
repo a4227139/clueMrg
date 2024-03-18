@@ -122,7 +122,7 @@ public class GangController {
 
     @GetMapping("/getGang")
     public Gang getGang(@RequestParam("phone") String phone){
-        Gang gang = gangService.genarateGang(phone);
+        Gang gang = gangService.generateGang(phone);
         return gang;
     }
 

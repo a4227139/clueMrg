@@ -11,6 +11,7 @@ import com.wa.cluemrg.bo.PageBO;
 import com.wa.cluemrg.entity.*;
 import com.wa.cluemrg.response.ResponseResult;
 import com.wa.cluemrg.service.*;
+import com.wa.cluemrg.util.CustomCellStyleStrategy;
 import com.wa.cluemrg.util.UnderlineToCamelUtils;
 import com.wa.cluemrg.vo.JsGridVO;
 import lombok.Data;
@@ -145,12 +146,33 @@ public class CallLogController {
             // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
             String fileName = URLEncoder.encode(callLogBo.getPhone()+"话单", "UTF-8").replaceAll("\\+", "%20");
             response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xlsx");
+            //根据编码添加基站位置
             List<CallLogBo> list = fillCallLog(callLogService.exportAll(callLogBo));
             /*for (CallLogBo callLog:list){
                 callLog.setId(null);
             }*/
+            StringBuilder victimPhone =new StringBuilder();
+            if (StringUtils.isNotBlank(callLogBo.getPhone())){
+                BtClue btParam = new BtClue();
+                btParam.setPhone(callLogBo.getPhone());
+                List<BtClue> btClueList = btClueService.selectAll(btParam);
+                for (BtClue clue:btClueList){
+                    victimPhone.append(clue.getVictimPhone());
+                    victimPhone.append(";");
+                }
+
+                TtClue ttParam = new TtClue();
+                ttParam.setPhone(callLogBo.getPhone());
+                List<TtClue> ttClueList = ttClueService.selectAll(ttParam);
+                for (TtClue clue:ttClueList){
+                    victimPhone.append(clue.getVictimPhone());
+                    victimPhone.append(";");
+                }
+            }
+            CustomCellStyleStrategy cellStyleStrategy = new CustomCellStyleStrategy(victimPhone.toString());
             // 这里需要设置不关闭流
             EasyExcel.write(response.getOutputStream(), CallLogExportBo.class)
+                    .registerWriteHandler(cellStyleStrategy)
                     .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
                     .autoCloseStream(Boolean.FALSE).sheet("话单")
                     .doWrite(list);

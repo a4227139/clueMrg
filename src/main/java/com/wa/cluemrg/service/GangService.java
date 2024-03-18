@@ -62,8 +62,12 @@ public class GangService {
         return gangMapper.deleteAll();
     }
 
-    public Gang genarateGang(String phone){
-        Graph graph = getGraph(phone,"phone",0,0);
+    public Gang generateGang(String phone){
+        return generateGang(phone,false);
+    }
+
+    public Gang generateGang(String phone,boolean strongRelation){
+        Graph graph = getGraph(phone,"phone",0,0,strongRelation);
         List<Node> nodeList = graph.getNodes();
         Gang gang = new Gang();
         for (Node node:nodeList){
@@ -84,6 +88,10 @@ public class GangService {
     }
 
     public Graph getGraph(String data, String type,int winWidth,int winHeight){
+        return getGraph(data,type,winWidth,winHeight,false);
+    }
+
+    public Graph getGraph(String data, String type,int winWidth,int winHeight,boolean strongRelation){
         Graph graph = new Graph();
         List<Node> nodes = new ArrayList<>();
         List<Link> links = new ArrayList<>();
@@ -217,7 +225,7 @@ public class GangService {
                         tempLinks.add(new Link(imei+"-"+phoneImeiItem.getPhone(),imei,phoneImeiItem.getPhone()));
                     }
                 }
-            }else if (currentNode.getSymbol().equals("triangle")){//person
+            }else if (currentNode.getSymbol().equals("triangle")&&!strongRelation){//person
                 String personId = currentNode.getName();
                 if (StringUtils.isNotBlank(personId)){
                     if (!visitedSet.contains(personId)){
@@ -291,12 +299,31 @@ public class GangService {
                             continue;
                         }
                         visitedSet.add(ttClueId);
-                        Node node = new Node(clue.getPhone(),clue.getPhone(),clue.getPhone(),"rect",x,0,0,currentNode.getLevel()+1);
+                        Node node = new Node(clue.getPhone(),clue.getPhone(),clue.getPhone(),"rect",x+600,0,0,currentNode.getLevel()+1);
                         queue.add(node);
                         tempNodes.add(node);
                         tempLinks.add(new Link(clueId+"-"+clue.getPhone(),clueId,clue.getPhone()));
                     }
                 }
+            }else if (currentNode.getSymbol().equals("polygon")&&!strongRelation){//caseNo
+                String caseNo = currentNode.getName();
+                if (!visitedSet.contains(caseNo)){
+                    visitedSet.add(caseNo);
+                    nodes.add(new Node(caseNo,caseNo,caseNo,"polygon",x,y,5,currentNode.getLevel()));
+                }
+                BtClue btClue = new BtClue();
+                btClue.setCaseNo(caseNo);
+                List<BtClue> btClueList = btClueService.selectAll(btClue);
+                for (BtClue clue : btClueList){
+                    if (!StringUtils.isBlank(clue.getClueId())&&!visitedSet.contains(clue.getClueId())){
+                        visitedSet.add(clue.getClueId());
+                        Node node = new Node(clue.getClueId(),clue.getClueId(),clue.getClueId(),"diamond",x+600,0,3,currentNode.getLevel()+1);
+                        queue.add(node);
+                        tempNodes.add(node);
+                        tempLinks.add(new Link(clue.getClueId()+"-"+caseNo,clue.getClueId(),caseNo));
+                    }
+                }
+
             }
             /*int size = tempNodes.size();
             int[] yIndexArray = new int[size];

@@ -8,14 +8,12 @@ import com.wa.cluemrg.entity.CallLog;
 import com.wa.cluemrg.entity.PhoneImei;
 import com.wa.cluemrg.entity.PhoneImsi;
 import com.wa.cluemrg.service.ScheduledTaskService;
+import com.wa.cluemrg.util.DateUtil;
 import com.wa.cluemrg.util.IMEICalculator;
 import lombok.extern.log4j.Log4j2;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -107,6 +105,11 @@ public class CallLogListener extends CustomizeListener<CallLog> {
                     &&callLog.getOppositePhone().startsWith("0086")){
                 callLog.setOppositePhone(callLog.getOppositePhone().replaceFirst("0086",""));
             }
+                //处理分离式的第二段例如 21:49:51 或 214951
+            if (DateUtil.isDateOnly(callLog.getStartTime())){
+                Date date = DateUtil.addTimeToDate(callLog.getStartTime(),callLog.getStartTime2());
+                callLog.setStartTime(date);
+            }
         }
         int success = callLogMapper.batchInsertCallLog(list);
         String result = "导入成功数："+success+" 导入失败数："+(list.size()-success);
@@ -163,7 +166,5 @@ public class CallLogListener extends CustomizeListener<CallLog> {
         }
         return String.format("%d分%d秒", minutes, remainingSeconds);
     }
-
-
 
 }

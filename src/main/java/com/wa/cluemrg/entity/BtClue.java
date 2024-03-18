@@ -1,13 +1,16 @@
 package com.wa.cluemrg.entity;
 
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+
+import java.util.Date;
 
 @Data
 public class BtClue {
     @ExcelProperty(value={"线索编号"})
     protected String clueId;
-    @ExcelProperty(value={"漫游地"})
+    @ExcelProperty(value={"漫游地","涉案电话-城市"})
     protected String roaming;
     @ExcelProperty(value={"运营商"})
     protected String operator;
@@ -59,6 +62,8 @@ public class BtClue {
     protected String jzInquiryTime;
     @ExcelProperty(value={"备注"})
     protected String remark;
-
+    @ExcelProperty(value={"首次发布时间"})
+    @JsonFormat(pattern = "yyyy-MM-dd HH:MM:dd")
+    protected Date clueTime;
 }
 

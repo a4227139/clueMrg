@@ -1,11 +1,14 @@
 package com.wa.cluemrg.entity;
 
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
-import java.util.List;
+import java.util.Date;
 
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TtClue {
     @ExcelProperty(value={"线索编号","线索编号（JZ,YD,LT,DX）"})
     protected String clueId;
@@ -36,7 +39,8 @@ public class TtClue {
     @ExcelProperty(value={"开户人住址"})
     protected String ownerAddress;
     @ExcelProperty(value={"落位时间","落位时间（YYYY-MM-DD HH:MM:dd）"})
-    protected String clueTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:MM:dd")
+    protected Date clueTime;
     @ExcelProperty(value={"状态"})
     protected String state;
     @ExcelProperty(value={"下发时间"})
@@ -61,6 +65,8 @@ public class TtClue {
     protected String fzPerson;
     @ExcelProperty(value={"备注"})
     protected String remark;
+    @ExcelProperty(value={"受害人号码"})
+    protected String victimPhone;
     protected String[] phones;
 }
 

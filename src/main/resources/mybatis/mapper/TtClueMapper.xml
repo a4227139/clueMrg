@@ -31,12 +31,13 @@
         <result column="JZ_INQUIRY_TIME" jdbcType="TIMESTAMP" property="jzInquiryTime" />
         <result column="FZ_PERSON" jdbcType="VARCHAR" property="fzPerson" />
         <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+        <result column="VICTIM_PHONE" jdbcType="VARCHAR" property="victimPhone" />
     </resultMap>
 
     <!-- 根据所有字段查找Clue -->
     <select id="selectAll" resultMap="clueResultMap">
         SELECT CLUE_ID,OPERATOR,PHONE,ROAMING,CASE_CATEGORY,OWNER,OWNER_ID,OWNER_ADDRESS,CLUE_TIME,IMEIS,BS_NAME,LONGITUDE,LATITUDE,LAC,CI,STATE,DATE(ISSUE_TIME) AS ISSUE_TIME,JURISDICTION,MATERIAL,
-          ATTRIBUTION,SITUATION,SUSPECT,SUSPECT_NUM,JZ_PERSON,DATE(JZ_INQUIRY_TIME) AS JZ_INQUIRY_TIME,FZ_PERSON,REMARK
+          ATTRIBUTION,SITUATION,SUSPECT,SUSPECT_NUM,JZ_PERSON,DATE(JZ_INQUIRY_TIME) AS JZ_INQUIRY_TIME,FZ_PERSON,REMARK,VICTIM_PHONE
         FROM TT_CLUE
         <where>
             <if test="phones != null and phones.length > 0">
@@ -133,25 +134,25 @@
 
     <!-- 插入操作 -->
     <insert id="insert" parameterType="com.wa.cluemrg.entity.TtClue">
-        INSERT INTO TT_CLUE (  CLUE_ID,   OPERATOR,  PHONE, ROAMING,CASE_CATEGORY,OWNER,OWNER_ID,OWNER_ADDRESS,CLUE_TIME,IMEIS,BS_NAME,LONGITUDE,LATITUDE,LAC,CI, STATE,  ISSUE_TIME,  JURISDICTION,  MATERIAL,  ATTRIBUTION,  SITUATION,  SUSPECT,  SUSPECT_NUM,  JZ_PERSON,  JZ_INQUIRY_TIME,  FZ_PERSON,  REMARK)
-        VALUES (  #{clueId},  #{operator},  #{phone},  #{roaming},#{caseCategory},#{owner},#{ownerId},#{ownerAddress},#{clueTime},#{imeis},#{bsName},#{longitude},#{latitude},#{lac},#{ci}, #{state},  #{issueTime},  #{jurisdiction},  #{material},  #{attribution},  #{situation},  #{suspect},  #{suspectNum},  #{jzPerson},  #{jzInquiryTime},  #{fzPerson},  #{remark})
+        INSERT INTO TT_CLUE (  CLUE_ID,   OPERATOR,  PHONE, ROAMING,CASE_CATEGORY,OWNER,OWNER_ID,OWNER_ADDRESS,CLUE_TIME,IMEIS,BS_NAME,LONGITUDE,LATITUDE,LAC,CI, STATE,  ISSUE_TIME,  JURISDICTION,  MATERIAL,  ATTRIBUTION,  SITUATION,  SUSPECT,  SUSPECT_NUM,  JZ_PERSON,  JZ_INQUIRY_TIME,  FZ_PERSON,  REMARK,VICTIM_PHONE)
+        VALUES (  #{clueId},  #{operator},  #{phone},  #{roaming},#{caseCategory},#{owner},#{ownerId},#{ownerAddress},#{clueTime},#{imeis},#{bsName},#{longitude},#{latitude},#{lac},#{ci}, #{state},  #{issueTime},  #{jurisdiction},  #{material},  #{attribution},  #{situation},  #{suspect},  #{suspectNum},  #{jzPerson},  #{jzInquiryTime},  #{fzPerson},  #{remark},  #{victimPhone})
     </insert>
 
     <!-- 插入操作 -->
     <insert id="batchInsert" parameterType="com.wa.cluemrg.entity.TtClue">
-        INSERT IGNORE TT_CLUE (  CLUE_ID, OPERATOR,  PHONE,  ROAMING,CASE_CATEGORY,OWNER,OWNER_ID,OWNER_ADDRESS,CLUE_TIME,IMEIS,BS_NAME,LONGITUDE,LATITUDE,LAC,CI, STATE,  ISSUE_TIME, JURISDICTION,  MATERIAL,  ATTRIBUTION,  SITUATION,  SUSPECT,  SUSPECT_NUM,  JZ_PERSON,  JZ_INQUIRY_TIME,  FZ_PERSON,  REMARK)
+        INSERT IGNORE TT_CLUE (  CLUE_ID, OPERATOR,  PHONE,  ROAMING,CASE_CATEGORY,OWNER,OWNER_ID,OWNER_ADDRESS,CLUE_TIME,IMEIS,BS_NAME,LONGITUDE,LATITUDE,LAC,CI, STATE,  ISSUE_TIME, JURISDICTION,  MATERIAL,  ATTRIBUTION,  SITUATION,  SUSPECT,  SUSPECT_NUM,  JZ_PERSON,  JZ_INQUIRY_TIME,  FZ_PERSON,  REMARK,VICTIM_PHONE)
         VALUES
         <foreach collection="list" item="item" separator=",">
-             (  #{item.clueId},   #{item.operator},  #{item.phone},   #{item.roaming},#{item.caseCategory},#{item.owner},#{item.ownerId},#{item.ownerAddress},#{item.clueTime},#{item.imeis},#{item.bsName},#{item.longitude},#{item.latitude},#{item.lac},#{item.ci}, #{item.state},  #{item.issueTime},  #{item.jurisdiction},  #{item.material},  #{item.attribution},  #{item.situation},  #{item.suspect},  #{item.suspectNum},  #{item.jzPerson},  #{item.jzInquiryTime},  #{item.fzPerson},  #{item.remark})
+             (  #{item.clueId},   #{item.operator},  #{item.phone},   #{item.roaming},#{item.caseCategory},#{item.owner},#{item.ownerId},#{item.ownerAddress},#{item.clueTime},#{item.imeis},#{item.bsName},#{item.longitude},#{item.latitude},#{item.lac},#{item.ci}, #{item.state},  #{item.issueTime},  #{item.jurisdiction},  #{item.material},  #{item.attribution},  #{item.situation},  #{item.suspect},  #{item.suspectNum},  #{item.jzPerson},  #{item.jzInquiryTime},  #{item.fzPerson},  #{item.remark},#{item.victimPhone})
         </foreach>
     </insert>
 
     <!-- 插入操作/更新 -->
     <insert id="batchInsertOrUpdate" parameterType="com.wa.cluemrg.entity.TtClue">
-        INSERT IGNORE TT_CLUE (  CLUE_ID, OPERATOR,  PHONE,  ROAMING,CASE_CATEGORY,OWNER,OWNER_ID,OWNER_ADDRESS,CLUE_TIME,IMEIS,BS_NAME,LONGITUDE,LATITUDE,LAC,CI, STATE,  ISSUE_TIME, JURISDICTION,  MATERIAL,  ATTRIBUTION,  SITUATION,  SUSPECT,  SUSPECT_NUM,  JZ_PERSON,  JZ_INQUIRY_TIME,  FZ_PERSON,  REMARK)
+        INSERT IGNORE TT_CLUE (  CLUE_ID, OPERATOR,  PHONE,  ROAMING,CASE_CATEGORY,OWNER,OWNER_ID,OWNER_ADDRESS,CLUE_TIME,IMEIS,BS_NAME,LONGITUDE,LATITUDE,LAC,CI, STATE,  ISSUE_TIME, JURISDICTION,  MATERIAL,  ATTRIBUTION,  SITUATION,  SUSPECT,  SUSPECT_NUM,  JZ_PERSON,  JZ_INQUIRY_TIME,  FZ_PERSON,  REMARK,VICTIM_PHONE)
         VALUES
         <foreach collection="list" item="item" separator=",">
-            (  #{item.clueId},   #{item.operator},  #{item.phone},   #{item.roaming},#{item.caseCategory},#{item.owner},#{item.ownerId},#{item.ownerAddress},#{item.clueTime},#{item.imeis},#{item.bsName},#{item.longitude},#{item.latitude},#{item.lac},#{item.ci}, #{item.state},  #{item.issueTime},  #{item.jurisdiction},  #{item.material},  #{item.attribution},  #{item.situation},  #{item.suspect},  #{item.suspectNum},  #{item.jzPerson},  #{item.jzInquiryTime},  #{item.fzPerson},  #{item.remark})
+            (  #{item.clueId},   #{item.operator},  #{item.phone},   #{item.roaming},#{item.caseCategory},#{item.owner},#{item.ownerId},#{item.ownerAddress},#{item.clueTime},#{item.imeis},#{item.bsName},#{item.longitude},#{item.latitude},#{item.lac},#{item.ci}, #{item.state},  #{item.issueTime},  #{item.jurisdiction},  #{item.material},  #{item.attribution},  #{item.situation},  #{item.suspect},  #{item.suspectNum},  #{item.jzPerson},  #{item.jzInquiryTime},  #{item.fzPerson},  #{item.remark},  #{item.victimPhone})
         </foreach>
         ON DUPLICATE KEY UPDATE
         ROAMING = VALUES(ROAMING),
@@ -179,7 +180,8 @@
         JZ_PERSON  =  VALUES(JZ_PERSON),
         JZ_INQUIRY_TIME  =  VALUES(JZ_INQUIRY_TIME),
         FZ_PERSON  =  VALUES(FZ_PERSON),
-        REMARK  =  VALUES(REMARK)
+        REMARK  =  VALUES(REMARK),
+        VICTIM_PHONE=VALUES(VICTIM_PHONE)
     </insert>
 
 

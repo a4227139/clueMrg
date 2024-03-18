@@ -31,13 +31,14 @@
         <result column="JZ_INQUIRY_TIME" jdbcType="TIMESTAMP" property="jzInquiryTime" />
         <result column="FZ_PERSON" jdbcType="VARCHAR" property="fzPerson" />
         <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+        <result column="CLUE_TIME"  property="clueTime" />
     </resultMap>
 
     <!-- 根据所有字段查找Clue -->
     <select id="selectAll" resultMap="clueResultMap">
         SELECT CLUE_ID,ROAMING,OPERATOR,PHONE,CASE_UNIT,CASE_NO,CASE_CATEGORY,MONEY,TIME,
           CASE_BRIEF,VICTIM_PHONE,OWNER,OWNER_ID,OWNER_ADDRESS,STATE,DATE(ISSUE_TIME) AS ISSUE_TIME,LIAISON_OFFICER,JURISDICTION,MATERIAL,
-          ATTRIBUTION,SITUATION,SUSPECT,SUSPECT_NUM,JZ_PERSON,DATE(JZ_INQUIRY_TIME) AS JZ_INQUIRY_TIME,FZ_PERSON,REMARK
+          ATTRIBUTION,SITUATION,SUSPECT,SUSPECT_NUM,JZ_PERSON,DATE(JZ_INQUIRY_TIME) AS JZ_INQUIRY_TIME,FZ_PERSON,REMARK,CLUE_TIME
         FROM BT_CLUE
         <where>
             <if test="clueId != null and clueId != ''">
@@ -128,26 +129,26 @@
 
     <!-- 插入操作 -->
     <insert id="insert" parameterType="com.wa.cluemrg.entity.BtClue">
-        INSERT INTO bt_clue (  CLUE_ID,  ROAMING,  OPERATOR,  PHONE,  CASE_UNIT,  CASE_NO,  CASE_CATEGORY,  MONEY,  TIME,  CASE_BRIEF,  VICTIM_PHONE, OWNER, OWNER_ID,OWNER_ADDRESS, STATE,  ISSUE_TIME,  LIAISON_OFFICER,  JURISDICTION,  MATERIAL,  ATTRIBUTION,  SITUATION,  SUSPECT,  SUSPECT_NUM,  JZ_PERSON,  JZ_INQUIRY_TIME,  FZ_PERSON,  REMARK)
-        VALUES (  #{clueId},  #{roaming},  #{operator},  #{phone},  #{caseUnit},  #{caseNo},  #{caseCategory},  #{money},  #{time},  #{caseBrief},  #{victimPhone}, #{owner},  #{ownerId}, #{ownerAddress},#{state},  #{issueTime},  #{liaisonOfficer},  #{jurisdiction},  #{material},  #{attribution},  #{situation},  #{suspect},  #{suspectNum},  #{jzPerson},  #{jzInquiryTime},  #{fzPerson},  #{remark})
+        INSERT INTO bt_clue (  CLUE_ID,  ROAMING,  OPERATOR,  PHONE,  CASE_UNIT,  CASE_NO,  CASE_CATEGORY,  MONEY,  TIME,  CASE_BRIEF,  VICTIM_PHONE, OWNER, OWNER_ID,OWNER_ADDRESS, STATE,  ISSUE_TIME,  LIAISON_OFFICER,  JURISDICTION,  MATERIAL,  ATTRIBUTION,  SITUATION,  SUSPECT,  SUSPECT_NUM,  JZ_PERSON,  JZ_INQUIRY_TIME,  FZ_PERSON,  REMARK,CLUE_TIME)
+        VALUES (  #{clueId},  #{roaming},  #{operator},  #{phone},  #{caseUnit},  #{caseNo},  #{caseCategory},  #{money},  #{time},  #{caseBrief},  #{victimPhone}, #{owner},  #{ownerId}, #{ownerAddress},#{state},  #{issueTime},  #{liaisonOfficer},  #{jurisdiction},  #{material},  #{attribution},  #{situation},  #{suspect},  #{suspectNum},  #{jzPerson},  #{jzInquiryTime},  #{fzPerson},  #{remark},  #{clueTime})
     </insert>
 
     <!-- 插入操作 -->
     <insert id="batchInsert" parameterType="com.wa.cluemrg.entity.BtClue">
-        INSERT IGNORE bt_clue (  CLUE_ID,  ROAMING,  OPERATOR,  PHONE,  CASE_UNIT,  CASE_NO,  CASE_CATEGORY,  MONEY,  TIME,  CASE_BRIEF,  VICTIM_PHONE,  OWNER, OWNER_ID,OWNER_ADDRESS, STATE,  ISSUE_TIME,  LIAISON_OFFICER,  JURISDICTION,  MATERIAL,  ATTRIBUTION,  SITUATION,  SUSPECT,  SUSPECT_NUM,  JZ_PERSON,  JZ_INQUIRY_TIME,  FZ_PERSON,  REMARK)
+        INSERT IGNORE bt_clue (  CLUE_ID,  ROAMING,  OPERATOR,  PHONE,  CASE_UNIT,  CASE_NO,  CASE_CATEGORY,  MONEY,  TIME,  CASE_BRIEF,  VICTIM_PHONE,  OWNER, OWNER_ID,OWNER_ADDRESS, STATE,  ISSUE_TIME,  LIAISON_OFFICER,  JURISDICTION,  MATERIAL,  ATTRIBUTION,  SITUATION,  SUSPECT,  SUSPECT_NUM,  JZ_PERSON,  JZ_INQUIRY_TIME,  FZ_PERSON,  REMARK,CLUE_TIME)
         VALUES
         <foreach collection="list" item="item" separator=",">
-         (  #{item.clueId},  #{item.roaming},  #{item.operator},  #{item.phone},  #{item.caseUnit},  #{item.caseNo},  #{item.caseCategory},  #{item.money},  #{item.time},  #{item.caseBrief},  #{item.victimPhone}, #{item.owner},  #{item.ownerId}, #{item.ownerAddress},#{item.state},  #{item.issueTime},  #{item.liaisonOfficer},  #{item.jurisdiction},  #{item.material},  #{item.attribution},  #{item.situation},  #{item.suspect},  #{item.suspectNum},  #{item.jzPerson},  #{item.jzInquiryTime},  #{item.fzPerson},  #{item.remark})
+         (  #{item.clueId},  #{item.roaming},  #{item.operator},  #{item.phone},  #{item.caseUnit},  #{item.caseNo},  #{item.caseCategory},  #{item.money},  #{item.time},  #{item.caseBrief},  #{item.victimPhone}, #{item.owner},  #{item.ownerId}, #{item.ownerAddress},#{item.state},  #{item.issueTime},  #{item.liaisonOfficer},  #{item.jurisdiction},  #{item.material},  #{item.attribution},  #{item.situation},  #{item.suspect},  #{item.suspectNum},  #{item.jzPerson},  #{item.jzInquiryTime},  #{item.fzPerson},  #{item.remark},  #{clueTime})
         </foreach>
     </insert>
 
 
     <!-- 插入操作/更新 -->
     <insert id="batchInsertOrUpdate" parameterType="com.wa.cluemrg.entity.BtClue">
-        INSERT IGNORE bt_clue (  CLUE_ID,  ROAMING,  OPERATOR,  PHONE,  CASE_UNIT,  CASE_NO,  CASE_CATEGORY,  MONEY,  TIME,  CASE_BRIEF,  VICTIM_PHONE,  OWNER, OWNER_ID,OWNER_ADDRESS, STATE,  ISSUE_TIME,  LIAISON_OFFICER,  JURISDICTION,  MATERIAL,  ATTRIBUTION,  SITUATION,  SUSPECT,  SUSPECT_NUM,  JZ_PERSON,  JZ_INQUIRY_TIME,  FZ_PERSON,  REMARK)
+        INSERT IGNORE bt_clue (  CLUE_ID,  ROAMING,  OPERATOR,  PHONE,  CASE_UNIT,  CASE_NO,  CASE_CATEGORY,  MONEY,  TIME,  CASE_BRIEF,  VICTIM_PHONE,  OWNER, OWNER_ID,OWNER_ADDRESS, STATE,  ISSUE_TIME,  LIAISON_OFFICER,  JURISDICTION,  MATERIAL,  ATTRIBUTION,  SITUATION,  SUSPECT,  SUSPECT_NUM,  JZ_PERSON,  JZ_INQUIRY_TIME,  FZ_PERSON,  REMARK,CLUE_TIME)
         VALUES
         <foreach collection="list" item="item" separator=",">
-            (  #{item.clueId},  #{item.roaming},  #{item.operator},  #{item.phone},  #{item.caseUnit},  #{item.caseNo},  #{item.caseCategory},  #{item.money},  #{item.time},  #{item.caseBrief},  #{item.victimPhone}, #{item.owner},  #{item.ownerId}, #{item.ownerAddress},#{item.state},  #{item.issueTime},  #{item.liaisonOfficer},  #{item.jurisdiction},  #{item.material},  #{item.attribution},  #{item.situation},  #{item.suspect},  #{item.suspectNum},  #{item.jzPerson},  #{item.jzInquiryTime},  #{item.fzPerson},  #{item.remark})
+            (  #{item.clueId},  #{item.roaming},  #{item.operator},  #{item.phone},  #{item.caseUnit},  #{item.caseNo},  #{item.caseCategory},  #{item.money},  #{item.time},  #{item.caseBrief},  #{item.victimPhone}, #{item.owner},  #{item.ownerId}, #{item.ownerAddress},#{item.state},  #{item.issueTime},  #{item.liaisonOfficer},  #{item.jurisdiction},  #{item.material},  #{item.attribution},  #{item.situation},  #{item.suspect},  #{item.suspectNum},  #{item.jzPerson},  #{item.jzInquiryTime},  #{item.fzPerson},  #{item.remark},  #{item.clueTime})
         </foreach>
         ON DUPLICATE KEY UPDATE
         ROAMING = VALUES(ROAMING),
@@ -175,7 +176,8 @@
         JZ_PERSON = VALUES(JZ_PERSON),
         JZ_INQUIRY_TIME = VALUES(JZ_INQUIRY_TIME),
         FZ_PERSON = VALUES(FZ_PERSON),
-        REMARK = VALUES(REMARK)
+        REMARK = VALUES(REMARK),
+        CLUE_TIME = VALUES(CLUE_TIME)
     </insert>
 
     <!-- 删除操作 -->
@@ -185,7 +187,7 @@
 
     <!-- 更新操作 -->
     <update id="update" parameterType="com.wa.cluemrg.entity.BtClue">
-        UPDATE bt_clue SET ROAMING=#{roaming},OPERATOR=#{operator},PHONE=#{phone},CASE_UNIT=#{caseUnit},CASE_NO=#{caseNo},CASE_CATEGORY=#{caseCategory},MONEY=#{money},TIME=#{time},CASE_BRIEF=#{caseBrief},VICTIM_PHONE=#{victimPhone},OWNER=#{owner},STATE=#{state},ISSUE_TIME=#{issueTime},LIAISON_OFFICER=#{liaisonOfficer},JURISDICTION=#{jurisdiction},MATERIAL=#{material},ATTRIBUTION=#{attribution},SITUATION=#{situation},SUSPECT=#{suspect},SUSPECT_NUM=#{suspectNum},JZ_PERSON=#{jzPerson},JZ_INQUIRY_TIME=#{jzInquiryTime},FZ_PERSON=#{fzPerson},REMARK=#{remark}
+        UPDATE bt_clue SET ROAMING=#{roaming},OPERATOR=#{operator},PHONE=#{phone},CASE_UNIT=#{caseUnit},CASE_NO=#{caseNo},CASE_CATEGORY=#{caseCategory},MONEY=#{money},TIME=#{time},CASE_BRIEF=#{caseBrief},VICTIM_PHONE=#{victimPhone},OWNER=#{owner},STATE=#{state},ISSUE_TIME=#{issueTime},LIAISON_OFFICER=#{liaisonOfficer},JURISDICTION=#{jurisdiction},MATERIAL=#{material},ATTRIBUTION=#{attribution},SITUATION=#{situation},SUSPECT=#{suspect},SUSPECT_NUM=#{suspectNum},JZ_PERSON=#{jzPerson},JZ_INQUIRY_TIME=#{jzInquiryTime},FZ_PERSON=#{fzPerson},REMARK=#{remark},CLUE_TIME=#{clueTime}
         WHERE CLUE_ID=#{clueId}
     </update>
 

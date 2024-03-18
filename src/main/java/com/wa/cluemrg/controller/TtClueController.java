@@ -10,6 +10,7 @@ import com.wa.cluemrg.bo.*;
 import com.wa.cluemrg.entity.TtClue;
 import com.wa.cluemrg.exception.BusinessException;
 import com.wa.cluemrg.response.ResponseResult;
+import com.wa.cluemrg.service.ScheduledTaskService;
 import com.wa.cluemrg.service.TtClueService;
 import com.wa.cluemrg.service.CallLogService;
 import com.wa.cluemrg.service.PhoneImeiService;
@@ -93,7 +94,7 @@ public class TtClueController {
         String sortField = UnderlineToCamelUtils.camelToUnderline(pageBo.getSortField());
         String sortOrder = pageBo.getSortOrder();
         if (StringUtils.isEmpty(sortField)&&StringUtils.isEmpty(sortOrder)){
-            PageHelper.orderBy("CLUE_TIME DESC ,CLUE_ID DESC");
+            PageHelper.orderBy("CLUE_TIME DESC");
         }else {
             PageHelper.orderBy(sortField+" "+sortOrder);
         }
@@ -123,6 +124,7 @@ public class TtClueController {
     @PutMapping("/updateClue")
     @Secured("ROLE_LEVEL2")
     public int updateClue(@RequestBody TtClue ttClue) {
+        ScheduledTaskService.waitToAddStrong(ttClue.getPhone());
         return ttClueService.update(ttClue);
     }
 

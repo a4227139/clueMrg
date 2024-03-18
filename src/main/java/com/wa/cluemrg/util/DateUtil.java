@@ -2,6 +2,8 @@ package com.wa.cluemrg.util;
 
 import org.springframework.util.StringUtils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -11,7 +13,7 @@ import java.util.List;
 
 public class DateUtil {
     public static void main(String[] args) {
-        String dateStartString = "2023-09-01";
+        /*String dateStartString = "2023-09-01";
         String dateEndString = "2023-09-17";
 
         // Parse the date strings to LocalDate objects
@@ -29,7 +31,18 @@ public class DateUtil {
         System.out.println("Dates in the range:");
         for (LocalDate date : dateList) {
             System.out.println(date);
-        }
+        }*/
+        Date date = new Date(); // 当前日期
+        String time1 = "21:49:51"; // 时间字符串1
+        String time2 = "214951";   // 时间字符串2
+
+        // 添加时间到日期中
+        Date resultDate1 = addTimeToDate(date, time1);
+        Date resultDate2 = addTimeToDate(date, time2);
+
+        // 输出结果
+        System.out.println("Result 1: " + resultDate1);
+        System.out.println("Result 2: " + resultDate2);
     }
 
     public static  int daysBetween(String dateStartString,String dateEndString){
@@ -91,6 +104,53 @@ public class DateUtil {
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
         calendar.set(Calendar.MILLISECOND, 999);
+
+        return calendar.getTime();
+    }
+
+    public static boolean isDateOnly(Date date) {
+        if (date==null){
+            return false;
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.HOUR_OF_DAY) == 0 &&
+                calendar.get(Calendar.MINUTE) == 0 &&
+                calendar.get(Calendar.SECOND) == 0 &&
+                calendar.get(Calendar.MILLISECOND) == 0;
+    }
+
+
+    /**
+     * 只支持HH:mm:ss或HHmmss
+     * @param date
+     * @param time
+     * @return
+     */
+    public static Date addTimeToDate(Date date, String time) {
+        SimpleDateFormat hhmmssSdf = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat hhmmssSdf2 = new SimpleDateFormat("HHmmss");
+        Date timeDate = null;
+        try {
+            timeDate = hhmmssSdf.parse(time);
+        } catch (ParseException e) {
+            try {
+                timeDate = hhmmssSdf2.parse(time);
+            } catch (ParseException parseException) {
+                return date;
+            }
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        Calendar timeCalendar = Calendar.getInstance();
+        timeCalendar.setTime(timeDate);
+
+        calendar.set(Calendar.HOUR_OF_DAY, timeCalendar.get(Calendar.HOUR_OF_DAY));
+        calendar.set(Calendar.MINUTE, timeCalendar.get(Calendar.MINUTE));
+        calendar.set(Calendar.SECOND, timeCalendar.get(Calendar.SECOND));
+        calendar.set(Calendar.MILLISECOND, 0);
 
         return calendar.getTime();
     }

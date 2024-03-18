@@ -20,6 +20,7 @@ import com.wa.cluemrg.response.ResponseResult;
 import com.wa.cluemrg.service.BtClueService;
 import com.wa.cluemrg.service.CallLogService;
 import com.wa.cluemrg.service.PhoneImeiService;
+import com.wa.cluemrg.service.ScheduledTaskService;
 import com.wa.cluemrg.util.UnderlineToCamelUtils;
 import com.wa.cluemrg.vo.JsGridVO;
 import lombok.extern.log4j.Log4j2;
@@ -131,6 +132,7 @@ public class BtClueController {
     @PutMapping("/updateClue")
     @Secured("ROLE_LEVEL2")
     public int updateClue(@RequestBody BtClue btClue) {
+        ScheduledTaskService.waitToAddStrong(btClue.getPhone());
         return btClueService.update(btClue);
     }
 

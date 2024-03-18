@@ -40,7 +40,7 @@ public class TtClueService {
 
     public int insert(TtClue ttClue) {
         generateClueId(ttClue);
-        ttClue.setClueTime(simpleDateFormat2.format(new Date()));
+        //ttClue.setClueTime(simpleDateFormat2.format(new Date()));
         return ttClueMapper.insert(ttClue);
     }
 
