@@ -193,7 +193,8 @@
 
     <!-- 更新操作 -->
     <update id="update" parameterType="com.wa.cluemrg.entity.TtClue">
-        UPDATE TT_CLUE SET OPERATOR=#{operator},PHONE=#{phone},ROAMING=#{roaming},CASE_CATEGORY=#{caseCategory},OWNER=#{owner},OWNER_ID=#{ownerId},OWNER_ADDRESS=#{ownerAddress},CLUE_TIME=#{clueTime},IMEIS=#{imeis},BS_NAME=#{bsName},LONGITUDE=#{longitude},LATITUDE=#{latitude},LAC=#{lac},CI=#{ci},STATE=#{state},ISSUE_TIME=#{issueTime},JURISDICTION=#{jurisdiction},MATERIAL=#{material},ATTRIBUTION=#{attribution},SITUATION=#{situation},SUSPECT=#{suspect},SUSPECT_NUM=#{suspectNum},JZ_PERSON=#{jzPerson},JZ_INQUIRY_TIME=#{jzInquiryTime},FZ_PERSON=#{fzPerson},REMARK=#{remark}
+        UPDATE TT_CLUE SET OPERATOR=#{operator},PHONE=#{phone},ROAMING=#{roaming},CASE_CATEGORY=#{caseCategory},OWNER=#{owner},OWNER_ID=#{ownerId},OWNER_ADDRESS=#{ownerAddress},CLUE_TIME=#{clueTime},IMEIS=#{imeis},BS_NAME=#{bsName},LONGITUDE=#{longitude},LATITUDE=#{latitude},
+                           LAC=#{lac},CI=#{ci},STATE=#{state},ISSUE_TIME=#{issueTime},JURISDICTION=#{jurisdiction},MATERIAL=#{material},ATTRIBUTION=#{attribution},SITUATION=#{situation},SUSPECT=#{suspect},SUSPECT_NUM=#{suspectNum},JZ_PERSON=#{jzPerson},JZ_INQUIRY_TIME=#{jzInquiryTime},FZ_PERSON=#{fzPerson},REMARK=#{remark},VICTIM_PHONE=#{victimPhone}
         WHERE CLUE_ID=#{clueId}
     </update>
 

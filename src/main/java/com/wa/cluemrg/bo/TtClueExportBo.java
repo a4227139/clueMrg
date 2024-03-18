@@ -33,6 +33,8 @@ public class TtClueExportBo {
     protected String ownerId;
     @ExcelProperty(value={"开户人住址"})
     protected String ownerAddress;
+    @ExcelProperty(value={"受害人号码"})
+    protected String victimPhone;
     @ExcelProperty(value={"作案地点"})
     protected String jurisdiction;
     @ExcelProperty(value={"技侦查询人"})
