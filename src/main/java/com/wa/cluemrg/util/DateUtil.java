@@ -128,6 +128,9 @@ public class DateUtil {
      * @return
      */
     public static Date addTimeToDate(Date date, String time) {
+        if (time==null){
+            return date;
+        }
         SimpleDateFormat hhmmssSdf = new SimpleDateFormat("HH:mm:ss");
         SimpleDateFormat hhmmssSdf2 = new SimpleDateFormat("HHmmss");
         Date timeDate = null;

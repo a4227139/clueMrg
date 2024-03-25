@@ -38,7 +38,7 @@ public class CallLog {
     private String imei;
     @ExcelProperty(value = {"IMSI","己方卡号","主叫imsi"})
     private String imsi;
-    @ExcelProperty(value = {"己方名称","己方基站名称","基站信息","通话基站"})
+    @ExcelProperty(value = {"己方名称","己方基站名称","基站信息","通话基站","位置"})
     private String address;
 }
 

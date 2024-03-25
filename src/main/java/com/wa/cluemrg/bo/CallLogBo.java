@@ -47,7 +47,7 @@ public class CallLogBo {
     private String longitude;
     @ExcelProperty(value = {"纬度"})
     private String latitude;
-    @ExcelProperty(value = {"己方名称","己方基站名称","基站信息","通话基站"})
+    @ExcelProperty(value = {"己方名称","己方基站名称","基站信息","通话基站","位置"})
     private String address;
 
     private int pageIndex = 1;
