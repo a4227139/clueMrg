@@ -106,7 +106,7 @@ public class BtClueController {
         if (StringUtils.isEmpty(sortOrder)){
             sortOrder="DESC";
         }
-        PageHelper.orderBy(sortField+" "+sortOrder);
+        //PageHelper.orderBy(sortField+" "+sortOrder);
 
         List<BtClue> list = btClueService.selectAll(pageBo.getData());
 

@@ -123,7 +123,14 @@
                 AND REMARK LIKE CONCAT('%', #{remark}, '%')
             </if>
         </where>
-        order by CLUE_ID desc
+        ORDER BY
+            CASE
+            WHEN CLUE_ID LIKE 'X%' THEN STR_TO_DATE(SUBSTRING(CLUE_ID, 2, 8), '%Y%m%d')
+            WHEN CLUE_ID LIKE 'DK%' THEN STR_TO_DATE(SUBSTRING(CLUE_ID, 3, 8), '%Y%m%d')
+            WHEN CLUE_ID LIKE 'KD%' THEN STR_TO_DATE(SUBSTRING(CLUE_ID, 3, 8), '%Y%m%d')
+            ELSE NULL
+        END
+        DESC
     </select>
 
 
@@ -180,6 +187,25 @@
         CLUE_TIME = VALUES(CLUE_TIME)
     </insert>
 
+    <!-- 插入操作/更新 -->
+    <insert id="batchInsertOrUpdate2" parameterType="com.wa.cluemrg.entity.BtClue">
+        INSERT IGNORE bt_clue (  CLUE_ID,  ROAMING,  OPERATOR,  PHONE,  CASE_UNIT,  CASE_NO,  CASE_CATEGORY,  MONEY,  TIME,  CASE_BRIEF)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (  #{item.clueId},  #{item.roaming},  #{item.operator},  #{item.phone},  #{item.caseUnit},  #{item.caseNo},  #{item.caseCategory},  #{item.money},  #{item.time},  #{item.caseBrief})
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        ROAMING = VALUES(ROAMING),
+        OPERATOR = VALUES(OPERATOR),
+        PHONE = VALUES(PHONE),
+        CASE_UNIT = VALUES(CASE_UNIT),
+        CASE_NO = VALUES(CASE_NO),
+        CASE_CATEGORY = VALUES(CASE_CATEGORY),
+        MONEY = VALUES(MONEY),
+        TIME = VALUES(TIME),
+        CASE_BRIEF = VALUES(CASE_BRIEF)
+    </insert>
+
     <!-- 删除操作 -->
     <delete id="delete" parameterType="java.lang.String">
         DELETE FROM BT_CLUE WHERE CLUE_ID = #{clueId}
@@ -202,7 +228,15 @@
     </select>
 
     <select id="getLatestClue" resultType="java.lang.String">
-        SELECT CLUE_ID FROM BT_CLUE ORDER BY CLUE_ID DESC LIMIT 1
+        SELECT CLUE_ID FROM BT_CLUE ORDER BY
+            CASE
+                WHEN CLUE_ID LIKE 'X%' THEN STR_TO_DATE(SUBSTRING(CLUE_ID, 2, 8), '%Y%m%d')
+                WHEN CLUE_ID LIKE 'DK%' THEN STR_TO_DATE(SUBSTRING(CLUE_ID, 3, 8), '%Y%m%d')
+                WHEN CLUE_ID LIKE 'KD%' THEN STR_TO_DATE(SUBSTRING(CLUE_ID, 3, 8), '%Y%m%d')
+                ELSE NULL
+                END
+            DESC
+        LIMIT 1
     </select>
 
 </mapper>

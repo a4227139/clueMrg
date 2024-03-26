@@ -1,6 +1,7 @@
 package com.wa.cluemrg.service;
 
 import com.alibaba.excel.EasyExcelFactory;
+import com.wa.cluemrg.dao.BtClueMapper;
 import com.wa.cluemrg.dao.QgBtClueMapper;
 import com.wa.cluemrg.entity.BtClue;
 import com.wa.cluemrg.listener.QgBtClueListener;
@@ -18,6 +19,8 @@ public class QgBtClueService {
 
     @Autowired
     private QgBtClueMapper qgBtClueMapper;
+    @Autowired
+    private BtClueMapper btClueMapper;
 
     public List<BtClue> selectAll(BtClue btClue) {
         return qgBtClueMapper.selectAll(btClue);
@@ -47,7 +50,7 @@ public class QgBtClueService {
     public String dealUpload(MultipartFile file){
         String fileName = uploadUtil.saveFile(file);
         ThreadLocal<String> message = new ThreadLocal<>();
-        EasyExcelFactory.read(fileName, new QgBtClueListener(BtClue.class,qgBtClueMapper,message)).headRowNumber(2).doReadAll();
+        EasyExcelFactory.read(fileName, new QgBtClueListener(BtClue.class,qgBtClueMapper,btClueMapper,message)).headRowNumber(1).doReadAll();
         return message.get();
     }
 }

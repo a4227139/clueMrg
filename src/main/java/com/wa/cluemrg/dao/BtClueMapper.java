@@ -29,4 +29,6 @@ public interface BtClueMapper extends MyBatisBaseDao<BtClue, String> {
 
     int batchInsertOrUpdate(List<BtClue> btClueList);
 
+    int batchInsertOrUpdate2(List<BtClue> btClueList);
+
 }

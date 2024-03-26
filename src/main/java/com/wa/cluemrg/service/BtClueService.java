@@ -57,8 +57,10 @@ public class BtClueService {
         String clueId = btClueMapper.getLatestClue();
         if (clueId.startsWith("X")){
             return clueId.substring(1,5)+"-"+clueId.substring(5,7)+"-"+clueId.substring(7,9);
-        }else {
+        }else if(clueId.startsWith("DK")||clueId.startsWith("KD")){
             return clueId.substring(2,6)+"-"+clueId.substring(6,8)+"-"+clueId.substring(8,10);
+        }else {
+            return "";
         }
     }
 
